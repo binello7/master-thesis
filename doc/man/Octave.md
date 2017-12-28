@@ -4,8 +4,8 @@
 ## Notes
 * fflus???
 * stdout???
-* quad???
-* fsolve???
+* quad??
+* fsolve??
 
 ## Behaviour
 * if A is a matrix m x n, ``A(:)`` is a column vector where the columns of A were concatenated one after each other from 1 to n
@@ -33,6 +33,8 @@
 
 ## Packages management
 * ``pkg list``: list all installed packages
+* ``pkg install pkgname-X.X.X.tar.gz``: install the package _pkgname-X.X.X.tar.gz_
+* ``pkg load pkgname``: loads the package _pkgname_ for use within _Octave_
 
 ## General functions
 * ``doc`` _FunctionName_: returns the documentation of _FunctionName_
