@@ -1,0 +1,56 @@
+% Packages for a reasonable beamer session
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{csquotes}
+\usepackage{babel}
+
+\usepackage{graphicx}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\usepackage{hyperref}
+
+\usepackage{ellipsis}
+
+\usepackage[style=authoryear, backend=biber]{biblatex}
+\setbeamertemplate{itemize/enumerate body begin}{\setlength{\leftmargini}{1.5em}}
+\renewcommand*{\nameyeardelim}{\addcomma\addspace}
+\addbibresource{\jobname.bib}
+\renewcommand{\footnotesize}{\tiny}
+
+\usepackage{tikz,pgf,calc}
+%\usetikzlibrary{matrix, shapes, positioning, calc,
+%  decorations.pathreplacing, shapes.geometric, arrows}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, text width=1.5cm, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=0.5cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+%% References
+\newlength\leftsidebar
+\makeatletter
+\setlength\leftsidebar{\beamer@leftsidebar}
+\makeatother
+
+\usepackage[absolute,overlay]{textpos}
+\newenvironment{reference}[2]{%
+  \begin{textblock*}{\textwidth}(\leftsidebar+#1,\paperheight-#2)
+      \scriptsize\bgroup\color{red!50!black}}{\egroup\end{textblock*}}
+
+% Path to graphics
+\graphicspath{{../img/}}
+
+% Sources
+\usepackage{setspace}
+\newcommand{\source}[1]{\begin{spacing}{0.5}{\fontsize{5}{6}\selectfont source: \itshape {#1}}\end{spacing}}

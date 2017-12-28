@@ -1,0 +1,145 @@
+% Andreas Scheidegger - May 24, 2013
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 3.
+
+\mode<presentation>
+\ProcessOptionsBeamer
+
+% ---------------------------------
+% color definitions
+\usepackage{color}
+\definecolor{eawag_blue}{RGB}{1,173,221}
+\definecolor{eawag_gray}{rgb}{0.2, 0.2, 0.2}
+\definecolor{eawag_orange}{RGB}{227, 136, 55}
+\definecolor{eawag_green}{RGB}{163, 181, 44}
+
+% ---------------------------------
+% set colors of elements
+
+% set the title color
+\setbeamercolor{title}{fg=eawag_blue}
+
+% set colors for specific elements
+\setbeamercolor{block title}{bg=eawag_blue, fg=eawag_gray} % title color
+\setbeamercolor{block body}{bg=eawag_blue!30!white}        % background
+\setbeamercolor{block title alerted}{bg=eawag_orange,fg=eawag_gray} % background
+\setbeamercolor{block body alerted}{bg=eawag_orange!30!white} % background
+\setbeamercolor{block title example}{bg=eawag_green,fg=eawag_gray} % background
+\setbeamercolor{block body example}{bg=eawag_green!30!white} % background
+
+\setbeamercolor{enumerate item}{fg=eawag_gray}
+\setbeamercolor{enumerate subitem}{fg=eawag_gray}
+\setbeamercolor{enumerate}{fg=eawag_gray}
+\setbeamercolor{itemize}{fg=eawag_gray}
+\setbeamercolor{itemize item}{fg=eawag_blue}
+\setbeamercolor{itemize subitem}{fg=eawag_blue}
+\setbeamercolor{description item}{fg=eawag_blue!80!black}
+
+\setbeamercolor{frametitle}{fg=eawag_gray, bg=eawag_blue}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{section}{fg=eawag_gray}
+\setbeamercolor{subsection}{fg=eawag_gray}
+\setbeamercolor{alerted text}{fg=eawag_orange}
+\setbeamercolor{caption name}{fg=eawag_blue!80!black}
+\setbeamercolor{section in toc}{fg=eawag_blue!80!black}
+
+% ---------------------------------
+% CC license
+\usepackage[
+    type={CC},
+    modifier={by-sa},
+    version={4.0},
+    imagewidth={5em},
+]{doclicense}
+
+% ---------------------------------
+% symbols for bullet points
+
+% itemize
+\usepackage{amssymb}
+\setbeamertemplate{itemize
+  item}{\raise1pt\hbox{\donotcoloroutermaths$\bullet$}} %\circ
+\setbeamertemplate{itemize
+  subitem}{\small\raise0.8pt\hbox{\donotcoloroutermaths$\bullet$}}
+\setbeamertemplate{itemize
+  subsubitem}{\small\raise0.8pt\hbox{\donotcoloroutermaths$\bullet$}}
+
+% enumerate
+% \setbeamertemplate{enumerate item}{\insertenumlabel.}
+% \setbeamertemplate{enumerate subitem}{\insertenumlabel.\insertsubenumlabel}
+% \setbeamertemplate{enumerate subsubitem}{\insertenumlabel.\insertsubenumlabel.\insertsubsubenumlabel}
+% \setbeamertemplate{enumerate mini template}{\insertenumlabel}
+
+% ---------------------------------
+% Misc
+
+% settings for Boxes
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+% figure and table captions
+\usepackage[small,bf]{caption}     % options for captions
+
+% number sections in toc
+\setbeamertemplate{section in toc}[sections numbered]
+
+% ---------------------------------
+% frame title
+
+\setbeamertemplate{frametitle}{
+  \vspace{5mm}
+  \hspace{-5mm}
+  \textbf{\insertframetitle}
+  \par
+  \hspace{-5mm}
+  \large{\insertframesubtitle}
+}
+
+% ---------------------------------
+% footer styling
+
+\setbeamercolor{color_footer_left}{fg=black!70!white,bg=white}
+\setbeamercolor{color_footer_middel}{fg=black!70!white,bg=white}
+\setbeamercolor{color_footer_right}{fg=black!70!white,bg=white}
+
+\defbeamertemplate*{footline}{eawag}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.33\paperwidth,ht=2.25ex,dp=1ex]{color_footer_left}%
+    \hspace*{4ex} \insertshortauthor%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex,center]{color_footer_middel}%
+    \insertsectionhead
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex]{color_footer_right}%
+   \hfill \insertframenumber{} \hspace*{4ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+% ---------------------------------
+% title page
+\defbeamertemplate*{title page}{customized}[1][]
+{
+  \vspace{0.35\paperheight}
+  \hfill \usebeamerfont{title}\textbf{\inserttitle}
+  \par
+  \hfill \usebeamerfont{subtitle}\insertsubtitle
+  \par
+  \vspace{0.18\paperheight}
+  \usebeamerfont{date}\insertdate
+  \par
+  \usebeamerfont{author}\insertauthor
+  \par
+  \usebeamerfont{institute}\textbf{\insertinstitute}
+  \par\vspace*{\fill}
+  \doclicenseThis
+}
+
+% ---------------------------------
+\beamertemplatenavigationsymbolsempty               % no navigation symbols
+\usefonttheme[onlymath]{serif}                      % make equations serife
+
+\mode
+<all>

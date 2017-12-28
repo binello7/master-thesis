@@ -1,29 +1,18 @@
-# README #
+# Master Thesis
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Repository for my master thesis.
+All relevant files will be uploaded here.
 
-### What is this repository for? ###
+Here a list of available files and a brief description.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+ - ´ex_1d_adveqn.m´: This script solves the advection equation with different numerical schemes:
+   
+    1. Forward in time, backward in space
+    3. Lax-Friedrichs scheme
+    5. Leap-frog scheme
+    6. Lax-Wendroff scheme
+     
+     
+ - __blablabla__
+ 
+ - __blablabla__

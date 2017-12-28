@@ -1,0 +1,12 @@
+syntax: glob
+
+doc/pres/pres01/*.pdf
+doc/pres/pres01/img
+*.aux
+*.bcf
+*.log
+*.nav
+*.out
+*.run.xml
+*.snm
+*.toc
