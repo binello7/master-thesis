@@ -2,8 +2,10 @@
 
 
 ## Notes
-fflus???
-stdout???
+* fflus???
+* stdout???
+* quad???
+* fsolve???
 
 ## Behaviour
 * if A is a matrix m x n, ``A(:)`` is a column vector where the columns of A were concatenated one after each other from 1 to n
