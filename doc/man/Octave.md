@@ -69,6 +69,7 @@
 * ``mesh``: plots a mesh in 3D
 * ``surf``: plots a surface in 3D
 * ``view (az, el)``: specifies the plot view point to an azimuth _az_ and elevation _el_
+    * ``[az el] = view ()``: get the current figure view
 * ``shading`` interp: interpolates the plot color
 * ``colormap`` _ColormapName_: sets the plot's colormap to _ColormapName_
 * ``hold``: to retain / let go the current figure

@@ -1,8 +1,9 @@
 # Commands
 * ``man command``: see the manual for _command_
 * ``which command``: shows the path for _command_
-* ``xset dpms force off``: turns off the screen
 * ``$(command)``: result of _command_
+* ``top``: provides a dynamic real-time view of the running system
+* ``xset dpms force off``: turns off the screen
 * ``touch filename``: creates an emtpy file named _filename_
 * ``nano filename``: opens _filename_ with _nano_ the command-line text editor
 * ``grep``: searches a file or folder for the given word or strings
