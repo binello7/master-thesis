@@ -62,6 +62,10 @@
 * ``textscan``: read data from a text file or string
 
 ## Functions to write data
+* ``save ('filename.ext', 'datamatrix')``: save the array _datamatrix_ with default header to _filename.ext_
+
+## Folders and files management functions
+``fullfile``: builds complete file names from separate parts
 
 ## Plot and Related Functions
 * ``plot``: line plot in 2D
@@ -76,9 +80,6 @@
 * ``gcf``: get current figure
 * ``reshape``: reshapes a vector under a defined matrix form
 * ``meshgrid``: given x and y spacing vectors produces a node points matrix
-
-## Folders and files management functions
-``fullfile``: builds complete file names from separate parts
 
 ## Errors management functions
 * ``error_ids``: returns the Octave standard error ids
