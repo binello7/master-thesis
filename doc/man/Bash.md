@@ -5,17 +5,17 @@
 * ``top``: provides a dynamic real-time view of the running system
 * ``chmod +x filename.ext``: makes _filename.ext_ an executable file
 * ``scp``: copy files or folders between different hosts
-    - ``scp your_username@remotehost:filename.ext /some/local/directory``: copy from remote host to local host
-    - ``scp filename.ext your_username@remotehost:/some/remote/directory``: copy from local host to remote host 
+   - ``scp your_username@remotehost:filename.ext /some/local/directory``: copy from remote host to local host
+   - ``scp filename.ext your_username@remotehost:/some/remote/directory``: copy from local host to remote host 
 * ``xset dpms force off``: turns off the screen
 * ``touch filename``: creates an emtpy file named _filename_
 * ``nano filename``: opens _filename_ with _nano_ the command-line text editor
 * ``grep``: searches a file or folder for the given word or strings
-    - ``grep 'word' filename``
-    - ``grep 'word' file1 file2 file3``
-    - ``grep 'string1 string2'  filename``
-    - ``grep -r "string" /folder/`` recursively, searches for _string_ in all files under _folder_
-    - ``grep -i "sTrINg" filename`` looks for _sTrINg_ into _filename_ ignoring word case
+   - ``grep 'word' filename``
+   - ``grep 'word' file1 file2 file3``
+   - ``grep 'string1 string2'  filename``
+   - ``grep -r "string" /folder/`` recursively, searches for _string_ in all files under _folder_
+   - ``grep -i "sTrINg" filename`` looks for _sTrINg_ into _filename_ ignoring word case
 * cat:
 * load:
 * do
