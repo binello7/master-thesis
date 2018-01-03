@@ -20,10 +20,12 @@
 * inputParser
 
 ## Operators
-* .': transpose
-* ': conjugate transpose (if not a complex equivalent to ')
-* ~: if a function returns more than one parameter, assign it to the unwanted ones. This value is not returned but it is still computed!!
-* @:
+* ``.'``: transpose
+* ``'``: conjugate transpose (if not a complex equivalent to ')
+* ``~``: if a function returns more than one parameter, assign it to the unwanted ones. This value is not returned but it is still computed!!
+* ``!``: logical _not_ operator
+* ``~``: logical _not_ operator
+* ``@``:
 
 ## Format conversion specifications
 * ``%g``: general (any number)
@@ -33,8 +35,13 @@
 
 ## Packages management
 * ``pkg list``: list all installed packages
+    - ``... -forge``: list all package available on _SourceForge_
 * ``pkg install pkgname-X.X.X.tar.gz``: install the package _pkgname-X.X.X.tar.gz_
+* ``pkg describe pkgname``: show a description of the package
+    - ``... -verbose pkgname``: add a list of all functions implemented und _pkgname_
+* ``pkg uninstall pkgname``: uninstall an installed package _pkgname_
 * ``pkg load pkgname``: loads the package _pkgname_ for use within _Octave_
+* ``pkg unload pkgname``: unloads the previously loaded package _pkgname_
 
 ## General functions
 * ``doc`` _FunctionName_: returns the documentation of _FunctionName_
@@ -48,6 +55,8 @@
 ## Array Manipulation Functions
 * flipud: flips a vector (vertical!) upsidedown
 * ``repmat (A, m, n)``: Form a block matrix of size m by n, with a copy of matrix A as each element
+* ``horzcat (mat1, mat2, ..., matN)``: horizonltally concatenates matrices. Matrices must have the same vertical length.
+* ``vertcat (mat1, mat2, ..., matN)``: vertically concatenates matrices. Matrices must have the same horizontal length.
 * unique (X): Returns the unique elements of X sorted in ascending order
 
 ## Struct Functions
