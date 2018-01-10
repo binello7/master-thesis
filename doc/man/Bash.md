@@ -2,14 +2,10 @@
 * ``man command``: see the manual for _command_
 * ``which command``: shows the path for _command_
 * ``$(command)``: result of _command_
-* ``top``: provides a dynamic real-time view of the running system
+
 * ``chmod +x filename.ext``: makes _filename.ext_ an executable file
-* ``scp``: copy files or folders between different hosts
-      - ``scp your_username@remotehost:filename.ext /some/local/directory``: copy from remote host to local host
-      - ``scp filename.ext your_username@remotehost:/some/remote/directory``: copy from local host to remote host 
-* ``xset dpms force off``: turns off the screen
+
 * ``touch filename``: creates an emtpy file named _filename_
-* ``nano filename``: opens _filename_ with _nano_ the command-line text editor
 * ``grep``: searches a file or folder for the given word or strings
       - ``grep 'word' filename``
       - ``grep 'word' file1 file2 file3``
@@ -26,5 +22,14 @@
 * nproc: returns the number of processors
 * pause(): forces the system to pause by the given amount of seconds
 * tar: uncompress an archive (many possible options)
-
 * wait: 
+* ``ssh username@hostname``: connects to _username@hostname_ via ssh
+* ``nohup command``: executes _command_ in nohup mode. Closing connection (terminal window, ssh connection) doesn't stop the process. Output goes to the file nohup.out
+* ``scp``: copy files or folders between different hosts
+      - ``scp your_username@remotehost:filename.ext /some/local/directory``: copy from remote host to local host
+      - ``scp filename.ext your_username@remotehost:/some/remote/directory``: copy from local host to remote host 
+
+# Utility
+* ``top``: provides a dynamic real-time view of the running system (kind of system monitor)
+* ``nano filename``: opens _filename_ with _nano_ the command-line text editor
+* ``xset dpms force off``: turns off the screen

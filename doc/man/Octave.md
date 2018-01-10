@@ -50,7 +50,8 @@
 * ``lookfor`` _SomeText_: looks for _SomeText_ in the help of every Octave function
 * ``demo`` _FunctionName_: launches the demo for the function _FunctionName_
 * ``test`` _FunctionName_: perform the tests for the function _FunctionName_
-* ``whos`` _VariableName_: shows the properties of the variable _VariableName_
+* ``who``: show the variables currently saved in the workspace
+* ``whos``: showa a detailed view of the variables currently in the workspace
 
 ## Array Manipulation Functions
 * flipud: flips a vector (vertical!) upsidedown
@@ -64,14 +65,17 @@
 * numfields (_MyStruct_): returns the number of fields of the struct _MyStruct_
 
 ## Strings Manipulation Funcitons
-* strcat (s1, s2,... sN): returns the horizontal concatenation of the sN strings
-* strcmp (s1, s3): returns 1 if s1 and s2 are the same, 0 if not
+* ``strcat (s1, s2,... sN)``: returns the horizontal concatenation of the sN strings
+* ``strcmp (s1, s3)``: returns 1 if s1 and s2 are the same, 0 if not
+* ``strjoin (CellStringArray, Del)``: joins the elements of the cell string array into one single string using _Del_ as delimiter
 
 ## Functions to read data
 * ``textscan``: read data from a text file or string
+* ``load``: automatically loads the variables saved to a file by the function ``save``
 
 ## Functions to write data
 * ``save ('filename.ext', 'datamatrix')``: save the array _datamatrix_ with default header to _filename.ext_
+* ``fputs (fid, str)``: writes the string _str_ to the file _fid_ the way it is. No need to worry about special characters (%, \, ...)
 
 ## Folders and files management functions
 ``fullfile``: builds complete file names from separate parts
