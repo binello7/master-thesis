@@ -1,0 +1,109 @@
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{hyperref} % Hyperlinks within and outside the document
+\hypersetup{
+unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+pdfauthor={JuanPi Carbajal},%
+pdftitle={},%
+colorlinks=true,       % false: boxed links; true: colored links
+linkcolor=OliveGreen,          % color of internal links
+citecolor=Sepia,        % color of links to bibliography
+filecolor=magenta,      % color of file links
+urlcolor=NavyBlue,          % color of external links
+}
+
+\usepackage{nicefrac}
+
+\usepackage{babel}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{lmodern} % German related symbols
+\usepackage{fouriernc} % Use the New Century Schoolbook font, comment this line to use the default LaTeX font or replace it with another
+\usepackage{roboto}
+
+\usepackage{babel}
+
+\usepackage{graphicx}
+\usepackage[small]{caption} %To change the appearance of captions, use the caption package. E.g. to make all caption labels small
+\usepackage{siunitx}
+\usepackage{subfig}
+
+\usepackage{amsmath}    %formulas matematicas lindas
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{hyperxmp}
+\usepackage[
+type={CC},
+modifier={by-sa},
+version={4.0},
+imagewidth={2cm},
+]{doclicense}
+
+\makeatletter
+\@namedef{ver@framed.sty}{9999/12/31}
+\@namedef{opt@framed.sty}{}
+\makeatother
+\usepackage{minted} % Highlight source code using Pygments
+\renewcommand{\listingscaption}{Code}
+
+\definecolor{LightGray}{gray}{0.95}
+\newcommand{\octcli}[1]{%
+% Bug in minted bgcolor triggered since TexLive2016.
+% Fixed on minted 2.5.1 https://tex.stackexchange.com/questions/388796/compilation-fails-using-pygment-minted-on-texlive-2017/389058
+%\colorbox{LightGray}{\texttt{octave>}}\mint[bgcolor=LightGray]{octave}|#1|
+\colorbox{LightGray}{\texttt{octave>}}\mintinline[bgcolor=LightGray]{octave}|#1| %
+}
+\newcommand{\octv}[1]{%
+\mintinline{octave}{#1}%
+}
+
+%% Para teenr los botones bonitos
+\usepackage{tikz}
+\usetikzlibrary{shadows}
+
+\newcommand*\keystroke[1]{%
+  \tikz[baseline=(key.base)]
+    \node[%
+      draw,
+      fill=white,
+      drop shadow={shadow xshift=0.25ex,shadow yshift=-0.25ex,fill=black,opacity=0.75},
+      rectangle,
+      rounded corners=2pt,
+      inner sep=1pt,
+      line width=0.5pt,
+      font=\scriptsize\sffamily
+    ](key) {#1\strut}
+  ;
+}
+
+% Customs commmands
+% Calculus
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\pder}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpder}[2]{\frac{\partial^2{#1}}{\partial{#2^2}}}
+\newcommand{\sderp}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
+\newcommand{\tder}[2]{\frac{\ud{#1}}{\ud{#2}}}
+\newcommand{\definter}[4]{\int_{#1}^{#2} {#3}\ud {#4}}
+\newcommand{\inter}[2]{\int {#1}\ud {#2}}
+
+% Misc
+\newcommand{\eval}[1]{\Big |_{#1}}
+% bold math
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+% Operators
+\DeclareMathOperator*{\err}{err}
+\DeclareMathOperator*{\armin}{arg\,min}
+\DeclareMathOperator*{\linspan}{span}
+\DeclareMathOperator*{\rank}{rank}
+
+% Logicals
+\newcommand{\suchthat}{\big \backslash \;}
+% Line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+% hints
+\newcommand{\hint}[1]{{\it Hint}: #1}
+
+\pagestyle{plain}

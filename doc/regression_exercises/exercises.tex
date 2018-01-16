@@ -1,0 +1,77 @@
+% Copyright (C) 2017 - Juan Pablo Carbajal
+%
+% This work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 International License.
+%
+% You should have received a copy of the license along with this
+% work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
+
+\documentclass[10pt,english,final,a4paper]{exam}
+
+\include{preamble}
+
+\pagestyle{headandfoot}
+\runningheadrule
+\firstpageheader{}{}{}
+\runningheader{1D Regression Exercises}{}{January 2018}
+\firstpagefooter{}{\doclicenseThis}{}
+\runningfooter{}{}{\doclicenseImage}
+\runningfootrule
+
+%\author{Juan Pablo Carbajal}
+%\date{January 2018}
+%\title{Msc. thesis S. Rusca: regression}
+
+\qformat{Exercise~\thequestion: \thequestiontitle \hfill}
+
+\begin{document}
+
+\begin{center}
+{\Large 1D Regression}\\
+Juan Pablo Carbajal\\
+January 2018
+\end{center}
+
+\vspace{1.5em}
+
+Linear least-squares, Polynomial, Splines, Nonlinear least-squares, GP
+
+%\section{Hands-on}
+%\begin{questions}
+%\end{questions}
+
+\section{Training, validation and testing}
+\begin{questions}
+\titledquestion{Splitting the dataset}
+\titledquestion{Shuffling the dataset}
+\end{questions}
+
+\section{Cross-validation}
+\begin{questions}
+\titledquestion{Leave one out}
+\titledquestion{K-fold cross validation}
+\end{questions}
+
+\section{Ridge regression}
+\begin{questions}
+\titledquestion{Tikhonov regularization}
+\titledquestion{Cross validation}
+\end{questions}
+
+\section{Special functions and Hilbert spaces}
+\begin{questions}
+\titledquestion{Fourier}
+\begin{parts}
+\part Shanon-Nyquist
+\end{parts}
+\titledquestion{Legendre}
+\titledquestion{Chebishev}
+\end{questions}
+
+\section{Gaussian processes}
+\begin{questions}
+\titledquestion{Choosing covariance functions}
+\titledquestion{MAP vs. Posterior}
+\end{questions}
+
+\end{document}
