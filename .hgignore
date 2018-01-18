@@ -1,7 +1,9 @@
 syntax: glob
 
-doc/pres/pres01/*.pdf
+
 doc/pres/pres01/img
+case_studies/*/*.png
+case_studies/*/*.sh
 *.aux
 *.bcf
 *.log
@@ -10,3 +12,5 @@ doc/pres/pres01/img
 *.run.xml
 *.snm
 *.toc
+*.dat
+*.pdf
