@@ -84,7 +84,7 @@ for i = 1:nExp
   axis ([0 B 0 Ly 0 weir_height]);
   text (3.5, 5, 4.3, sprintf ('Nx = %d', Nx(i)))
   text (3.5, 5, 4, sprintf ('Ny = %d', Ny(i)))
-  print (gcf, sprintf ('experiment%02d_set-up.png', i)), '-r300');
+  print (gcf, sprintf ('experiment%02d_set-up.png', i), '-r300');
 
 
   #  Convert the data to the FullSWOF_2D format
