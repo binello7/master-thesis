@@ -80,6 +80,11 @@
 ## Folders and files management functions
 ``fullfile``: builds complete file names from separate parts
 
+## Interpolation functions
+* ``interp1 (x, y, xi)``: perform a one-dimensional interpolation
+    - ``pp = interp1 (..., 'pp')``: if _pp_ is provided no _xi_ have to be given to the function. The function returns then a piecewise polynomial object. The object can later be used with ``ppval`` for evaluation
+* ``ppval (pp, xi)``: evaluate the piecewise polynomial structure _pp_ at the points _xi_
+
 ## Plot and Related Functions
 * ``plot``: line plot in 2D
 * ``quiver``: plots vector field

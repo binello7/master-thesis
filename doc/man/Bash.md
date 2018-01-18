@@ -26,6 +26,7 @@
 * ``ssh username@hostname``: connects to _username@hostname_ via ssh
 * ``nohup command``: executes _command_ in nohup mode. Closing connection (terminal window, ssh connection) doesn't stop the process. Output goes to the file nohup.out
 * ``scp``: copy files or folders between different hosts
+      - ``scp -r ...``: recursively, to copy folders
       - ``scp your_username@remotehost:filename.ext /some/local/directory``: copy from remote host to local host
       - ``scp filename.ext your_username@remotehost:/some/remote/directory``: copy from local host to remote host 
 
