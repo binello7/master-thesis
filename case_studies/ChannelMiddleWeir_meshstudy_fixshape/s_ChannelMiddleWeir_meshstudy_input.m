@@ -158,6 +158,6 @@ fclose (fid);
 
 # save global variables
 save('input_variables.dat', 'weir_height', 'wTop_l', 'wTop_r', 'pweir');
-#clear all
+clear all
 
 
