@@ -35,8 +35,8 @@ endif
 ## Parameters that don't change in the loop
 B = 4;
 Ly = 40;     # length of the channel, same for all experiments
-Nx = [2 4 8 20 40 80 100 160];
-Ny = [20 40 80 200 400 800 1000 1600];
+Nx = [2 4 8 20 40 80 100];
+Ny = [20 40 80 200 400 800 1000];
 dy = Ly ./ Ny;
 nExp = length (Nx);     # how many experiments we run
 
