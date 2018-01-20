@@ -68,7 +68,7 @@ for i = 1:nExp
   H{i} = mean (HH{i}(:, round (end/2), 100:end), 3);
   [H_max(i), max_idx(i)] = max (H{i});
   HZ{i} = H{i} + Z{i};
-  middleweir_head(i) = interp1 (Y{i}, H{i}, weir_mes_pos);
+  middleweir_head(i) = interp1 (Y{i}, H{i}, weir_mes_pos(i));
 endfor
 
 dx = B ./ Nx;
