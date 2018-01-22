@@ -21,7 +21,7 @@ pkg load fswof2d
 
 ## Variables to save to the outputfile
 #
-vars = {'Y', 'Z', 'H', 'middleweir_head', 'HZ', 'H_max', 'Y_max', 'nExp', ...
+vars = {'Y', 'Z', 'H', 'middleweir_head', 'weir_mes_pos' 'HZ', 'H_max', 'Y_max', 'nExp', ...
        'Nx', 'Ny', 'dx', 'dy', 'B', 'Ly', 'metadata'};
 
 metadata.XX = 'Matrix of the x-nodes coordinates';
