@@ -4,6 +4,7 @@ syntax: glob
 doc/pres/pres01/img
 doc/pres/pres_mseminar/MSem_Presentation.bib
 case_studies/*/*.png
+case_studies/*/*.eps
 case_studies/*/*.sh
 case_studies/*/*/*.txt
 *.aux
