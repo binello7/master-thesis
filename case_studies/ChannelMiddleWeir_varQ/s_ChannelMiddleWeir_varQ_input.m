@@ -158,7 +158,8 @@ fputs (fid, bsh);
 fclose (fid);
 
 # save global variables
-save('input_variables.dat', 'weir_height', 'pweir', 'Qin', 'dy');
+save ('input_variables.dat', 'weir_height', 'pweir', 'dy');
+save ('input_Q.dat', 'Qin');
 clear all
 
 
