@@ -25,18 +25,18 @@ load ('extracted_data.dat');
 
 i = 1;
 ## Remove unusable experiments
-#while i <= size (H)(2)
-#  if weircenter_head(i) < 0.3
-#    weircenter_head(i) = [];
-#    Qin(i)             = [];
-#    H(:,i)             = [];
-#    HZ(:,i)            = [];
-#    H_max(i)           = [];
-#    h0(i)              = [];
-#    v0(i)              = [];
-#  endif
-#  i+=1;
-#endwhile
+while i <= size (H)(2)
+  if weircenter_head(i) < 0.3
+    weircenter_head(i) = [];
+    Qin(i)             = [];
+    H(:,i)             = [];
+    HZ(:,i)            = [];
+    H_max(i)           = [];
+    h0(i)              = [];
+    v0(i)              = [];
+  endif
+  i+=1;
+endwhile
 
 
 Qin   = abs (Qin);
@@ -45,18 +45,14 @@ H_max = H_max - weir_height;
 h0    = h0 - weir_height;
 
 hweir = @(Q, mu, c) (Q / (2 /3 * mu * sqrt (2*9.81) * B)).^(c);
-iswater=@(z,h,tol) abs(z-h)>tol
-water=@(z,h,tol=1e-8)ifelse(iswater(z,h,tol), h, NA)
+iswater=@(z,h,tol) abs(z-h)>tol;
+water=@(z,h,tol=5e-3)ifelse(iswater(z,h,tol), h, NA);
+
 
 ## Perform linear regression
 #
 lQin = (log10 (Qin)).';
 lh0  = (log10 (h0)).';
-figure (1)
-plot (lh0, lQin, 'o')
-hold on
-plot (log10 (hweir(Qin, mu2, 1/a)), lQin, 'ro')
-hold off
 
 C1  = 10^(mean (lQin - 3/2 * lh0));
 mu1 = C1 / (2/3 * B * sqrt(2 * 9.81));
@@ -70,10 +66,17 @@ C2    = 10^theta(1);
 mu2   = C2 / (2/3 * B * sqrt(2 * 9.81));
 a     = theta(2);
 
-
 MSE(1) = 1/n * sum ((h0 - hweir(Qin, 0.57, 2/3)).^2);
 MSE(2) = 1/n * sum ((h0 - hweir(Qin, mu1, 2/3)).^2);
 MSE(3) = 1/n * sum ((h0 - hweir(Qin, mu2, 1/a)).^2);
+
+
+
+figure (1)
+plot (lh0, lQin, 'o')
+hold on
+plot (log10 (hweir(Qin, mu2, 1/a)), lQin, 'ro')
+hold off
 
 ## Generate the plots of the analyzed variables
 # plot 1: longitudinal profile for the 25 experiments
@@ -81,7 +84,7 @@ plt_span = 1:length (Y);
 figure (2)
 plot (Y(plt_span), Z(plt_span), '-k', 'linewidth', 3);
 hold on
-plot (Y(plt_span), water(Z(plt_span), HZ(plt_span,:)));
+plot (Y(plt_span), water (Z(plt_span), HZ(plt_span,:)));
 hold off
 axis equal
 title ('Free surface profiles for Q in range 1 - 10 m3/s')
