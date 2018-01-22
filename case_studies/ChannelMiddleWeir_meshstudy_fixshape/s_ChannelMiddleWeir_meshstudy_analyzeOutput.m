@@ -17,7 +17,7 @@
 ## Created: 2018-01-09
 
 close all
-
+clear Y_max
 ## Load the variables
 # load variables if not present in workspace
 if !exist ('H', 'var')
@@ -25,6 +25,7 @@ if !exist ('H', 'var')
   load (fextractdata);
 endif
 
+Y_max(2:end) = Y_max(2:end) + 0.5 * dy(2:end);
 perc_diff_middleweir_h = abs (diff (middleweir_head)) ...
                          ./ middleweir_head(2:end) * 100;
 perc_diff_H_max = abs (diff (H_max)) ./ H_max(2:end) * 100;
@@ -78,20 +79,16 @@ xlabel ('dy [m]');
 ylabel ('h_{max} location [m]')
 print ('convergence_ymax.png', '-r300');
 
-# plot 6: distance at which max water head occurs
-figure (6)
-semilogy (dy(2:end), perc_diff_Y_max, 'r-o');
-title ('% variation max water depth location')
-xlabel ('dy [m]');
-ylabel ('variation y_{max} [%]')
-print ('diff_ymax.png', '-r300');
-
 # plot 7: profile along che middle of the channel
 figure (7)
-plot (Y{nExp}, Z{nExp}, 'k', 'linewidth', 2);
+plot (Y{1}, Z{1}, 'k', 'linewidth', 2);
+Yp{1} = Y{1};
 for i = 1:nExp
+  if i > 1
+    Yp{i} = Y{i} + 0.5 * dy(i);
+  endif
   hold on;
-  plot (Y{i}, HZ{i});
+  plot (Yp{i}, HZ{i});
   hold off;
 endfor
 title ('Free surface profiles')
