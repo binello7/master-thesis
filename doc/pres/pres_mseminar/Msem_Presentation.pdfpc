@@ -1,0 +1,11 @@
+[notes]
+### 1
+Intermediate Master Thesis Presentation
+
+ 	- Development of an Overland Flow Model Emulator### 2
+Like Zofingen 2017 or images here, from Canton Shaffausen: overland flow after storm event in May 2013### 3
+Idea: work on a real Swiss case study
+	- Obtain data from BAFU
+	- Build emulators for different study variables -> flow velocity, water depths, ...
+	- Asses performance -> e.g compare results with maps canton Lucern### 4
+The way science was always done, but by using numerical simulators instead of physical experiments
