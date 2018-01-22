@@ -21,12 +21,15 @@
 
 \usepackage{ellipsis}
 
-\usepackage{subcaption}
+% Additional packages
 \usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{xcolor}
+
 
 \usepackage[style=authoryear, backend=biber]{biblatex}
 \setbeamertemplate{itemize/enumerate body begin}{\setlength{\leftmargini}{1.5em}}
-%\renewcommand*{\nameyeardelim}{\addcomma\addspace}
+\renewcommand*{\nameyeardelim}{\addcomma\addspace}
 \addbibresource{\jobname.bib}
 \renewcommand{\footnotesize}{\tiny}
 
