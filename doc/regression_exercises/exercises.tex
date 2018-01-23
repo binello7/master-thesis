@@ -22,7 +22,7 @@
 %\date{January 2018}
 %\title{Msc. thesis S. Rusca: regression}
 
-\qformat{Exercise~\thequestion: \thequestiontitle \hfill}
+%\qformat{Exercise~\thequestion: \thequestiontitle \hfill}
 
 \begin{document}
 
@@ -34,7 +34,7 @@ January 2018
 
 \vspace{1.5em}
 
-Linear least-squares, Polynomial, Splines, Nonlinear least-squares, GP
+%Linear least-squares, Polynomial, Splines, Nonlinear least-squares, GP
 
 \section{Definitions}
 A \textbf{dataset} is a set of input-output data pairs 
@@ -56,7 +56,7 @@ Write a function that exchanges elements from two complementary sets.
 \begin{questions}
 \question Given an dataset of size $N$, write a function that produces all subsets of size $N-1$.
 \titledquestion{Leave-one-out cross-validation}
-The file \texttt{interpolation1D_poly1.dat} contains two noiseless datasets with the same inputs.
+The file \texttt{interpolation1D\_poly1.dat} contains two noiseless datasets with the same inputs.
 \begin{parts}
 \part Find the simplest polynomial model that interpolates the data using leave-one-out cross-validation. \hint{\texttt{polyfit}}
 
@@ -70,13 +70,13 @@ The file \texttt{interpolation1D_poly1.dat} contains two noiseless datasets with
 
 \end{parts}
 
-\question Redo all parts of the previous question use the following \emph{linear filter} to interpolate the data:
+\question Redo all parts of the previous question using a \emph{linear filter} to interpolate the data:
 
 \begin{equation}
 y (\bm{x}) = \sum_{i=1}^N y_i \varphi(\bm{x}, \bm{x}_i)
 \end{equation}
 
-In addition answer the following
+In addition answer the following:
 
 \begin{parts}
 \part Is this a linear model?
@@ -84,13 +84,12 @@ In addition answer the following
 \part Use the functions
 
 \begin{align}
-\varphi_{L}(x,x_i) &= \left\lbrace\begin{cases}
-0 & x < x_i - \sigma\\
-\frac{x   - x_i + \sigma}{\sigma} & x_i - \sigma <= x <= x_i\\
-\frac{x_i - x   + \sigma}{\sigma} & x_i <= x <= x_i + \sigma\\
-0 & x > x_i + \sigma
-\end{cases}\right.
-\varphi_{SE}(x,x_i) &= \exp \left( \frac{-(x - x')^2}{2 \sigma^2} \right)\\
+\varphi_{L}(x,x_i) &=  \alpha(x) \frac{x   - x_i}{\sigma} + 1, \quad \alpha(x) = \begin{cases}
+0  & x < x_i - \sigma \text{ or } x > x_i + \sigma\\
+1  & x_i - \sigma \leq x \leq x_i\\
+-1 & x_i \leq x \leq x_i + \sigma
+\end{cases}\\
+\varphi_{SE}(x,x_i) &= \exp \left( -\frac{(x - x')^2}{2 \sigma^2} \right)
 \end{align}
 
 \noindent to perform the interpolation and find the best value for the parameter $\sigma$ using cross-validation.
@@ -100,7 +99,7 @@ In addition answer the following
 \end{questions}
 
 %\section{Input and output transformations}
-%Explore the datasets in the files \texttt{interpolation1D_warp*.dat}.
+%Explore the datasets in the files \texttt{interpolation1D\_warp*.dat}.
 %\begin{questions}
 %\question What is the simplest polynomial model that can interpolate these datasets?
 %\question Find a model (not a polynomial) for each dataset that can interpolate the data and compute the uncertainty in the predictions of the model.
