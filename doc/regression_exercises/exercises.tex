@@ -36,9 +36,13 @@ January 2018
 
 Linear least-squares, Polynomial, Splines, Nonlinear least-squares, GP
 
-%\section{Hands-on}
-%\begin{questions}
-%\end{questions}
+\section{Definitions}
+A \textbf{dataset} is a set of input-output data pairs 
+\begin{equation}
+\lbrace \left(\bm{x}_i, y_i\right), \quad i = 1, \ldots, N\rbrace
+\end{equation}
+\noindent where $N$ is the size of the dataset, $\bm{x}_i \in \mathbb{R}^n$ is the $i$-th sample (or observation) of the input vector, and $y_i \in \mathbb{R}$
+is the $i$-th sample of the output.
 
 \section{Training, validation and testing}
 \begin{questions}
@@ -50,31 +54,72 @@ Write a function that exchanges elements from two complementary sets.
 
 \section{Cross-validation}
 \begin{questions}
-\question Given an set with N elements, write a function that produces all subsets with N-1 elements.
-\titledquestion{Leave-one-out}
-\titledquestion{Jackknife}
-\end{questions}
-
-\section{Ridge regression}
-\begin{questions}
-\titledquestion{Tikhonov regularization}
-\titledquestion{Cross validation}
-\end{questions}
-
-\section{Special functions and Hilbert spaces}
-\begin{questions}
-\titledquestion{Fourier}
+\question Given an dataset of size $N$, write a function that produces all subsets of size $N-1$.
+\titledquestion{Leave-one-out cross-validation}
+The file \texttt{interpolation1D_poly1.dat} contains two noiseless datasets with the same inputs.
 \begin{parts}
-\part Shanon-Nyquist
+\part Find the simplest polynomial model that interpolates the data using leave-one-out cross-validation. \hint{\texttt{polyfit}}
+
+\part Compute the uncertainty in the polynomial model using second output of the function \texttt{polyfit}
+
+\part Compute the uncertainty in the model using the jackknife method
+
+\part Compute the uncertainty in the intrapolation by propagating model uncertainties to the output.
+
+\part Compute the uncertainty in the intrapolation using the leave-one-out out-of-sample error estimation.
+
 \end{parts}
-\titledquestion{Legendre}
-\titledquestion{Chebishev}
+
+\question Redo all parts of the previous question use the following \emph{linear filter} to interpolate the data:
+
+\begin{equation}
+y (\bm{x}) = \sum_{i=1}^N y_i \varphi(\bm{x}, \bm{x}_i)
+\end{equation}
+
+In addition answer the following
+
+\begin{parts}
+\part Is this a linear model?
+
+\part Use the functions
+
+\begin{align}
+\varphi_{L}(x,x_i) &= \left\lbrace\begin{cases}
+0 & x < x_i - \sigma\\
+\frac{x   - x_i + \sigma}{\sigma} & x_i - \sigma <= x <= x_i\\
+\frac{x_i - x   + \sigma}{\sigma} & x_i <= x <= x_i + \sigma\\
+0 & x > x_i + \sigma
+\end{cases}\right.
+\varphi_{SE}(x,x_i) &= \exp \left( \frac{-(x - x')^2}{2 \sigma^2} \right)\\
+\end{align}
+
+\noindent to perform the interpolation and find the best value for the parameter $\sigma$ using cross-validation.
+
+\end{parts}
+
 \end{questions}
 
-\section{Gaussian processes}
-\begin{questions}
-\titledquestion{Choosing covariance functions}
-\titledquestion{MAP vs. Posterior}
-\end{questions}
+%\section{Input and output transformations}
+%Explore the datasets in the files \texttt{interpolation1D_warp*.dat}.
+%\begin{questions}
+%\question What is the simplest polynomial model that can interpolate these datasets?
+%\question Find a model (not a polynomial) for each dataset that can interpolate the data and compute the uncertainty in the predictions of the model.
+%\end{questions}
+
+%\section{Special functions and Hilbert spaces}
+%\begin{questions}
+%\titledquestion{Fourier}
+%\begin{parts}
+%\part Shanon-Nyquist
+%\end{parts}
+%\titledquestion{Legendre}
+%\titledquestion{Chebishev}
+%\end{questions}
+
+%\section{Gaussian processes}
+%\begin{questions}
+%\titledquestion{Choosing covariance functions}
+%\titledquestion{MAP vs. Posterior}
+%\end{questions}
 
 \end{document}
