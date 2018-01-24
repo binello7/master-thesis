@@ -16,23 +16,16 @@
 ## Author: Sebastiano Rusca <sebastiano.rusca@gmail.com>
 ## Created: 2018-01-24
 
+close all
+dataFolder = 'data';
+fname = @(s) fullfile ('..', dataFolder, s);
 
-## -*- texinfo -*-
-## @defun {@var{outarg} =} funcname (@var{inarg}, @dots{})
-## @defunx {@var{outarg2} =} funcname (@var{inarg2}, @dots{})
-## Oneliner
-##
-## Explanation usage 1
-##
-## Explanation usage 2
-##
-## @seealso{func1, func2}
-## @end defun
+dataFile = fname ('interpolation1D_poly1.dat');
 
+data = load (dataFile);
 
-function [n_1] = n-1_subset (D)
+X = data(:,1);
+Y = data(:,2:end);
 
-  n = length (D);
-  
-
-endfunction
+plot (X, Y(:,1), 'bo', X, Y(:,2), 'rx')
+axis tight
