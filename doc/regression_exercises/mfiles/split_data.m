@@ -30,7 +30,7 @@
 ## @end defun
 
 
-function [ss1 ss2] = splitdata (ds, n1)  
+function [ss1 ss2] = split_data (ds, n1)  
 
   n = length (ds);
   if n1 >= n
