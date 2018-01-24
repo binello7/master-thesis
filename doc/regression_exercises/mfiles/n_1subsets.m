@@ -30,9 +30,13 @@
 ## @end defun
 
 
-function [n_1] = n-1_subset (D)
+function [n_1] = n_1subset (D)
 
-  n = length (D);
-  
+  n   = length (D);
+  idx = nchoosek ([1:n], n-1);
+
+  for i = 1:n
+    n_1{i} = D(idx(i,:),:);
+  endfor
 
 endfunction
