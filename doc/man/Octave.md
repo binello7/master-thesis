@@ -47,18 +47,28 @@
 * ``doc`` _FunctionName_: returns the documentation of _FunctionName_
 * ``help`` _FunctionName_: returns the help for the function _FunctionName_
 * ``type`` _FunctionName_: shows the source code of the function _FunctionName_
-* ``lookfor`` _SomeText_: looks for _SomeText_ in the help of every Octave function
+* ``lookfor`` _SomeText_: looks for _SomeText_ in the help of every Octave
+    function
 * ``demo`` _FunctionName_: launches the demo for the function _FunctionName_
 * ``test`` _FunctionName_: perform the tests for the function _FunctionName_
 * ``who``: show the variables currently saved in the workspace
 * ``whos``: showa a detailed view of the variables currently in the workspace
 
 ## Array Manipulation Functions
-* flipud: flips a vector (vertical!) upsidedown
-* ``repmat (A, m, n)``: Form a block matrix of size m by n, with a copy of matrix A as each element
-* ``horzcat (mat1, mat2, ..., matN)``: horizonltally concatenates matrices. Matrices must have the same vertical length.
-* ``vertcat (mat1, mat2, ..., matN)``: vertically concatenates matrices. Matrices must have the same horizontal length.
-* unique (X): Returns the unique elements of X sorted in ascending order
+* ``flipud (X)``: flips matrix upsidedown (vertically)
+* ``repmat (A, m, n)``: form a block matrix of size m by n, with a copy
+    of matrix A as each element
+* ``horzcat (mat1, mat2, ..., matN)``: horizonltally concatenates matrices. 
+    Matrices must have the same vertical length.
+* ``vertcat (mat1, mat2, ..., matN)``: vertically concatenates matrices. 
+    Matrices must have the same horizontal length.
+* ``unique (X)``: Returns the unique elements of X sorted in ascending order.
+    X can be a matrix or a cell array of strings.
+* ``find (X)``: return a vector of indices of nonzero elements of a matrix, as
+    a row if X is a row vector or as a column otherwise.
+* ``prepad (X, L, C)``: Prepend the scalar value C to the vector X until it
+    is of length L. If C is not given, a value of 0 is used.
+
 
 ## Struct Functions
 * fieldnames (_MyStruct_): returns the fieldnames of the struct _MyStruct_
@@ -82,15 +92,24 @@
 
 ## Interpolation functions
 * ``interp1 (x, y, xi)``: perform a one-dimensional interpolation
-    - ``pp = interp1 (..., 'pp')``: if _pp_ is provided no _xi_ have to be given to the function. The function returns then a piecewise polynomial object. The object can later be used with ``ppval`` for evaluation
-* ``ppval (pp, xi)``: evaluate the piecewise polynomial structure _pp_ at the points _xi_
+    - ``pp = interp1 (..., 'pp')``: if _pp_ is provided no _xi_ have to be given
+      to the function. The function returns then a piecewise polynomial object. 
+      The object can later be used with ``ppval`` for evaluation
 
-## Plot and Related Functions
+
+## Evaluation functions
+* ``ppval (pp, xi)``: evaluate the piecewise polynomial structure _pp_ at
+    the points _xi_
+* ``polyval (P, X)``: evaluate the polynomial P at the specified values of X.
+    P is a vector made of the coefficients of the polynomial.
+
+## Plot and related functions
 * ``plot``: line plot in 2D
 * ``quiver``: plots vector field
 * ``mesh``: plots a mesh in 3D
 * ``surf``: plots a surface in 3D
-* ``view (az, el)``: specifies the plot view point to an azimuth _az_ and elevation _el_
+* ``view (az, el)``: specifies the plot view point to an azimuth _az_ and 
+    elevation _el_
     * ``[az el] = view ()``: get the current figure view
 * ``shading`` interp: interpolates the plot color
 * ``colormap`` _ColormapName_: sets the plot's colormap to _ColormapName_
