@@ -98,6 +98,24 @@ In addition answer the following:
 
 \end{questions}
 
+\section{Linear mixtures}
+\begin{questions}
+\question The 10 signals in \texttt{interpolation\_mixture.dat} are believed to be mixtures of the
+following responses:
+\begin{align}
+y_{A}(t) &= \frac{1}{\sqrt{\kappa t}}, \quad t > 0\\
+y_{B}(t) &= \sin \left( 2 \pi f \left(t - t_0\right) \right)\\
+y_{C}(t) &= t^2 \exp \left( - \eta (t-\xi)^2\right)\\
+y_{D}(t) &= \frac{1}{2} \left( 1 - \tanh (\nu (t - \delta)) \right)\\
+\end{align}
+\noindent where all parameters are positive real numbers.
+\begin{parts}
+\part Write a function to interpolate data using these responses
+\part Find the value of the parameters that interpolate the signals in the file
+\part Was responses were present in which signal?
+\end{parts}
+\end{questions}
+
 %\section{Input and output transformations}
 %Explore the datasets in the files \texttt{interpolation1D\_warp*.dat}.
 %\begin{questions}
