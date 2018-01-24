@@ -19,13 +19,37 @@
 close all
 dataFolder = 'data';
 fname = @(s) fullfile ('..', dataFolder, s);
+mse   = @(y, yf) 1 / length (y) * sum ((y - yf).^2);
+
 
 dataFile = fname ('interpolation1D_poly1.dat');
 
 data = load (dataFile);
 
 X = data(:,1);
-Y = data(:,2:end);
+Y = data(:,2);
 
-plot (X, Y(:,1), 'bo', X, Y(:,2), 'rx')
+plot (X, Y, 'bo')
 axis tight
+
+nx = length (X);
+MaxIter = 1e3;
+n_max = floor (MaxIter / nx);                  # maximum number of exponents sets
+e_max = floor (log (n_max + 1) / log (2) - 1); # maximum exponent
+
+##
+# every exponent can be considered (1) or not (0). If the exponent max is 3
+# then we have 4 coefficients (^0 also to be considered). The case [0 0 0 0] is
+# of course not considered.
+n_sets = 2^(e_max + 1) - 1;
+
+e_sets = dec2bin (1:n_sets) =='1';
+
+
+for i = 1:n_sets;
+  p_est(i,:) = polyfit (X, Y, e_sets(i,:));
+  mse_e(i,1) = mse(Y, polyval (p_est(i,:), X));
+endfor
+
+
+
