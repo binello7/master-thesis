@@ -38,7 +38,17 @@ function [ss1 ss2] = split_data (ds, n1)
            'Subset length n1 has to be smaller than dataseth length n');
   endif
 
+  p = randperm (n);
+  ds = ds(p,:);
   ss1 = ds(1:n1,:);
   ss2 = ds(n1+1:end,:);
 
 endfunction
+
+
+%!demo
+%! D = [10 20 30 40 50; 11 22 33 44 55].'
+%! [Dp1 Dp2] = split_data (D, 3)
+%! print (D)
+%! print (Dp1, Dp2)
+
