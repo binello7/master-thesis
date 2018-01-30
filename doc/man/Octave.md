@@ -55,19 +55,20 @@
 * ``whos``: showa a detailed view of the variables currently in the workspace
 
 ## Array Manipulation Functions
-* ``flipud (X)``: flips matrix upsidedown (vertically)
-* ``repmat (A, m, n)``: form a block matrix of size m by n, with a copy
-    of matrix A as each element
 * ``horzcat (mat1, mat2, ..., matN)``: horizonltally concatenates matrices. 
     Matrices must have the same vertical length.
-* ``vertcat (mat1, mat2, ..., matN)``: vertically concatenates matrices. 
-    Matrices must have the same horizontal length.
-* ``unique (X)``: Returns the unique elements of X sorted in ascending order.
-    X can be a matrix or a cell array of strings.
-* ``find (X)``: return a vector of indices of nonzero elements of a matrix, as
+* ``find (X)``: return a vector of indices of nonzero elements of a matrix as
     a row if X is a row vector or as a column otherwise.
+* ``flipud (X)``: flips matrix upsidedown (vertically)
 * ``prepad (X, L, C)``: Prepend the scalar value C to the vector X until it
     is of length L. If C is not given, a value of 0 is used.
+* ``repmat (A, m, n)``: form a block matrix of size m by n, with a copy
+    of matrix A as each element
+* ``unique (X)``: Returns the unique elements of X sorted in ascending order.
+    X can be a matrix or a cell array of strings.
+* ``vertcat (mat1, mat2, ..., matN)``: vertically concatenates matrices. 
+    Matrices must have the same horizontal length.
+
 
 
 ## Struct Functions
