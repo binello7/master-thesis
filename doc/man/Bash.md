@@ -13,6 +13,7 @@
       - ``grep -r "string" /folder/`` recursively, searches for _string_ in all files under _folder_
       - ``grep -i "sTrINg" filename`` looks for _sTrINg_ into _filename_ ignoring word case
 * cat:
+* ``sed``: search and replace text in a file
 * load:
 * do
 * echo
