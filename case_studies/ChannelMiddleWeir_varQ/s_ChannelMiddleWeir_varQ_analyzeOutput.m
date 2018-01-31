@@ -23,20 +23,20 @@ close all
 load ('input_Q.dat');
 load ('extracted_data.dat');
 
-i = 1;
-## Remove unusable experiments
-while i <= size (H)(2)
-  if weircenter_head(i) < 0.3
-    weircenter_head(i) = [];
-    Qin(i)             = [];
-    H(:,i)             = [];
-    HZ(:,i)            = [];
-    H_max(i)           = [];
-    h0(i)              = [];
-    v0(i)              = [];
-  endif
-  i+=1;
-endwhile
+#i = 1;
+### Remove unusable experiments
+#while i <= size (H)(2)
+#  if weircenter_head(i) < 0.3
+#    weircenter_head(i) = [];
+#    Qin(i)             = [];
+#    H(:,i)             = [];
+#    HZ(:,i)            = [];
+#    H_max(i)           = [];
+#    h0(i)              = [];
+#    v0(i)              = [];
+#  endif
+#  i+=1;
+#endwhile
 
 
 Qin   = abs (Qin);
@@ -80,7 +80,7 @@ hold off
 
 ## Generate the plots of the analyzed variables
 # plot 1: longitudinal profile for the 25 experiments
-plt_span = 1:length (Y);
+plt_span = 150:250;
 figure (2)
 plot (Y(plt_span), Z(plt_span), '-k', 'linewidth', 3);
 hold on
@@ -90,7 +90,7 @@ axis equal
 title ('Free surface profiles for Q in range 1 - 10 m3/s')
 xlabel ('Ly [m]');
 ylabel ('h [m]')
-annotation ('textarrow', [0.7 0.65], [0.6 0.6], 'string', ' flow direction', ...
+annotation ('textarrow', [0.7 0.65], [0.8 0.8], 'string', ' flow direction', ...
             'color', 'b', 'headlength', 6, 'headwidth', 6)
 print ('free_surfaces.eps', '-color');
 
