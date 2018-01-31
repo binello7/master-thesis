@@ -37,7 +37,7 @@ perc_diff_Y_max = abs (diff (Y_max)) ./ Y_max(2:end) * 100;
 # generate the legend
 for i = 1:nExp
   leg{i} = sprintf ('Nx = %d, Ny = %d', Nx(i), Ny(i));
-end
+endfor
 
 # plot 1: water head over the middle of the weir
 figure (1)
