@@ -38,6 +38,10 @@ close all
 # 3.2.d Do we have to take into account cross-correlation within parameters for the propagation?
 #       (see formula wikipedia, propagation of uncertainty)
 
+# 3.2.e What is meant? I computed the difference (absolute value) between the given outputs and
+#       outputs computed with the model (with p_est). In the intrapolation: linear interpolation between
+#       error at one output point and error at the following?? (doesn't really make sense...)
+
 
 
 
@@ -50,11 +54,18 @@ ind_loo     = @(nx) ! logical (eye (nx));
 p_est_jk_f  = @(x, y, loo, ln) cell2mat (transpose (arrayfun (@(i) polyfit (x(loo(:,i)), y(loo(:,i)), ln), 1:length(x), 'uniformoutput', false)));
 
 
-function dy = dyp (x, dp, ev)
+function dy = dypp (x, dp, ev)
 # sf^2 = (df/dp1)^2 * sp1^2 + (df/dp2)^2 * sp2^2 + ...
 # propagates the errot to the output using the above formula (polynomes)
- dy = sqrt (sumsq (x.^ev .* dp.', 2));
+  dy = sqrt (sumsq (x.^ev .* dp.', 2));
 endfunction
+
+function dy = dylo (p, x, y)
+  for i = 1:length (x)
+    dy(i,1) = abs (y(i) - polyval (p, x(i)));
+  endfor
+endfunction
+
 
 function sdjk = jk_stdv (p)
   n = length (p);
@@ -160,9 +171,12 @@ dp_jk = jk_stdv (p_est_jk);
 dp_jk = dp_jk(e_simp != 0);
 
 # propagation of uncertainty to output (dy)
-dy = dyp (X, dp_pf, ee_simp);
+dypo = dypp (X, dp_pf, ee_simp);
 
-#xt = linspace (min (X)*1.1, max (X)*1.1, 100).';
+# calculation of uncertainty with leave one out of sample error estimation
+dyle = dylo (p_est, X, Y);
+
+
 
 
 
