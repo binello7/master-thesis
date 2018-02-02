@@ -37,10 +37,11 @@ endfunction
 # the domain is a 2km x 2km catchment
 # TODO perform mesh study for grid convergence
 # so far dx = dy = 1m
+
 Lx = 2000;
 Ly = 2000;
-Nx = 2000;
-Ny = 2000;
+Nx = 1000;
+Ny = 1000;
 
 
 x = linspace (0, Lx, Nx+1);
@@ -92,9 +93,9 @@ h.surf = surf (XX, YY, ZZ);
 shading interp
 axis equal
 l = light ('position', [1 0.5 1]);
-hold on
-contour3 (ZZ, 25, 'linecolor', 'k', 'linewidth', 0.4);
-hold off
+#hold on
+#contour3 (ZZ, 25, 'linecolor', 'k', 'linewidth', 0.4);
+#hold off
 
 ## Convert data to fswof2d format and save them as topography file
 [X Y Z] = dataconvert ('fswof2d', XX, YY, ZZ);
