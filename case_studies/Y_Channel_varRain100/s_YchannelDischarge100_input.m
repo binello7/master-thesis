@@ -169,7 +169,7 @@ timetxt = strftime ("%Y-%m-%d %H:%M:%S", localtime (time ()));
 bsh = {
 '#!/bin/bash', ...
 sprintf("## Automatically generated on %s\n", timetxt), ...
-'nohup parallel -j+0 --eta fswof2d -f {} ::: $(basename -a Inputs/parameters*)'
+'nohup parallel -j+0 --eta fswof2d -f {} ::: $(basename -a Inputs/parameters*) &'
 };
 bsh = strjoin (bsh, "\n");
 fid = fopen (bfile, "wt");
