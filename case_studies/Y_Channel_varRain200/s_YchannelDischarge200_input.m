@@ -14,7 +14,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 ## Author: Sebastiano Rusca <sebastiano.rusca@gmail.com>
-## Created: 2018-02-01
+## Created: 2018-02-02
 
 pkg load fswof2d
 
@@ -36,12 +36,12 @@ endfunction
 ## Script
 # the domain is a 2km x 2km catchment
 # TODO perform mesh study for grid convergence
-# so far dx = dy = 1m
+# here Nx = Ny = 100, dx = dy = 20m
 
 Lx = 2000;
 Ly = 2000;
-Nx = 1000;
-Ny = 1000;
+Nx = 200;
+Ny = 200;
 
 
 x = linspace (0, Lx, Nx+1);
@@ -73,9 +73,6 @@ Zpb = a*x.^2 + b*x + c;
 
 ZZpb = repmat (Zpb, Ny, 1);
 
-#np = nf (alpha2, 0);
-#ZZp2 = (np(1) * XX + np(2) * YY ) ./ np(3);
-
 ## Resulting topography: sum of the different features
 ZZ = ZZpl + ZZpb + ZZg1 + ZZg2 + ZZg3;
 
@@ -93,54 +90,53 @@ h.surf = surf (XX, YY, ZZ);
 shading interp
 axis equal
 l = light ('position', [1 0.5 1]);
-#hold on
-#contour3 (ZZ, 25, 'linecolor', 'k', 'linewidth', 0.4);
-#hold off
+hold on
+contour3 (XX, YY, ZZ, 25, 'linecolor', 'k', 'linewidth', 0.4);
+hold off
 
 ## Convert data to fswof2d format and save them as topography file
+# convert data
 [X Y Z] = dataconvert ('fswof2d', XX, YY, ZZ);
 
-# save topography to file
+# save data
 topofile = 'topography.dat';
 topo2file (X, Y, Z, fname (topofile));
 
 ## Generate the different parameters sampling
 # duration sampling
-rain_durations = [10 30 60 120 150 180]; #[min]
+rain_durations = [60 120 180]; #[min]
 rain_durations = rain_durations * 60; #[s]
 save ('rain_durations.dat', 'rain_durations');
 
-sim_duration = [1 2 3 5 6 8]; #[h]
-sim_duration = sim_duration * 60^2; #[s]
-save ('sim_durations.dat', 'sim_duration');
+sim_durations = [3 5 7]; #[h]
+sim_durations = sim_durations * 60^2; #[s]
+save ('sim_durations.dat', 'sim_durations');
 
 # intensity sampling
-rain_intensities = [3 5 8 10 12 15 18 25]; #[mm/h]
+rain_intensities = [10 15 25]; #[mm/h]
 rain_intensities = rain_intensities / (1000 * 60^2);
 save ('rain_intensities.dat', 'rain_intensities');
 
 # saturation sampling
-soil_saturations = [0 0.5 1];
+soil_saturations = [0.25 0.75];
 save ('soil_saturations.dat', 'soil_saturations');
 
-## Save rain events to files
+## Generate rain and parameters files
 nrd  = length (rain_durations);
 nri  = length (rain_intensities);
 nsat = length (soil_saturations);
 
-
-
 for i = 1:nri
-  for j = 1:nrd
-    rain = [0 rain_intensities(i); rain_durations(j) 0];
-    rainfile = sprintf ('rain_%02d%02d.dat', i, j);
+  for d = 1:nrd
+    rain = [0 rain_intensities(i); rain_durations(d) 0];
+    rainfile = sprintf ('rain_%02d%02d.dat', i, d);
     save (fname (rainfile), 'rain');
-    for k = 1:nsat
-      suffix = sprintf ('_%01d_%02d%02d', k, i, j);
+    for s = 1:nsat
+      suffix = sprintf ('_%01d_%02d%02d', s, i, d);
       params = params2file ('xCells', Nx, ...
                             'yCells', Ny, ...
-                            'SimDuration', sim_duration(j), ...
-                            'SavedStates', sim_duration(j) /30, ...
+                            'SimDuration', sim_durations(d), ...
+                            'SavedStates', sim_durations(d) /30, ...
                             'xLength', Lx, ...
                             'yLength', Ly, ...
                             'BotBoundCond', 3, ...
@@ -148,12 +144,11 @@ for i = 1:nri
                             'TopographyFile', topofile, ...
                             'huvInit', 2, ...
                             'RainInit', 1, ...
-                            'CrustThickness', 2, ...
                             'HydrCondCrustCoef', 5e-6, ...
                             'HydrCondSoilCoef', 2e-7, ...
-                            'WaterContentCoef', soil_saturations(k), ...
-                            'WetFrontSuccHeadCoef', 0.09, ...
-                            'MaxInfiltrationRateCoef', 5.5e-6, ...
+                            'WaterContentVal', soil_saturations(s), ...
+                            'WetFrontSuccHeadVal', 0.09, ...
+                            'MaxInfiltrationRateVal', 5.5e-6, ...
                             'RainFile', rainfile, ...
                             'OutputsSuffix', suffix, ...
                             'ParametersFile', fname (strcat ('parameters', suffix, '.txt'))
@@ -167,23 +162,19 @@ for i = 1:nri
 endfor
 
 
-### Write bash script to run study
-#bfile = "run.sh";
-#printf ("Writing Bash script to file %s\n", bfile); fflush (stdout);
-#timetxt = strftime ("%Y-%m-%d %H:%M:%S", localtime (time ()));
-#bsh = {
-#'#!/bin/bash', ...
-#sprintf("## Automatically generated on %s\n", timetxt), ...
-#sprintf("for i in {1..%d}; do", nQ), ...
-#sprintf("  id=`printf %s $i`", suffix_fmt), ...
-#'  nohup fswof2d -f parameters$id.txt &', ...
-#'  if(( ($i % $(nproc)) == 0)); then wait; fi', ...
-#'done'
-#};
-#bsh = strjoin (bsh, "\n");
-#fid = fopen (bfile, "wt");
-#fputs (fid, bsh);
-#fclose (fid);
+## Write bash script to run study
+bfile = "run.sh";
+printf ("Writing Bash script to file %s\n", bfile); fflush (stdout);
+timetxt = strftime ("%Y-%m-%d %H:%M:%S", localtime (time ()));
+bsh = {
+'#!/bin/bash', ...
+sprintf("## Automatically generated on %s\n", timetxt), ...
+'nohup parallel -j+0 --eta fswof2d -f {} ::: $(basename -a Inputs/parameters*)'
+};
+bsh = strjoin (bsh, "\n");
+fid = fopen (bfile, "wt");
+fputs (fid, bsh);
+fclose (fid);
 
 
 
