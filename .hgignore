@@ -7,6 +7,7 @@ case_studies/*/*.png
 case_studies/*/*.eps
 case_studies/*/*.sh
 case_studies/*/*/*.txt
+case_studies/*/gist_earth.m
 *.aux
 *.bcf
 *.log
