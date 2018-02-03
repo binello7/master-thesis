@@ -119,7 +119,7 @@ sim_durations = sim_durations * 60^2; #[s]
 save ('sim_durations.dat', 'sim_durations');
 
 # intensity sampling
-rain_intensities = [10 15 25]; #[mm/h]
+rain_intensities = [25 35 50]; #[mm/h]
 rain_intensities = rain_intensities / (1000 * 60^2);
 save ('rain_intensities.dat', 'rain_intensities');
 
