@@ -14,7 +14,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 ## Author: Sebastiano Rusca <sebastiano.rusca@gmail.com>
-## Created: 2018-02-02
+## Created: 2018-02-01
 
 pkg load fswof2d
 
@@ -38,10 +38,16 @@ endfunction
 # TODO perform mesh study for grid convergence
 # here Nx = Ny = 100, dx = dy = 20m
 
+## Parameters for topography generation
+#
 Lx = 2000;
 Ly = 2000;
 Nx = 200;
 Ny = 200;
+
+# parameters to save for extracting output
+parameters = {'Lx', 'Ly', 'Nx', 'Ny', 'saved_states'};
+
 
 
 x = linspace (0, Lx, Nx+1);
@@ -113,7 +119,7 @@ sim_durations = sim_durations * 60^2; #[s]
 save ('sim_durations.dat', 'sim_durations');
 
 # intensity sampling
-rain_intensities = [10 15 25]; #[mm/h]
+rain_intensities = [25 35 50]; #[mm/h]
 rain_intensities = rain_intensities / (1000 * 60^2);
 save ('rain_intensities.dat', 'rain_intensities');
 
@@ -133,10 +139,12 @@ for i = 1:nri
     save (fname (rainfile), 'rain');
     for s = 1:nsat
       suffix = sprintf ('_%01d_%02d%02d', s, i, d);
+      saved_states(d) = sim_durations(d) /30;
+
       params = params2file ('xCells', Nx, ...
                             'yCells', Ny, ...
                             'SimDuration', sim_durations(d), ...
-                            'SavedStates', sim_durations(d) /30, ...
+                            'SavedStates', saved_states, ...
                             'xLength', Lx, ...
                             'yLength', Ly, ...
                             'BotBoundCond', 3, ...
@@ -160,6 +168,9 @@ for i = 1:nri
     endfor
   endfor
 endfor
+
+## Save important simulations parameters
+save ('parameters.dat', parameters{:})
 
 
 ## Write bash script to run study
