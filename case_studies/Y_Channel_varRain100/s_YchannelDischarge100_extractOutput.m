@@ -56,7 +56,7 @@ for i = 1:nri
       q_evl = huz_evolution(:,12);
       qqq = evolution_matrix (Nx, Ny, saved_states(d),q_evl);
       clear q_evl;
-      qt_lbound{j} = sum (qqq(1,:,:), 2)(:);
+      qt_bbound{j} = sum (qqq(1,:,:), 2)(:);
       indexes(j,:) = [s i d];
       j +=1;
     endfor
@@ -64,11 +64,11 @@ for i = 1:nri
 endfor
 toc
 
-save ('qt_lbound.dat', 'qt_lbound');
-
-indexes = dataframe (indexes(:,1), indexes(:,2), indexes(:,3), 'colnames', {'s', 'i', 'd'});
+#save ('qt_bbound.dat', 'qt_bbound');
 
 
+indexes_table = dataframe (indexes(:,1), indexes(:,2), indexes(:,3), 'colnames', {'s', 'i', 'd'});
+save ('indexes_table.dat', 'indexes_table');
 
 
 
