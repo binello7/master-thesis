@@ -35,40 +35,44 @@ clear topography;
 
 nrd = length (rain_durations);
 nri = length (rain_intensities);
-nst = length (soil_saturations);
-ntot = nrd * nri * nst;
+nsat = length (soil_saturations);
+ntot = nrd * nri * nsat;
 
 #nrd = 1;
 #nri = 1;
-#nst = 1;
+#nsat = 1;
 #i = 3;
 #d = 3;
 #s = 2;
 
-tic
 j = 1;
+tic
 for i = 1:nri
   for d = 1:nrd
-    for s = 1:nst
-      folderSuff    = sprintf ('_%01d_%02d%02d', s, i, d);
-      outputsFolder = strcat ('Outputs', folderSuff);
-      load (fullfile (outputsFolder, 'huz_evolution.dat'));
-      q_evl = huz_evolution(:,12);
-      qqq = evolution_matrix (Nx, Ny, saved_states(d),q_evl);
-      clear q_evl;
-      qt_bbound{j} = sum (qqq(1,:,:), 2)(:);
-      indexes(j,:) = [s i d];
+    for s = 1:nsat
+      for n = 1:saved_states(d)
+        folderSuff    = sprintf ('_%01d_%02d%02d', s, i, d);
+        outputsFolder = strcat ('Outputs', folderSuff);
+        q_temp = dlmread (fullfile (outputsFolder, 'huz_evolution.dat'), '\tab', [(n-1)*(Nx*Ny+Nx+3)+6 11 (n-1)*(Nx*Ny+Nx+3)+5+Nx*Ny 11]);
+        qq_temp = dataconvert ('octave', [Nx Ny], q_temp);
+        qt_bbound{j}(n)   = sum (qq_temp(1,:));
+        qt_bchannel{j}(n) = sum (qq_temp(1,37:47));
+        indexes(j,:) = [s i d];
+      endfor
       j +=1;
     endfor
   endfor
 endfor
 toc
 
-#save ('qt_bbound.dat', 'qt_bbound');
-
+save ('qt_bbound.dat', 'qt_bbound');
+save ('qt_bchannel.dat', 'qt_bchannel');
 
 indexes_table = dataframe (indexes(:,1), indexes(:,2), indexes(:,3), 'colnames', {'s', 'i', 'd'});
 save ('indexes_table.dat', 'indexes_table');
+
+
+
 
 
 
