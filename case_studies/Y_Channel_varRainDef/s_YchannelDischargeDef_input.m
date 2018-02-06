@@ -136,8 +136,8 @@ for i = 1:nri
   save (fname (rainfile), 'rain');
   for s = 1:nsat
     suffix = sprintf ('_%01d%02d', s, i);
-    saved_states = sim_duration /dt;
     dt   = 60;
+    saved_states = sim_duration /dt;
     Ks   = 2e-6;
     psi_f = 0.09;
 
