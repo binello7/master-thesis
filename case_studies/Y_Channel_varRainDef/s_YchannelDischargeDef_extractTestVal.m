@@ -30,21 +30,21 @@ load ('parameters.dat');
 ntri = length (rain_intensities_test);
 ntsat = length (soil_saturations_test);
 
-j = 1;
-tic
-for i = 1:ntri
-  for s = 1:ntsat
-    for n = 1:saved_states
-      folderSuff    = sprintf ('_t%01d%01d', s, i);
-      outputsFolder = strcat ('Outputs', folderSuff);
-      q_temp = dlmread (fullfile (outputsFolder, 'huz_evolution.dat'), '\tab', [(n-1)*(Nx*Ny+Nx+3)+6 11 (n-1)*(Nx*Ny+Nx+3)+5+Nx*Ny 11]);
-      qq_temp = dataconvert ('octave', [Nx Ny], q_temp);
-      qt_bbound_test(j,n)   = sum (qq_temp(1,:));
-    endfor
-    j +=1;
-  endfor
-endfor
-toc
+#j = 1;
+#tic
+#for i = 1:ntri
+#  for s = 1:ntsat
+#    for n = 1:saved_states
+#      folderSuff    = sprintf ('_t%01d%01d', s, i);
+#      outputsFolder = strcat ('Outputs', folderSuff);
+#      q_temp = dlmread (fullfile (outputsFolder, 'huz_evolution.dat'), '\tab', [(n-1)*(Nx*Ny+Nx+3)+6 11 (n-1)*(Nx*Ny+Nx+3)+5+Nx*Ny 11]);
+#      qq_temp = dataconvert ('octave', [Nx Ny], q_temp);
+#      qt_bbound_test(j,n)   = sum (qq_temp(1,:));
+#    endfor
+#    j +=1;
+#  endfor
+#endfor
+#toc
 
 save ('qt_bbound_test.dat', 'qt_bbound_test');
 
