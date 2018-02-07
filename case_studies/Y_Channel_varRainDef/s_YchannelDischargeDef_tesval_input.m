@@ -30,7 +30,7 @@ fname = @(s) fullfile (inputsFolder, s);
 
 # intensity sampling
 rain_intensities_test = [19 28 34]; #[mm/h]
-rain_intensities_val = [15 20 22 25 25 35].'
+rain_intensities_val = [15 20 22 25 25 35].';
 rain_intensities_test = rain_intensities_test / (1000 * 60^2);
 rain_intensities_val  = rain_intensities_val / (1000 * 60^2);
 save ('rain_intensities_test.dat', 'rain_intensities_test');
@@ -38,7 +38,7 @@ save ('rain_intensities_val.dat', 'rain_intensities_val');
 
 # saturation sampling
 soil_saturations_test = [0.1 0.4 0.9];
-soil_saturations_val  = [0.1 0.8 0.5 0.2 0.6 0.2];
+soil_saturations_val  = [0.1 0.8 0.5 0.2 0.6 0.2].';
 save ('soil_saturations_test.dat', 'soil_saturations_test');
 save ('soil_saturations_val.dat', 'soil_saturations_val');
 
