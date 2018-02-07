@@ -21,10 +21,8 @@ pkg load fswof2d
 
 ## Load data
 #
-load (fullfile ('Inputs', 'topography.dat'));
 load ('rain_intensities_val.dat');
 load ('rain_intensities_test.dat');
-load ('soil_saturations_val.dat');
 load ('soil_saturations_test.dat');
 load ('parameters.dat');
 
@@ -50,22 +48,18 @@ toc
 
 save ('qt_bbound_test.dat', 'qt_bbound_test');
 
-nvri = length (rain_intensities_val);
-nvsat = length (soil_saturations_val);
-
+nv = length (rain_intensities_val);
 j = 1;
 tic
-for i = 1:nvri
-  for s = 1:nvsat
-    for n = 1:saved_states
-      folderSuff    = sprintf ('_v%01d%01d', s, i);
-      outputsFolder = strcat ('Outputs', folderSuff);
-      q_temp = dlmread (fullfile (outputsFolder, 'huz_evolution.dat'), '\tab', [(n-1)*(Nx*Ny+Nx+3)+6 11 (n-1)*(Nx*Ny+Nx+3)+5+Nx*Ny 11]);
-      qq_temp = dataconvert ('octave', [Nx Ny], q_temp);
-      qt_bbound_val(j,n)   = sum (qq_temp(1,:));
-    endfor
-    j +=1;
+for i = 1:nv
+  for n = 1:saved_states
+    folderSuff    = sprintf ('_v%01d%01d', i, i);
+    outputsFolder = strcat ('Outputs', folderSuff);
+    q_temp = dlmread (fullfile (outputsFolder, 'huz_evolution.dat'), '\tab', [(n-1)*(Nx*Ny+Nx+3)+6 11 (n-1)*(Nx*Ny+Nx+3)+5+Nx*Ny 11]);
+    qq_temp = dataconvert ('octave', [Nx Ny], q_temp);
+    qt_bbound_val(j,n)   = sum (qq_temp(1,:));
   endfor
+  j +=1;
 endfor
 toc
 
