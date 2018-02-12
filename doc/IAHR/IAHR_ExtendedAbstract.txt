@@ -1,0 +1,22 @@
+Fast early flood warning systems exploiting catchment specific behavior
+
+Sebastiano Rusca, Juan Pablo Carbajal (Peter Molnar? Jörg Rieckermann?)
+
+Abstract
+
+Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades. Numerical models are the most useful tools to predict floods and trigger security measures or evacuations. However, the high complexity of these models hinders the use of detailed simulators for early warning systems.
+An early warning system has to be understood as one capable of giving within seconds a prediction of whether based on current conditions and meteorological forecast an occurring rain event will result in major flooding or not, and if yes within how much time. Due to their 
+In this work, we present a methodology for developing surrogate models of a detailed (non-linear shallow water equations) simulator. The performance of an emulator-based early flood warning system tailored for a specific catchment is discussed and analyzed.
+Reference of exactly the same idea in Volcanology https://www.newton.ac.uk/seminar/20180207100011001
+
+Introduction
+
+Introduce the problem and the importance of early warning systems.
+
+Materials and methods
+
+Experiment set-up
+
+A synthetic squared catchment of size 2 km x 2km was generated in order to perform the simulations. Simulations were run to obtain response hydrographs of the given catchment to different rain events and soil saturation conditions. In particular the parameters initial soil saturation and rain intensity were varied.
+
+
