@@ -12,5 +12,7 @@
 * Next step master thesis? See what discussed with P. Molnar and J. Rieckermann too
 * Open issues master_thesis
 * Open issues fswof2d
+:white_large_square:
+:white_check_mark:
 ----
     
