@@ -5,8 +5,8 @@ Sebastiano Rusca, Juan Pablo Carbajal (Peter Molnar? Jörg Rieckermann?)
 Abstract
 
 Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades. Numerical models are the most useful tools to predict floods and trigger security measures or evacuations. However, the high complexity of these models hinders the use of detailed simulators for early warning systems.
-An early warning system has to be understood as one capable of giving within seconds a prediction of whether based on current conditions and meteorological forecast an occurring rain event will result in major flooding or not, and if yes within how much time. Due to their 
-In this work, we present a methodology for developing surrogate models of a detailed (non-linear shallow water equations) simulator. The performance of an emulator-based early flood warning system tailored for a specific catchment is discussed and analyzed.
+An early warning system has to be understood as one capable of giving within seconds a prediction of whether based on current conditions and meteorological forecast an occurring rain event will result in major flooding or not, and if yes within how much time. Fine tuned physically based simulators are able to produce trustworthy flood predictions but are unusable as early warning systems due to their computational cost. Fast surrogate models built on these simulators can yield results of the same order of accuracy with speed-ups of up to 10 at the power of 5 times.
+In this work, we present a methodology for developing such surrogate models of a detailed (non-linear shallow water equations) simulator. The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
 Reference of exactly the same idea in Volcanology https://www.newton.ac.uk/seminar/20180207100011001
 
 Introduction
@@ -16,7 +16,22 @@ Introduce the problem and the importance of early warning systems.
 Materials and methods
 
 Experiment set-up
+figure: synthetically generated mountainous topography
 
-A synthetic squared catchment of size 2 km x 2km was generated in order to perform the simulations. Simulations were run to obtain response hydrographs of the given catchment to different rain events and soil saturation conditions. In particular the parameters initial soil saturation and rain intensity were varied.
+A synthetic squared catchment of size 2km x 2km was generated in order to perform the simulations. Simulations were run to obtain response hydrographs of the given catchment to different rain events and soil saturation conditions. In particular the parameters initial soil saturation and rain intensity were varied.
 
+Simulations results
+figure: response hydrographs of the 50 different experiments
 
+50 simulations were run with soil initial saturations in a range 0 – 1 [-] and rain intensities in a range 10 – 32 mm/h. As output response the outflow through the catchment bottom boundary was used. This is represented in the hydrographs of figure #.
+The hydrographs show different responses depending on the soil initial saturation and the rain intensity which was applied to the topography. In some cases, in particular by heavy rain and high initial soil saturation values, the appearance of surface runoff is very rapid. In other cases this just happens after it has rained for hours or does not happen at all. 
+The emulator we aim to build should be used as an early flood warning system. The variable which it is trying to predict is then the time at which a certain Qthhold, the maximum discharge for which the various hydraulic structure on the channel downstream of the catchment were dimensioned, is reached. As observable from the hydrographs this time can be very variable depending on the value of Qthhold or can never be reached.
+
+Emulator
+figure: emulator, training, test and validation data points
+
+The time lag to reach the chosen Qthhold (here 10% of the measured Qmax) was extracted from the hydrographs and plotted as a function of the initial soil saturation value and rain intensity. Output for events never reaching Qthhold is 420 min, which is longer than the rain event itself, meaning this discharge value is not reached within the event. The chosen emulator is a cubic interpolator of the training points. Different emulators were tested on the test points and the final emulator was then validated with the validation points.
+
+Conclusions
+
+References
