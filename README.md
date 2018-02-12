@@ -1,18 +1,16 @@
 # Master Thesis: project board
 
 ## Reminders
-* by 15/02/2018: prepare abstract for IAHR congress
-* by 16/02/2018: prepare master thesis outline
+* :white_large_square: by 15/02/2018: prepare abstract for IAHR congress
+* :white_large_square: by 16/02/2018: prepare master thesis outline
 ----
 
 ## To discuss
 ### Week 12 - 16/02/2018
-* Outline master thesis
-* Abstract IAHR
-* Next step master thesis? See what discussed with P. Molnar and J. Rieckermann too
-* Open issues master_thesis
-* Open issues fswof2d
-:white_large_square:
-:white_check_mark:
+* :white_large_square: Outline master thesis
+* :white_large_square: Abstract IAHR
+* :white_large_square: Next step master thesis? See what discussed with P. Molnar and J. Rieckermann too
+* :white_large_square: Open issues master_thesis
+* :white_large_square: Open issues fswof2d
 ----
     
