@@ -3,6 +3,8 @@ syntax: glob
 
 doc/pres/pres01/img
 doc/pres/pres_mseminar/MSem_Presentation.bib
+doc/regression_exercises/mfiles/*.eps
+doc/regression_exercises/mfiles/*.png
 case_studies/*/*.png
 case_studies/*/*.eps
 case_studies/*/*.sh
