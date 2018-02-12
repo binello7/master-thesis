@@ -34,7 +34,6 @@ load ('rain_intensities.dat');
 nExp = length (qt_bbound);
 nInt = length (rain_intensities);
 nSat = length (soil_saturations);
-#nExp = 6;
 
 t_min = (1:saved_states) * dt / 60; #[min]
 rain_intensities_h = rain_intensities * 1000 * 60^2; #[m/s -> mm/h]
@@ -52,34 +51,8 @@ clear q_temp;
 save ('qt_bbound_mat.dat', 'qt_bbound');
 
 
-## Further data extraction: Qmax and idx_Q_thrsh
-#
-Q_trhsh = 0.6; #[m3/s];
-val_nfound = NA;
-idx_thrsh = zeros (nSat, nInt);
-for i = 1:nInt
-  for s = 1:nSat
-    [Qmax(s,i) idx_max(s,i)] = max (qt_bbound(:,i,s));
-    if isempty (find (qt_bbound(:,i,s) >= Q_trhsh, 1))
-      idx_thrsh(s,i) = val_nfound;
-    else
-      idx_thrsh(s,i) = find (qt_bbound(:,i,s) >= Q_trhsh, 1);
-    endif
-  endfor
-endfor
-
-t_Qmax   = idx_max * dt; #[s]
-t_Qmax_m = t_Qmax / 60; #[min]
-
-t_Qthrsh   = idx_thrsh * dt; #[s]
-t_Qthrsh_m = t_Qthrsh / 60;
-
 ## Produce the plots
 # hydrographs plot
-if ~exist ('Blues.m')
-  matplotlib_cm ('Blues');
-endif
-
 
 f=1;
 figure (f)
@@ -90,7 +63,7 @@ refline = zeros (size(tt));
 
 miri = min (rain_intensities_h);
 mari = max (rain_intensities_h);
-mQmax = max (max(Qmax));
+mQmax = max (max( max(qt_bbound)));
 polyg = [
          rain_duration miri 0;
          rain_duration mari 0;
@@ -112,33 +85,12 @@ axis tight;
 #title ('Hydrograph for the bottom boundary')
 view (31, 49)
 #view (72, 58)
-set (gca, 'box', 'on')
+set (gca, 'box', 'off')
 xlabel ('t [min]');
 ylabel ('ri [mm/h]');
 zlabel ('Q [m^3/s]');
-print ('hydrographs3d.png', '-r600')
-
-
-## t_Qthrsh plot
-figure (f)
-f+=1;
-for s = 1:nSat
-  for i = 1:nInt
-    if ~isna (t_Qthrsh_m(s,i))
-    hold on
-      plot3 (rain_intensities_h(i), soil_saturations(s),  t_Qthrsh_m(s,i),'ro', 'markerfacecolor', 'r');
-    hold off
-    endif
-  endfor
-endfor
-axis tight;
-grid on;
-xlabel ('ri [mm/h]');
-ylabel ('\Delta\theta [-]');
-zlabel ('t(Q_{thrsh} [min])');
-
-
-
+print ('hydrographs3d.eps', '-color')
+print ('hydrographs3d.png', '-r300')
 
 
 
@@ -176,28 +128,28 @@ zlabel ('t(Q_{thrsh} [min])');
 #zlabel ('t(Q_{max}) [h]');
 ##print ('sampling_outputTQmax.eps', '-color');
 
-## topography plot
-#topo_plt = false;
-#if topo_plt
-#  load ('Inputs/topography.dat');
-#  X = topography(:,1); Y = topography(:,2); Z = topography(:,3);
-#  [X Y Z] = dataconvert ('octave', [Nx Ny], X, Y, Z);
-#  cc = gist_earth (64);
+# topography plot
+topo_plt = true;
+if topo_plt
+  load ('Inputs/topography.dat');
+  X = topography(:,1); Y = topography(:,2); Z = topography(:,3);
+  [X Y Z] = dataconvert ('octave', [Nx Ny], X, Y, Z);
+  cc = gist_earth (64);
 
-#  h = struct ();
-#  figure
-#  colormap (cc);
-#  h.surf = surf (X, Y, Z, 'edgecolor', 'none');
-#  shading interp
-#  hold on
-#  h.cont = contour3 (X, Y, Z, 20, 'linecolor', 'k', 'linewidth', 0.4);
-#  #h.light = light ();
-#  hold off
-#  xlabel ('X [m]');
-#  ylabel ('Y [m]');
-#  zlabel ('Z [m]');
-#  print ('topography.png', '-color');
-#endif
+  h = struct ();
+  figure
+  colormap (cc);
+  h.surf = surf (X, Y, Z, 'edgecolor', 'none');
+  shading interp
+  hold on
+  h.cont = contour3 (X, Y, Z, 20, 'linecolor', 'k', 'linewidth', 0.4);
+  #h.light = light ();
+  hold off
+  xlabel ('X [m]');
+  ylabel ('Y [m]');
+  zlabel ('Z [m]');
+  print ('topography.png', '-r900');
+endif
 
 
 
