@@ -73,16 +73,17 @@ function sdjk = jk_stdv (p)
   sdjk = transpose (sqrt ((n-1) / n * sum (cell2mat (transpose (arrayfun (@(i) ((p(i,:) - p_m).^2), 1:n, 'uniformoutput', false))), 1)));
 endfunction
 
-function plot_CI (x, y, xt, p, dp, ev, tit)
+function plot_CI (x, y, xt, yt, p, dy, tit)
   yt = polyval (p, xt);
-  plot (x, y, 'o;data;', xt, yt, 'k-;fit;');
+  plot (x, y, 'o', xt, yt, 'k-', 'linewidth', 1.5);
   axis tight
   hold on
-  plot (xt, yt+dyp(xt, dp, ev)*[-1 1],'r-;CI;');
+  plot (xt, yt+dy*[-1 1],'r');
   hold off
   title (sprintf ('%s', tit))
   xlabel ('x');
   ylabel ('y');
+  legend ('data', 'fit', 'CI', 'CI', 'location', 'northwest')
 endfunction
 
 
@@ -99,6 +100,11 @@ X    = data(:,1);
 Y    = data(:,3);
 nx = length (X);
 
+## Add random noise
+#
+Yn = Y + 0.4*randn (size(Y));
+
+
 plot (X, Y, 'bo')
 axis tight
 grid on
@@ -112,7 +118,7 @@ grid on
 
 
 e_min = 3;         # minimum exponent
-e_max = e_min + 2; # maximum exponent
+e_max = e_min + 2; # maximum exponent: e_min + 2
 
 ##
 # every exponent can be considered (1) or not (0). If the exponent max is 3
@@ -155,7 +161,8 @@ idx_min = idx_mse(idx_min);
 # the simplest model is the one with index 'idx_min'
 e_simp = e_sets(idx_min,:);
 ee_simp = length (e_simp) - find (e_simp);
-[p_est s] = polyfit (X, Y, e_simp);
+[p_est s] = polyfit (X, Yn, e_simp);
+
 
 ## Uncertainty calculations
 # method: polyfit output 
@@ -171,10 +178,16 @@ dp_jk = jk_stdv (p_est_jk);
 dp_jk = dp_jk(e_simp != 0);
 
 # propagation of uncertainty to output (dy)
-dypo = dypp (X, dp_pf, ee_simp);
+xe = transpose (linspace (1.1*min (X), 1.1*max (X), 200));
+ye = polyval (p_est, xe);
+dypo = dypp (xe, dp_pf, ee_simp);
 
 # calculation of uncertainty with leave one out of sample error estimation
-dyle = dylo (p_est, X, Y);
+dyle = dylo (p_est, X, Y, 10);
+
+
+## Plot the interpolation results
+plot_CI (X, Y, xe, ye, p_est, dypo, '')
 
 
 
