@@ -13,4 +13,4 @@
 * :white_large_square: Open issues master_thesis
 * :white_large_square: Open issues fswof2d
 ----
-    
+:white_check_mark:
