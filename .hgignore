@@ -12,6 +12,8 @@ case_studies/*/*/*.txt
 case_studies/*/gist_earth.m
 doc/IAHR/IAHR_Template
 *.docx
+*.bbl
+*.blg
 *.aux
 *.bcf
 *.log
