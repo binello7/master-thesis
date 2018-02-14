@@ -20,7 +20,7 @@
 % IMPORTANT: Author wants to format references in chicaco style Author must use BiBTex
 % IMPORTANT: Author wants to format numbered references remove chicaco style file and \bibliographystyle{chicaco}
 
-%\usepackage{chicaco}
+\usepackage{chicaco}
 
 %  \cite{key}
 %    which produces citations with full author list and year.
@@ -85,11 +85,11 @@
 % insert tabular command inside \tabletext{} this will produce tables in 10pts
 
 \begin{document}
-\title{Preparing a two column extended abstract}
-\author{{A. Unknown \& C. Unknown} \\
-{\aff{University of Trento, Italy}} \\\\
-{\authornext{B. Unknown}}\\
-{\aff{University of Trento, Italy}}
+\title{Fast early flood warning systems exploiting catchment specific behavior}
+\author{{S. Rusca} \\
+{\aff{ETH Zurich, Switzerland}} \\\\
+{\authornext{J. P. Carbajal}}\\
+{\aff{University of ???}}
 %{\authornext{R. Schielen}}\\
 %{\aff{Department of Water Engineering and Management}} \\
 %{\aff{University of Twente, Enschede, The Netherlands.}}\\
@@ -98,10 +98,10 @@
 
 \section*{Abstract}
 
-{\bf The text in this paper is for visual purpose only. No rights
-can be taken from this.}\\
-The entire document can be $2$ pages maximum long. \\
-Insert in this section a short abstract of $5$ lines maximum.\\
+Floods due to heavy rain are among the most destructive events in hydrology. 
+Numerical models cannot directly be used for real time flood prediction due to
+their high complexity. Ad hoc surrogate models provide great speed
+ups with minor accuracy losses.
 
 
 \section{Introduction}
@@ -142,7 +142,7 @@ horizons.
 
 \begin{figure}[h!]
 \centerline{
-\includegraphics[width=8cm]{sketch.eps}
+\includegraphics[width=8cm]{img/emulator.png}
 } \caption{Sketch of flow configuration} \label{f:sketch1}
 \end{figure}
 
@@ -185,12 +185,8 @@ and refer to eq.(\ref{eqn}).
 
 Here you can insert acknowledge.
 
-\begin{thebibliography}{9}
-\bibitem{} Donald, A.P. and Gee, A.S., 1992.  Acid waters in upland Wales: causes, effects and remedies. Environmental Pollu-tion, 78, 141-148.
-\bibitem{} Duff, P.M.D. and Smith, A.J., 1992. Geology of England and Wales.
-The Geological Society, London.
-\bibitem{} Haria, A.H. and Shand, P., 2004. Evidence for deep sub-surface flow routing in forested upland Wales: implications for contaminant transport and stream flow generation. Hy-drology and Earth System Sciences, 8(3): 334-344.
-\end{thebibliography}
+\bibliography{ref}
+\bibliographystyle{chicaco}
 
 
 
