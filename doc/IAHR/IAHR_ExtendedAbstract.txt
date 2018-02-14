@@ -4,12 +4,28 @@ Fast early flood warning systems exploiting catchment specific behavior
 Sebastiano Rusca, Juan Pablo Carbajal (Peter Molnar? Jörg Rieckermann?)
 
 1. Abstract
-Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades. Numerical models are the most useful tools to predict floods and trigger security measures or evacuations. However, the high complexity of these models hinders the use of detailed simulators for early warning systems.
+Floods due to heavy rain are among the most destructive events in hydrology and
+their frequency has incremented over the last decades. 
+Numerical models are the most useful tools to predict floods and trigger
+security measures or evacuations. However, the high complexity of these models
+hinders the use of detailed simulators for early warning systems.
 
-An early warning system has to be understood as one capable of giving within seconds a prediction of whether based on current conditions and meteorological forecast an occurring rain event will result in major flooding or not, and if yes within how much time. Fine tuned physically based simulators are able to produce trustworthy flood predictions but are unusable as early warning systems due to their high computational cost. Fast surrogate models based on these simulators can yield results of the same order of accuracy with speed-up factors of up to 10 at the power of 6.
+An early warning system has to be understood as one capable of giving within
+seconds a prediction of whether based on current conditions and meteorological
+forecast an occurring rain event will result in major flooding or not, and if
+yes within how much time. Fine tuned physically based simulators are able
+to produce trustworthy flood predictions but are unusable as early warning
+systems due to their high computational cost.
+Fast surrogate models based on these simulators can yield results of the same
+order of accuracy with speed-up factors of up to 10 at the power of 6.
 
-In this work, we present a methodology for developing such surrogate models of a detailed (non-linear shallow water equations) simulator. The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
-Reference of exactly the same idea in Volcanology https://www.newton.ac.uk/seminar/20180207100011001
+In this work, we present a methodology for developing such surrogate models of
+a detailed (non-linear shallow water equations) simulator. The performance
+of the resulting emulator-based early flood warning system tailored for
+the catchment in question is discussed and analyzed.
+
+Reference of exactly the same idea in Volcanology
+https://www.newton.ac.uk/seminar/20180207100011001
 
 2. Brief methodology
 Experiment set-up
