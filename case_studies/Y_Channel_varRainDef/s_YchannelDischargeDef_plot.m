@@ -148,7 +148,7 @@ if topo_plt
   xlabel ('X [m]');
   ylabel ('Y [m]');
   zlabel ('Z [m]');
-  print ('topography.png', '-r900');
+  print ('topography.png', '-r300');
 endif
 
 
