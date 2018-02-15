@@ -1,7 +1,4 @@
-%narms.tex, an example driver file for Balkema documents.
-
-%use the following for A4 paper:
-\documentclass[12pt,a4paper,twocolumn,fleqn]{narms}
+\documentclass[12pt,a4paper,english,twocolumn,fleqn]{narms}
 
 % packages needed
 \usepackage{subfigure}
@@ -9,176 +6,142 @@
 \usepackage{timesmt}
 
 % add here more packages based on the document format
-\usepackage{xcolor}
+\usepackage[usenames,dvipsnames,svgnames]{xcolor}
+\usepackage[numbers, sort&compress]{natbib}
 
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{bm}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{siunitx}
+%\sisetup{mode=text,range-phrase = {\text{~to~}}}
+\sisetup{
+  range-phrase = {,}\ ,
+  range-units  = brackets,
+  open-bracket = [,
+  close-bracket= ],
+}
+
+\usepackage[colorlinks=true]{hyperref} % Hyperlinks within and outside the document
+% false: boxed links; true: colored links
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{lmodern} % German related symbols
 
 % setting math equation indent from left 0pts
-
 \mathindent=0pt%
-
-% use this for chicaco style reference
-% Author references
-% IMPORTANT: Author wants to format references in chicaco style Author must use BiBTex
-% IMPORTANT: Author wants to format numbered references remove chicaco style file and \bibliographystyle{chicaco}
-
-%\usepackage{chicaco}
-
-%  \cite{key}
-%    which produces citations with full author list and year.
-%    eg. (Brown 1978; Jarke, Turner, Stohl, et al. 1985)
-
-%  \citeNP{key}
-%    which produces citations with full author list and year, but without
-%    enclosing parentheses:
-%    eg. Brown 1978; Jarke, Turner & Stohl 1985
-
-%  \citeA{key}
-%    which produces citations with only the full author list.
-%    eg. (Brown; Jarke, Turner & Stohl)
-
-%  \citeANP{key}
-%    which produces citations with only the full author list, without
-%    parentheses eg. Brown; Jarke, Turner & Stohl
-
-%  \citeN{key}
-%    which produces citations with the full author list and year, but
-%    can be used as nouns in a sentence; no parentheses appear around
-%    the author names, but only around the year.
-%      eg. Shneiderman (1978) states that......
-%    \citeN should only be used for a single citation.
-
-%  \shortcite{key}
-%    which produces citations with abbreviated author list and year.
-
-%  \shortciteNP{key}
-%    which produces citations with abbreviated author list and year.
-
-%  \shortciteA{key}
-%    which produces only the abbreviated author list.
-
-%  \shortciteANP{key}
-%    which produces only the abbreviated author list.
-
-%  \shortciteN{key}
-%    which produces the abbreviated author list and year, with only the
-%    year in parentheses. Use with only one citation.
-
-%  \citeyear{key}
-%    which produces the year information only, within parentheses.
-
-%  \citeyearNP{key}
-%    which produces the year information only.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%  All this stuff is from modifying the article.cls for Balkema
-%%%  specifications.
-
-%\title{...}
-%\author{...}
-%use \aff for author affiliations
-% use \authornext for from second author
-% empty line space between multiple authors
-%\abstract{...}
-%\maketitle{}
 
 %%%%%%% Style for TABLES
 % insert tabular command inside \tabletext{} this will produce tables in 10pts
 
+\defcitealias{Octave}{GNU Octave}
+\defcitealias{Inkscape}{Inkscape}
+
+\newcommand{\jpi}[1]{{\color{Magenta} JPi: #1}}
+
 \begin{document}
 \title{Fast early flood warning systems exploiting catchment specific behavior}
 \author{{S. Rusca} \\
-{\aff{ETH Zurich, Switzerland}} \\\\
+{\aff{Swiss Federal Institute of Aquatic Science and Technology, Eawag, Überlandstrasse 133, 8600 Dübendorf, Switzerland}} \\\\
 {\authornext{J. P. Carbajal}}\\
-{\aff{University of ???}}
-%{\authornext{R. Schielen}}\\
-%{\aff{Department of Water Engineering and Management}} \\
-%{\aff{University of Twente, Enschede, The Netherlands.}}\\
+{\aff{Swiss Federal Institute of Aquatic Science and Technology, Eawag, Überlandstrasse 133, 8600 Dübendorf, Switzerland}}
 } \maketitle
 
 
 \section*{Abstract}
 
-Floods due to heavy rain are among the most destructive events in hydrology. 
-Numerical models cannot directly be used for real time flood prediction due to
-their high complexity. Ad hoc surrogate models provide great speed
-ups with minor accuracy losses.
+Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades.
+Numerical models are the most useful tools to predict floods and trigger security measures or evacuations. However, the high complexity of these models hinders the use of detailed simulators for realtime early warning systems.
 
+In this work, we present a methodology for developing such surrogate models of a detailed (non-linear shallow water equations) simulator.
+The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
 
 \section{Introduction}
 
 In this work, we present a methodology for developing a surrogate model of
 a detailed (non-linear shallow water equations) simulator. The simulator used
-for this scope is \textit{FullSWOF\textunderscore2D-v.1.07.00}
-\cite{noauthor_fullswof_nodate}. The performance of the resulting emulator-based
-early flood warning system tailored for the catchment in question is discussed
-and analyzed.\\
+for this scope is \textit{FullSWOF\textunderscore2D-v.1.07.00}~\citep{fullswof}.
+The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
 
-An early warning system has to be understood as one capable of giving within
-seconds a prediction of whether based on current conditions (soil moisture content,
-potential infiltration, \dots) and meteorological forecast an occurring rain
-event will result in major flooding or not, and if yes within how much time.\\
-
-Fine tuned physically based simulators are able
-to produce trustworthy flood predictions but are unusable as early warning
-systems due to their high computational cost.
-Fast surrogate models based on these simulators can yield results of the same
-order of accuracy with speed-up factors of up to $10^6$.
-\textcolor{red}{reference of same idea in volcanology}
-
+Fine tuned shallow water based simulators are able to produce trustworthy flood predictions but are unusable as early warning systems due to their high computational cost.
+This is  inappropriate for early warning system which should be capable of giving within seconds a prediction of whether, based on current conditions and meteorological forecast, an occurring rain event will result in major flooding or not, and if yes within how much time.
+Fast surrogate models based on detailed simulators can accurate results\footnote{Note that accuracy is task dependent} with speed-up factors of up to $10^6$~\citep[see][for an application in geophysical hazards]{Bayarri2015}.
 
 \section{Methodology}
 
-A synthetic squared catchment of size 2km x 2km was generated in order to
-perform the simulations. Simulations were run to obtain response hydrographs of
-the given catchment to different rain events and soil saturation conditions.
-In particular the parameters initial soil saturation and rain intensity were
-varied. A constant rain with a duration of 6\,h was chosen, while a longer
-duration was set for the simulation, in order to be able to observe the
-hydrograph recession.
+The general goal of our emulator is to take inputs related to a rain event and catchment situation, and predict the time it will take to observe a catchment discharge greater or equal to a predefined threshold discharged $Q_!$.
+The threshold discharge is provided by a downstream region that is prone to flooding and the quantity of interest (QoI) is the time-to-threshold, $t_!$.
 
-\begin{figure}[t]
+The emulator is built using two input parameters: rain intensity ($I$) and soil saturation ($\Delta\theta$).
+Simulations were run using the simulator with different values of these parameters and response hydrographs of a $\SI{2}{\kilo\metre} \times \SI{2}{\kilo\metre}$ synthetic catchment where recorded.
+A set of \num{50} simulations were run with saturations in the $[\numrange{0}{1}]$ interval
+and rain intensities in \SIrange{10}{30}{\milli\metre\per\hour}.\\
+Figure~\ref{img:topography} shows the synthetic topography used.
+
+\begin{figure}[htpb]
   \centering
   \includegraphics[width=0.4\textwidth]{img/topography.png}
-  \caption{Synthetic topography produced in \textit{Octave} \cite{noauthor_gnu_nodate}}
+  \caption{Synthetic topography defining a parabolic catchment with \num{3} Gaussian bumps.}
   \label{img:topography}
 \end{figure}
 
-Figure \ref{img:topography} here above shows the synthetic topography used.
-50 simulations were run with soil initial saturations in a range of $[0 - 1]$
-and rain intensities in a range of $[10 - 35]\,mm/h$.\\
+The rationality behind the chosen parameters is that rain intensity is readily available from meteorological forecast, and soil saturation is used to incorporate the recent history of the catchment, e.g. if we there were several rain int he previous days the soil will be highly saturated.
 
-As output response the total outflow through the catchment bottom boundary was used.
-This is represented in the hydrographs of Figure \ref{img:hydrographs}.
+Since the response hydrograph shape is independent of rain duration, i.e. the effect of different rain durations can be factored out
 
-\begin{figure}[t]
+\begin{equation}
+Q(t, I, \Delta\theta, d) \approx Q_\infty(t, I, \Delta\theta) \Xi(t \leq d)
+\end{equation}
+
+\noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration, and $\Xi(x)$ is the indicator function of the interval $[0,d]$.
+This representation does not recover the recession of the hydrograph, but that is irrelevant for our application.
+Figure~\ref{img:hydrographs} show an example response obtained from the simulator.
+The rain event duration is marked with a rectangle, after which recess of the discharge can be observed.
+
+\begin{figure}[htpb]
   \centering
   \includegraphics[width=0.4\textwidth]{img/hydrographs3d.png}
-  \caption{Response hydrographs of the catchment to the different rain events}
+  \caption{\jpi{Show a single response, mark rain duration with vertical line and $Q_!$ with horizontal line. Better captions, describe content!}. Response hydrographs of the catchment to the different rain events.}
   \label{img:hydrographs}
 \end{figure}
 
-The hydrographs show different responses depending on
-the soil initial saturation and the rain intensity which was applied.
-In some cases, in particular by heavy rain and high initial soil
-saturation values, the appearance of surface runoff is very rapid.
-In other cases this just happens after it has rained for hours or
-does not happen at all. The emulator we aim to build should be used as
-an early flood warning system. The variable which it is trying to predict is
-then the time at which a certain $Q_{thhold}$, the maximum discharge for which the
-various hydraulic structure on the channel downstream of the catchment were
-dimensioned, is reached. As observable from the hydrographs this time can be
-very variable depending on the value of $Q_{thhold}$ or can never be reached.
+The discharge for infinite rain duration $Q_\infty(\ldots)$ determines the QoI $t_!$,
 
+\begin{equation}
+Q_\infty (t_!, I, \Delta\theta) - Q_! = 0
+\end{equation}
 
+\noindent Although $Q_\infty$ is not available, simulations using sufficiently long rain events (\SI{6}{\hour} in our case) are enough for the application at hand.
+This is because rain intensity is likely to change within \SI{6}{\hour}, and because high intensity rains of such duration can be considered extreme for many regions.
+
+\section{Preliminary results}
+\jpi{Describe the issue with the discontinuity in $t_!$, use Fig.~\ref{img:hydrographs} to support the explanation.}
+
+\jpi{Describe in a few paragraph what you expect to obtain. Here goes the figure with your current emulator}
+
+%The hydrographs show different responses depending on the soil initial saturation and the rain intensity which was applied.
+%In some cases, in particular by heavy rain and high initial soil saturation values, the appearance of surface runoff is very rapid.
+%In other cases this just happens after it has rained for hours or does not happen at all. The emulator we aim to build should be used as an early flood warning system. The variable which it is trying to predict is then the time at which a certain $Q_!$, the maximum discharge for which the various hydraulic structure on the channel downstream of the catchment were dimensioned, is reached. As observable from the hydrographs this time can be very variable depending on the value of $Q_!$ or can never be reached.
 
 \section{Acknowledge}
+The authors would like to thank Prof. Peter Molnar and Dr. Jörg Rieckermann for their support and guidance during S. Rusca's master thesis and the writing of this article.
+We thank the developers of \citetalias{Octave} and \citetalias{Inkscape} for their excellent software tools, which were used for this article.
 
-Here you can insert acknowledge.
+Source code is available at \url{bitbucket.org/binello7/master_thesis}.
 
-\bibliography{ref}
-\bibliographystyle{plain}
+\paragraph*{Funding} The research leading to these results has received funding from the Eawag's discretionary funding program (project EmuMore \url{kakila.bitbucket.io/emumore}).
 
+\paragraph*{Author contributions} \textbf{SR} developed the software, carried out simulations, and data analysis. \textbf{JPC} contributed to the emulator design, data analysis, and supervised SR. All authors contributed to the writing of this manuscript.
+
+\sloppy
+\bibliographystyle{unsrtnat}
+\bibliography{References}
 
 
 \end{document}
