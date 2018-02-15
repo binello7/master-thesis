@@ -57,22 +57,19 @@
 
 \section*{Abstract}
 
-Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades.
-Numerical models are the most useful tools to predict floods and trigger security measures or evacuations. However, the high complexity of these models hinders the use of detailed simulators for realtime early warning systems.
-
-In this work, we present a methodology for developing such surrogate models of a detailed (non-linear shallow water equations) simulator.
-The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
+We present an catchment specific emulator based on non-linear shallow water equations to be used
+for flood early warning system in realtime.
 
 \section{Introduction}
 
-In this work, we present a methodology for developing a surrogate model of
-a detailed (non-linear shallow water equations) simulator. The simulator used
-for this scope is \textit{FullSWOF\textunderscore2D-v.1.07.00}~\citep{fullswof}.
-The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
+Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades.
+Numerical models are useful tools to predict floods and trigger security measures or evacuations. However, the high computation demands of these models hinders their use in realtime early warning systems.
 
 Fine tuned shallow water based simulators are able to produce trustworthy flood predictions but are unusable as early warning systems due to their high computational cost.
-This is inappropriate for early warning systems which should be capable of giving within seconds a prediction of whether, based on current conditions and meteorological forecast, an occurring rain event will result in major flooding or not, and if yes within how much time.
+Early warning systems should be capable of quickly providing a prediction of whether, based on current conditions and meteorological forecast, an occurring rain event will result in major flooding or not, and if yes within how much time.
 Fast surrogate models based on detailed simulators can provide accurate results\footnote{Note that accuracy is task dependent} with speed-up factors of up to $10^6$~\citep[see][for an application in geophysical hazards]{Bayarri2015}.
+
+In this work, we present the development of a surrogate model of a detailed simulator using \textit{FullSWOF\textunderscore2D-v.1.07.00}~\citep{fullswof} (non-linear shallow water equations).
 
 \section{Methodology}
 
@@ -82,7 +79,7 @@ The threshold discharge is provided by a downstream region that is prone to floo
 The emulator is built using two input parameters: rain intensity ($I$) and soil saturation ($\Delta\theta$).
 Simulations were run using the simulator with different values of these parameters and response hydrographs of a $\SI{2}{\kilo\metre} \times \SI{2}{\kilo\metre}$ synthetic catchment were recorded.
 A set of \num{50} simulations were run with saturations in the $[\numrange{0}{1}]$ interval
-and rain intensities in \SIrange{10}{30}{\milli\metre\per\hour}.\\
+and rain intensities in \SIrange{10}{30}{\milli\metre\per\hour}.
 Figure~\ref{img:topography} shows the synthetic topography used.
 
 \begin{figure}[htpb]
@@ -100,7 +97,7 @@ Since the response hydrograph shape is independent of rain duration, i.e. the ef
 Q(t, I, \Delta\theta, d) \approx Q_\infty(t, I, \Delta\theta) \Xi(t \leq d)
 \end{equation}
 
-\noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration, and $\Xi(x)$ is the indicator function of the interval $[\numrange{0}{d}]$.
+\noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration, and $\Xi(x)$ is the indicator function of the interval $[\num{0},d]$.
 This representation does not recover the recession of the hydrograph, but that is irrelevant for our application.
 Fig.~\ref{img:hydrograph} shows an example response obtained from the simulator.
 Recess of the discharge can be observed immediately after the end of the rain event.
@@ -156,7 +153,9 @@ Source code is available at \url{bitbucket.org/binello7/master_thesis}.
 
 \paragraph*{Funding} The research leading to these results has received funding from the Eawag's discretionary funding program (project EmuMore \url{kakila.bitbucket.io/emumore}).
 
-\paragraph*{Author contributions} \textbf{SR} developed the software, carried out simulations, and data analysis. \textbf{JPC} contributed to the emulator design, data analysis, and supervised SR. All authors contributed to the writing of this manuscript.
+\paragraph*{Author contributions}
+\textbf{SR} developed the software, carried out simulations, and data analysis.
+\textbf{JPC} contributed to the emulator design, data analysis, and supervised SR. All authors contributed to the writing of this manuscript.
 
 \sloppy
 \bibliographystyle{unsrtnat}
