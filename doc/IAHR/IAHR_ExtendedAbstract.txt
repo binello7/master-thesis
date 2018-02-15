@@ -4,34 +4,39 @@ Fast early flood warning systems exploiting catchment specific behavior
 Sebastiano Rusca, Juan Pablo Carbajal (Peter Molnar? Jörg Rieckermann?)
 
 1. Abstract
-Floods due to heavy rain are among the most destructive events in hydrology and
-their frequency has incremented over the last decades. 
-Numerical models are the most useful tools to predict floods and trigger
-security measures or evacuations. However, the high complexity of these models
-hinders the use of detailed simulators for early warning systems.
+Floods due to heavy rain are among the most destructive events in hydrology and their frequency has incremented over the last decades. 
+Numerical models are the most useful tools to predict floods and trigger security measures or evacuations. However, the high complexity of these models hinders the use of detailed simulators for realtime early warning systems.
 
-An early warning system has to be understood as one capable of giving within
-seconds a prediction of whether based on current conditions and meteorological
-forecast an occurring rain event will result in major flooding or not, and if
-yes within how much time. Fine tuned physically based simulators are able
-to produce trustworthy flood predictions but are unusable as early warning
-systems due to their high computational cost.
-Fast surrogate models based on these simulators can yield results of the same
-order of accuracy with speed-up factors of up to 10 at the power of 6.
+An early warning system should be capable of giving within seconds a prediction of whether, based on current conditions and meteorological forecast, an occurring rain event will result in major flooding or not, and if yes within how much time.
+Fine tuned physically based simulators are able to produce trustworthy flood predictions but are unusable as early warning systems due to their high computational cost.
+Fast surrogate models based on these simulators can yield results of the same order of accuracy with speed-up factors or the order of 10^5.
 
-In this work, we present a methodology for developing such surrogate models of
-a detailed (non-linear shallow water equations) simulator. The performance
-of the resulting emulator-based early flood warning system tailored for
-the catchment in question is discussed and analyzed.
-
-Reference of exactly the same idea in Volcanology
-https://www.newton.ac.uk/seminar/20180207100011001
+In this work, we present a methodology for developing such surrogate models of a detailed (non-linear shallow water equations) simulator[1].
+The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
 
 2. Brief methodology
 Experiment set-up
 figure: synthetically generated mountainous topography
 
-A synthetic squared catchment of size 2km x 2km was generated in order to perform the simulations. Simulations were run to obtain response hydrographs of the given catchment to different rain events and soil saturation conditions. In particular the parameters initial soil saturation and rain intensity were varied. A constant rain with a duration of 6h was chosen, while a longer time was taken for the simulation, in order to be able to observe the hydrograph recession. 
+The general goal of our emulator is to take inputs related to a rain event and catchment situation and predict the
+time it will take to observe a discharge from the catchment greater or equal to a predefined threshold discharged $Q_!$.
+The threshold discharge is probided by a downstream region that is prone to flooding.
+Hence the quantity of interest (QoI) is the time-to-threshold, $t_!$.
+The emulator is built using two input parameters: rain intensity ($I$) and soil saturation ($\Delta\theta$). 
+Simulations were run using FullSwof2D [REFXX] with different values of these paramters and response hydrographs of an $2km \times 2km$ synthetic catchment where recorded.
+
+The rationaly behind the chosen paramters is that rain intensity is readily available from metheorological predictions, while soil saturation is used to incorporate the recent history of the catchmenth, e.g. if we there were several rain int he previous days the soil will be highly saturated.
+Since the response hydrograph shape is indenpendent of rain duration, i.e. the effect of different rain duarations can be factored out
+\begin{equation}
+Q(t, I, \Delta\theta, d) \aprox Q_\infty(t, I, \Delta\theta) \Xi(t \leq d)
+\end{equation}
+\noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration and $\Xi(x)$ is the indicator function of the interval $[0,d]$.
+The discharge for infinite rain duration $Q_\infty(\ldots)$ determines the QoI,
+\begin{equation}
+Q_\infty (t_!, I, \Delta\theta) - Q_\! = 0
+\end{equation}
+\noindent Although $Q_\infty$ is not available sufficiently long rain events (6h in our case) are enough for the aplication at hand.
+This is because rain intensity is likely to change withinh 6h, and because high intensity rains of such duration can be considered \textit{extreme} for many regions.
 
 figure: response hydrographs of the 50 different experiments
 
@@ -48,3 +53,6 @@ The time lag to reach the chosen Qthhold (here 10% of the measured Qmax) was ext
               MAE (min, %)    RMSE (min)
 test           5.8, 27.0        2.89
 validation     11.8, 11.6       5.73
+
+4. References
+Bayarri, M. J., Berger, J. O., Calder, E. S., Patra, A. K., Pitman, E. B., Spiller, E. T., & Wolpert, R. L. (2015). Probabilistic Quantification Of Hazards: A Methodology Using Small Ensembles Of Physics-Based Simulations And Statistical Surrogates. International Journal for Uncertainty Quantification, 5(4), 297–325. DOI:10.1615/Int.J.UncertaintyQuantification.2015011451
