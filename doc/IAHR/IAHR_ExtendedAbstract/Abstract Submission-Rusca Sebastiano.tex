@@ -9,6 +9,7 @@
 \usepackage{timesmt}
 
 % add here more packages based on the document format
+\usepackage{xcolor}
 
 
 % setting math equation indent from left 0pts
@@ -20,7 +21,7 @@
 % IMPORTANT: Author wants to format references in chicaco style Author must use BiBTex
 % IMPORTANT: Author wants to format numbered references remove chicaco style file and \bibliographystyle{chicaco}
 
-\usepackage{chicaco}
+%\usepackage{chicaco}
 
 %  \cite{key}
 %    which produces citations with full author list and year.
@@ -106,87 +107,77 @@ ups with minor accuracy losses.
 
 \section{Introduction}
 
-{\bf The text in this paper is for visual purpose only. No rights
-can be taken from this.}\\
+In this work, we present a methodology for developing a surrogate model of
+a detailed (non-linear shallow water equations) simulator. The simulator used
+for this scope is \textit{FullSWOF\textunderscore2D-v.1.07.00}
+\cite{noauthor_fullswof_nodate}. The performance of the resulting emulator-based
+early flood warning system tailored for the catchment in question is discussed
+and analyzed.\\
 
-The submission of Extended Abstract to $5^{th}$ IAHR Europe Congress
-is available on the website of the congress at: http://events.unitn.it/en/iahr2018.\\
+An early warning system has to be understood as one capable of giving within
+seconds a prediction of whether based on current conditions (soil moisture content,
+potential infiltration, \dots) and meteorological forecast an occurring rain
+event will result in major flooding or not, and if yes within how much time.\\
 
-Follow the instructions.\\
-
-Here some lines as example of the template of the Extended Abstract.\\
-
-A detailed riparian field study to assess the im-portance of
-bedrock groundwater in streamflow processes was established in the
-headwaters of the Afon Hafren, mid-Wales, UK. Results from this
-study identified distinct groundwater horizons close to the stream
-channel.  Different flow pathways and travel times resulted in a
-different chemical charac-ter of groundwaters in these different
-horizons.  Groundwater discharge from these horizons into the
-stream was by piston displacement in response to re-charging
-rainfall higher up in the catchment.  Groundwater upwelling into
-the soils indicated soil water to be sourced from both groundwater
-and rain-fall.  Soil waters closest to the stream (ca. 25m) were
-predominantly groundwater controlled and may be the major source
-for ecologically toxic soil compo-nents such as aluminium entering
-the river.
-
-A detailed riparian field study to assess the im-portance of
-bedrock groundwater in streamflow processes was established in the
-headwaters of the Afon Hafren, mid-Wales, UK.  Results from this
-study identified distinct groundwater horizons close to the stream
-channel.  Different flow pathways and travel times resulted in a
-different chemical charac-ter of groundwaters in these different
-horizons.
+Fine tuned physically based simulators are able
+to produce trustworthy flood predictions but are unusable as early warning
+systems due to their high computational cost.
+Fast surrogate models based on these simulators can yield results of the same
+order of accuracy with speed-up factors of up to $10^6$.
+\textcolor{red}{reference of same idea in volcanology}
 
 
-\begin{figure}[h!]
-\centerline{
-\includegraphics[width=8cm]{img/emulator.png}
-} \caption{Sketch of flow configuration} \label{f:sketch1}
+\section{Methodology}
+
+A synthetic squared catchment of size 2km x 2km was generated in order to
+perform the simulations. Simulations were run to obtain response hydrographs of
+the given catchment to different rain events and soil saturation conditions.
+In particular the parameters initial soil saturation and rain intensity were
+varied. A constant rain with a duration of 6\,h was chosen, while a longer
+duration was set for the simulation, in order to be able to observe the
+hydrograph recession.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.4\textwidth]{img/topography.png}
+  \caption{Synthetic topography produced in \textit{Octave} \cite{noauthor_gnu_nodate}}
+  \label{img:topography}
 \end{figure}
 
+Figure \ref{img:topography} here above shows the synthetic topography used.
+50 simulations were run with soil initial saturations in a range of $[0 - 1]$
+and rain intensities in a range of $[10 - 35]\,mm/h$.\\
 
-A detailed riparian field study to assess the im-portance of
-bedrock groundwater in streamflow processes was established in the
-headwaters of the Afon Hafren, mid-Wales, UK.  Results from this
-study identified distinct groundwater horizons close to the stream
-channel.
+As output response the total outflow through the catchment bottom boundary was used.
+This is represented in the hydrographs of Figure \ref{img:hydrographs}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.4\textwidth]{img/hydrographs3d.png}
+  \caption{Response hydrographs of the catchment to the different rain events}
+  \label{img:hydrographs}
+\end{figure}
+
+The hydrographs show different responses depending on
+the soil initial saturation and the rain intensity which was applied.
+In some cases, in particular by heavy rain and high initial soil
+saturation values, the appearance of surface runoff is very rapid.
+In other cases this just happens after it has rained for hours or
+does not happen at all. The emulator we aim to build should be used as
+an early flood warning system. The variable which it is trying to predict is
+then the time at which a certain $Q_{thhold}$, the maximum discharge for which the
+various hydraulic structure on the channel downstream of the catchment were
+dimensioned, is reached. As observable from the hydrographs this time can be
+very variable depending on the value of $Q_{thhold}$ or can never be reached.
 
 
-\begin{table}
-\caption{Margin settings for A4 size paper and letter size paper.}
-\tabletext{
-\begin{tabular}{lllll}\hline
-&\multicolumn{2}{l}{A4 size
-paper}&\multicolumn{2}{l}{Letter size paper}\\[-6pt]
-&\multicolumn{2}{l}{\hrulefill}&\multicolumn{2}{l}{\hrulefill}\\
-Setting&cm&inches&cm&inches\\\hline
-Top&1.2&0.47"&0.32&0.13"\\
-Bottom&1.3&0.51"&0.42&0.17"\\
-Left&1.15&0.45"&1.45&0.57"\\
-Right&1.15&0.45"&1.45&0.57"\\
-All other&0.0&0.0"&0.0&0.0"\\
-Column width*&9.0&3.54"&9.0&3.54"\\
-Column spacing*&0.7&0.28"&0.7&0.28"\\\hline
-\end{tabular}}
-\end{table}
-
-\subsection{Equation}
-
-You can add an equation:
-
-\begin{equation}\label{eqn}
-  a=1
-\end{equation}
-and refer to eq.(\ref{eqn}).
 
 \section{Acknowledge}
 
 Here you can insert acknowledge.
 
 \bibliography{ref}
-\bibliographystyle{chicaco}
+\bibliographystyle{plain}
 
 
 
