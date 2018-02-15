@@ -100,7 +100,7 @@ Since the response hydrograph shape is independent of rain duration, i.e. the ef
 Q(t, I, \Delta\theta, d) \approx Q_\infty(t, I, \Delta\theta) \Xi(t \leq d)
 \end{equation}
 
-\noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration, and $\Xi(x)$ is the indicator function of the interval $[0,d]$.
+\noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration, and $\Xi(x)$ is the indicator function of the interval $[\numrange{0}{d}]$.
 This representation does not recover the recession of the hydrograph, but that is irrelevant for our application.
 Fig.~\ref{img:hydrograph} shows an example response obtained from the simulator.
 Recess of the discharge can be observed immediately after the end of the rain event.
@@ -108,7 +108,7 @@ Recess of the discharge can be observed immediately after the end of the rain ev
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.4\textwidth]{img/hydrograph.png}
-  \caption{Response hydrograph for $\Delta\theta = 0.50$ and $I = 32.2\,mm/h$. $Q_!$ and $Q^\prime_!$ lines highlight the discontinous behaviour of the response.}
+  \caption{Response hydrograph for $\Delta\theta = 0.5$ and $I = \SI{32.2}{\milli\metre\per\hour}$. $Q_!$ and $Q^\prime_!$ lines highlight the discontinuous behavior of the response.}
   \label{img:hydrograph}
 \end{figure}
 
@@ -127,13 +127,15 @@ This is because rain intensity is likely to change within \SI{6}{\hour}, and bec
 
 \jpi{Describe in a few paragraph what you expect to obtain. Here goes the figure with your current emulator}
 
-
-The response hydrographs show a very discontinuous behavior. Depending on the region of the hydrograph, small modifications of $Q_!$ can generate big variations in $t_!$. By observing Fig~\ref{img:hydrograph} this is particularly true in the region between $Q_!$ and $Q^\prime_!$. This phenomenon makes our QoI particularly difficult to predict. For this reason an emulator for this quantity turns out to be of high interest.
+The response hydrographs show a very discontinuous behavior. Depending on the region of the hydrograph, small modifications of $Q_!$ can generate big variations in $t_!$.
+By observing Fig~\ref{img:hydrograph} this is particularly true in the region between $Q_!$ and $Q^\prime_!$. This phenomenon makes our QoI particularly difficult to predict.
+For this reason an emulator for this quantity turns out to be of high interest.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[width=0.4\textwidth]{img/emulator.png}
-  \caption{$t_!$ as a function of $I$ and $\Delta\theta$. The black mesh shows the prediction of $t_!$ between the sampled points, i.e. our emulator.}
+  \caption{$t_!$ as a function of $I$ and $\Delta\theta$.
+  The black mesh shows the prediction of $t_!$ between the sampled points, i.e. our emulator.}
   \label{img:emulator}
 \end{figure}
 
