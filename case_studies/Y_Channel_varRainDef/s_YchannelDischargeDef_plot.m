@@ -47,9 +47,11 @@ for n = 1:nExp
 endfor
 qt_bbound = q_temp;
 clear q_temp;
-
 save ('qt_bbound_mat.dat', 'qt_bbound');
 
+miri = min (rain_intensities_h);
+mari = max (rain_intensities_h);
+mQmax = max (max( max(qt_bbound)));
 
 ## Produce the plots
 # hydrographs plot
@@ -61,9 +63,6 @@ colr = copper (nSat);
 
 refline = zeros (size(tt));
 
-miri = min (rain_intensities_h);
-mari = max (rain_intensities_h);
-mQmax = max (max( max(qt_bbound)));
 polyg = [
          rain_duration miri 0;
          rain_duration mari 0;
@@ -87,10 +86,49 @@ view (31, 49)
 #view (72, 58)
 set (gca, 'box', 'off')
 xlabel ('t [min]');
-ylabel ('ri [mm/h]');
+ylabel ('I [mm/h]');
 zlabel ('Q [m^3/s]');
 print ('hydrographs3d.eps', '-color')
 print ('hydrographs3d.png', '-r300')
+
+
+
+figure (f)
+f+=1;
+
+ri = 9;
+ss = 3;
+Q1 = 0.7;
+t1 = interp1 (qt_bbound(:,ri,ss), t_min, Q1);
+Q2 = 0.8;
+t2 = interp1 (qt_bbound(:,ri,ss), t_min, Q2);
+tmax = max (t_min);
+
+plot (t_min, qt_bbound(:,ri,ss), 'b', 'linewidth', 1);
+hold on
+line ([rain_duration rain_duration], [0, max(qt_bbound(:,ri,ss))], 'color', 'k', ...
+      'linestyle', '-');
+ha = annotation ("textarrow", 1/tmax*[rain_duration-50 rain_duration-11], ...
+            [0.3 0.3], 'headstyle', 'vback1', 'headwidth', 5, 'headlength', 5, ...
+            'string', 'rain duration ', 'fontsize', 9);
+line ([t1 t1], [0 Q1], 'linestyle', '--');
+text (t1+3, 0.033, 't_!', 'fontweight', 'bold');
+line ([0 tmax], [Q1 Q1]);
+text (5, Q1+0.033, 'Q_!', 'fontweight', 'bold');
+line ([0 tmax], [Q2 Q2]);
+text (5, Q2+0.033, 'Q\prime_!', 'fontweight', 'bold');
+line ([t2 t2], [0 Q2], 'linestyle', '--');
+text (t2+3, 0.033, 't\prime_!', 'fontweight', 'bold');
+
+
+
+hold off
+legend (sprintf ('\\Delta\\theta = %0.2f, I = %0.1f mm/h', soil_saturations(ss), rain_intensities_h(ri)),'location', 'northwest');
+axis tight
+xlabel ('t [min]');
+ylabel ('Q [m^3/s]');
+print ('hydrograph.png', '-r300');
+
 
 
 
@@ -129,7 +167,7 @@ print ('hydrographs3d.png', '-r300')
 ##print ('sampling_outputTQmax.eps', '-color');
 
 # topography plot
-topo_plt = true;
+topo_plt = false;
 if topo_plt
   load ('Inputs/topography.dat');
   X = topography(:,1); Y = topography(:,2); Z = topography(:,3);
