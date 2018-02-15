@@ -44,6 +44,7 @@
 \defcitealias{Inkscape}{Inkscape}
 
 \newcommand{\jpi}[1]{{\color{Magenta} JPi: #1}}
+\newcommand{\seb}[1]{{\color{Red} Seb: #1}}
 
 \begin{document}
 \title{Fast early flood warning systems exploiting catchment specific behavior}
@@ -70,8 +71,8 @@ for this scope is \textit{FullSWOF\textunderscore2D-v.1.07.00}~\citep{fullswof}.
 The performance of the resulting emulator-based early flood warning system tailored for the catchment in question is discussed and analyzed.
 
 Fine tuned shallow water based simulators are able to produce trustworthy flood predictions but are unusable as early warning systems due to their high computational cost.
-This is  inappropriate for early warning system which should be capable of giving within seconds a prediction of whether, based on current conditions and meteorological forecast, an occurring rain event will result in major flooding or not, and if yes within how much time.
-Fast surrogate models based on detailed simulators can accurate results\footnote{Note that accuracy is task dependent} with speed-up factors of up to $10^6$~\citep[see][for an application in geophysical hazards]{Bayarri2015}.
+This is inappropriate for early warning systems which should be capable of giving within seconds a prediction of whether, based on current conditions and meteorological forecast, an occurring rain event will result in major flooding or not, and if yes within how much time.
+Fast surrogate models based on detailed simulators can provide accurate results\footnote{Note that accuracy is task dependent} with speed-up factors of up to $10^6$~\citep[see][for an application in geophysical hazards]{Bayarri2015}.
 
 \section{Methodology}
 
@@ -79,7 +80,7 @@ The general goal of our emulator is to take inputs related to a rain event and c
 The threshold discharge is provided by a downstream region that is prone to flooding and the quantity of interest (QoI) is the time-to-threshold, $t_!$.
 
 The emulator is built using two input parameters: rain intensity ($I$) and soil saturation ($\Delta\theta$).
-Simulations were run using the simulator with different values of these parameters and response hydrographs of a $\SI{2}{\kilo\metre} \times \SI{2}{\kilo\metre}$ synthetic catchment where recorded.
+Simulations were run using the simulator with different values of these parameters and response hydrographs of a $\SI{2}{\kilo\metre} \times \SI{2}{\kilo\metre}$ synthetic catchment were recorded.
 A set of \num{50} simulations were run with saturations in the $[\numrange{0}{1}]$ interval
 and rain intensities in \SIrange{10}{30}{\milli\metre\per\hour}.\\
 Figure~\ref{img:topography} shows the synthetic topography used.
@@ -91,7 +92,7 @@ Figure~\ref{img:topography} shows the synthetic topography used.
   \label{img:topography}
 \end{figure}
 
-The rationality behind the chosen parameters is that rain intensity is readily available from meteorological forecast, and soil saturation is used to incorporate the recent history of the catchment, e.g. if we there were several rain int he previous days the soil will be highly saturated.
+The rationality behind the chosen parameters is that rain intensity is readily available from meteorological forecast, and soil saturation is used to incorporate the recent history of the catchment, e.g. if there were several rains in the previous days the soil will be highly saturated.
 
 Since the response hydrograph shape is independent of rain duration, i.e. the effect of different rain durations can be factored out
 
@@ -101,14 +102,14 @@ Q(t, I, \Delta\theta, d) \approx Q_\infty(t, I, \Delta\theta) \Xi(t \leq d)
 
 \noindent where $Q$ is the response hydrograph, $t$ is the time variable, $d$ is the rain event duration, and $\Xi(x)$ is the indicator function of the interval $[0,d]$.
 This representation does not recover the recession of the hydrograph, but that is irrelevant for our application.
-Figure~\ref{img:hydrographs} show an example response obtained from the simulator.
-The rain event duration is marked with a rectangle, after which recess of the discharge can be observed.
+Fig.~\ref{img:hydrograph} shows an example response obtained from the simulator.
+Recess of the discharge can be observed immediately after the end of the rain event.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[width=0.4\textwidth]{img/hydrographs3d.png}
-  \caption{\jpi{Show a single response, mark rain duration with vertical line and $Q_!$ with horizontal line. Better captions, describe content!}. Response hydrographs of the catchment to the different rain events.}
-  \label{img:hydrographs}
+  \includegraphics[width=0.4\textwidth]{img/hydrograph.png}
+  \caption{Response hydrograph for $\Delta\theta = 0.50$ and $I = 32.2\,mm/h$. $Q_!$ and $Q^\prime_!$ lines highlight the discontinous behaviour of the response.}
+  \label{img:hydrograph}
 \end{figure}
 
 The discharge for infinite rain duration $Q_\infty(\ldots)$ determines the QoI $t_!$,
@@ -121,9 +122,21 @@ Q_\infty (t_!, I, \Delta\theta) - Q_! = 0
 This is because rain intensity is likely to change within \SI{6}{\hour}, and because high intensity rains of such duration can be considered extreme for many regions.
 
 \section{Preliminary results}
-\jpi{Describe the issue with the discontinuity in $t_!$, use Fig.~\ref{img:hydrographs} to support the explanation.}
+
+\jpi{Describe the issue with the discontinuity in $t_!$, use Fig.~\ref{img:hydrograph} to support the explanation.}
 
 \jpi{Describe in a few paragraph what you expect to obtain. Here goes the figure with your current emulator}
+
+
+The response hydrographs show a very discontinuous behavior. Depending on the region of the hydrograph, small modifications of $Q_!$ can generate big variations in $t_!$. By observing Fig~\ref{img:hydrograph} this is particularly true in the region between $Q_!$ and $Q^\prime_!$. This phenomenon makes our QoI particularly difficult to predict. For this reason an emulator for this quantity turns out to be of high interest.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=0.4\textwidth]{img/emulator.png}
+  \caption{$t_!$ as a function of $I$ and $\Delta\theta$. The black mesh shows the prediction of $t_!$ between the sampled points, i.e. our emulator.}
+  \label{img:emulator}
+\end{figure}
+
 
 %The hydrographs show different responses depending on the soil initial saturation and the rain intensity which was applied.
 %In some cases, in particular by heavy rain and high initial soil saturation values, the appearance of surface runoff is very rapid.
