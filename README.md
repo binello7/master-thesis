@@ -1,7 +1,7 @@
 # Master Thesis: project board
 
 ## Ideas
-* Extend weir equation experiment: emulator giving weir slope / weir length for a desired \mu coefficient
+* Extend weir equation experiment: emulator giving weir slope / weir length for a desired \mu coefficient and compare it with [this paper](https://pubs.usgs.gov/circ/1957/0397/report.pdf)
 
 ## Reminders
 * :white_large_square: by 16/02/2018: prepare master thesis outline
