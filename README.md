@@ -8,7 +8,7 @@
 ## To discuss
 ### Week 12 - 16/02/2018
 * :white_large_square: Outline master thesis
-* :white_large_square: Abstract IAHR
+* :white_check_mark: Abstract IAHR
 * :white_large_square: Next step master thesis? See what discussed with P. Molnar and J. Rieckermann too
 * :white_large_square: Open issues master_thesis
 * :white_large_square: Open issues fswof2d
