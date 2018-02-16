@@ -1,7 +1,7 @@
 # Master Thesis: project board
 
 ## Reminders
-* :white_large_square: by 15/02/2018: prepare abstract for IAHR congress
+* :white_check_mark: by 15/02/2018: prepare abstract for IAHR congress
 * :white_large_square: by 16/02/2018: prepare master thesis outline
 ----
 
@@ -13,4 +13,3 @@
 * :white_large_square: Open issues master_thesis
 * :white_large_square: Open issues fswof2d
 ----
-:white_check_mark:
