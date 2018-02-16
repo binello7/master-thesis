@@ -33,6 +33,18 @@
 * ``\n``: new line
 * ``\t``: tab character
 
+## Packages
+* ``dataframe``
+* ``fpl``: plot data on unstructured triangular and tetrahedral meshes in Octave
+* ``geometry``
+* ``gpml``
+* ``io``
+* ``linear-algebra``
+* ``optim``
+* ``parallel``: execute operations (for cycles, ...) in parallel
+* ``statistics``
+* ``struct``
+
 ## Packages management
 * ``pkg list``: list all installed packages
     - ``... -forge``: list all package available on _SourceForge_
@@ -96,6 +108,8 @@
     - ``pp = interp1 (..., 'pp')``: if _pp_ is provided no _xi_ have to be given
       to the function. The function returns then a piecewise polynomial object. 
       The object can later be used with ``ppval`` for evaluation
+* ``interp2``
+* ``griddata``
 
 
 ## Evaluation functions
@@ -106,6 +120,9 @@
 
 ## Plot and related functions
 * ``plot``: line plot in 2D
+* ``line``: plots a 2D or 3D line
+* ``plot3``: plot lines in 3D
+* ``waterfall``: special 3D plot
 * ``quiver``: plots vector field
 * ``mesh``: plots a mesh in 3D
 * ``surf``: plots a surface in 3D
