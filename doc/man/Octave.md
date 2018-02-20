@@ -25,6 +25,7 @@
 * ``~``: if a function returns more than one parameter, assign it to the unwanted ones. This value is not returned but it is still computed!!
 * ``!``: logical _not_ operator
 * ``~``: logical _not_ operator
+* ``\``: left divide operator. Very useful with matrix, solves linear systems in the most efficient way
 * ``@``:
 
 ## Format conversion specifications
