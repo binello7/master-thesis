@@ -24,20 +24,20 @@ pkg load optim
 load ('input_Q.dat');
 load ('extracted_data.dat');
 
-i = 1;
-# Remove unusable experiments
-while i <= size (H)(2)
-  if weircenter_head(i) < 0.05
-    weircenter_head(i) = [];
-    Qin(i)             = [];
-    H(:,i)             = [];
-    HZ(:,i)            = [];
-    H_max(i)           = [];
-    h0(i)              = [];
-    v0(i)              = [];
-  endif
-  i+=1;
-endwhile
+#i = 1;
+## Remove unusable experiments
+#while i <= size (H)(2)
+#  if weircenter_head(i) < 0.05
+#    weircenter_head(i) = [];
+#    Qin(i)             = [];
+#    H(:,i)             = [];
+#    HZ(:,i)            = [];
+#    H_max(i)           = [];
+#    h0(i)              = [];
+#    v0(i)              = [];
+#  endif
+#  i+=1;
+#endwhile
 
 ## Input data
 Qin   = abs (Qin);
