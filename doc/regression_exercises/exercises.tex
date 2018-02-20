@@ -73,7 +73,7 @@ The file \texttt{interpolation1D\_poly1.dat} contains two noiseless datasets wit
 \question Redo all parts of the previous question using a \emph{linear filter}:
 
 \begin{equation}
-y (\bm{x}) = \sum_{i=1}^N y_i \varphi(\bm{x}, \bm{x}_i)
+y (\bm{x}) = \sum_{i=1}^N w(y_i) \varphi(\bm{x}, \bm{x}_i)
 \end{equation}
 
 In addition answer the following:
@@ -89,7 +89,7 @@ In addition answer the following:
 1  & x_i - \sigma \leq x \leq x_i\\
 -1 & x_i \leq x \leq x_i + \sigma
 \end{cases}\\
-\varphi_{SE}(x,x_i) &= \exp \left( -\frac{(x - x')^2}{2 \sigma^2} \right)
+\varphi_{SE}(x,x_i) &= \exp \left( -\frac{(x - x_i)^2}{2 \sigma^2} \right)
 \end{align}
 
 \noindent to perform the interpolation and find the best value for the parameter $\sigma$ using cross-validation.
