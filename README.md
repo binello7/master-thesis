@@ -13,7 +13,7 @@
 * :white_large_square: Outline master thesis
 * :white_large_square: What with *Channel Experiments* (2 levels channel etc.?)
 * :white_large_square: Next step master thesis? See what discussed with P. Molnar and J. Rieckermann too
-* :white_large_square: Open issues master_thesis
-* :white_large_square: Open issues fswof2d
+* :white_large_square: Open issues *master_thesis*
+* :white_large_square: Open issues *fswof2d*
 * :white_check_mark: Abstract IAHR
 ----
