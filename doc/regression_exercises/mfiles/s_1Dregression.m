@@ -17,6 +17,7 @@
 ## Created: 2018-01-24
 
 close all
+pkg load optim
 
 ## To discuss
 #
@@ -43,10 +44,26 @@ close all
 #       error at one output point and error at the following?? (doesn't really make sense...)
 
 
-
-
-## Simple functions to do LOO
+## Data
 #
+dataFolder = 'data';
+fname = @(s) fullfile ('..', dataFolder, s);
+dataFile = fname ('interpolation1D_poly1.dat');
+data = load (dataFile);
+
+X    = data(:,1);
+Y    = data(:,3);
+nx   = length (X);
+
+## Add random noise
+#
+#Yn = Y + 0.4*randn (size(Y));
+Yn = Y;
+
+
+
+## Functions
+# simple functions to do loo
 se_o_f      = @(xy,xyt,n) (polyval ( polyfit (xy(:,1), xy(:,2), n), xyt(:,1)) - xyt(:,2)).^2;
 mse_o_f     = @(xy, loo, n) mean(arrayfun (@(i)se_o_f(xy(loo(i,:),:), xy(!loo(i,:),:), n), 1:size(loo,1)));
 mse         = @(y, yf) mean ((y - yf).^2);
@@ -87,22 +104,13 @@ function plot_CI (x, y, xt, yt, p, dy, tit)
 endfunction
 
 
+# functions for linear filter: squared exponential (SE)
+phi_SE   = @(x, sigma) exp (- (x - X.').^2 / (2*sigma^2)); 
+#lf_SE    = @(x) arrayfun (@(i) phi_SE (x(i)) * Y, 1:length(x)); 
 
 
-## Data
-#
-dataFolder = 'data';
-fname = @(s) fullfile ('..', dataFolder, s);
-dataFile = fname ('interpolation1D_poly1.dat');
-data = load (dataFile);
 
-X    = data(:,1);
-Y    = data(:,3);
-nx = length (X);
 
-## Add random noise
-#
-Yn = Y + 0.4*randn (size(Y));
 
 
 plot (X, Y, 'bo')
