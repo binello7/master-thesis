@@ -17,6 +17,7 @@
 ## Created: 2018-01-24
 
 close all
+clear all
 pkg load optim
 
 ## To discuss
@@ -60,6 +61,8 @@ nx   = length (X);
 #Yn = Y + 0.4*randn (size(Y));
 Yn = Y;
 
+# create a vector of x-values for the plots
+xp = transpose (linspace (1.1*min (X), 1.1*max (X), 200));
 
 
 ## Functions
@@ -104,15 +107,34 @@ function plot_CI (x, y, xt, yt, p, dy, tit)
 endfunction
 
 
-# functions for linear filter: squared exponential (SE)
+# functions for linear filter
+# linear triangular
+function yL = phi_L (x, xi, sigma)
+  for i = 1:length(xi)
+    for j = 1:length(x)
+      if x(j) < xi(i) - sigma || x(j) > xi(i) + sigma
+        yL(j,i) = 1;
+      elseif x(j) >= xi(i) - sigma && x(j) <= xi(i)
+        yL(j,i) = (x(j) - xi(i)) / sigma + 1;
+      elseif x(j) >= xi(i) && x(j) <= xi(i) + sigma
+        yL(j,i) = -(x(j) - xi(i)) / sigma + 1;
+      endif
+    endfor
+  endfor
+endfunction
+
+# squared exponential (SE)
 phi_SE   = @(x, sigma) exp (- (x - X.').^2 / (2*sigma^2)); 
-#lf_SE    = @(x) arrayfun (@(i) phi_SE (x(i)) * Y, 1:length(x)); 
 
 
 
 
 
 
+## Visualize the data
+f = 1;
+figure (f);
+f+=1;
 plot (X, Y, 'bo')
 axis tight
 grid on
@@ -186,19 +208,64 @@ dp_jk = jk_stdv (p_est_jk);
 dp_jk = dp_jk(e_simp != 0);
 
 # propagation of uncertainty to output (dy)
-xe = transpose (linspace (1.1*min (X), 1.1*max (X), 200));
-ye = polyval (p_est, xe);
-dypo = dypp (xe, dp_pf, ee_simp);
+ye = polyval (p_est, xp);
+dypo = dypp (xp, dp_pf, ee_simp);
 
 # calculation of uncertainty with leave one out of sample error estimation
 dyle = dylo (p_est, X, Y, 10);
 
 
 ## Plot the interpolation results
-plot_CI (X, Y, xe, ye, p_est, dypo, '')
+figure (f)
+f+=1;
+plot_CI (X, Y, xp, ye, p_est, dypo, '')
 
 
+## 3.3 Linear filter
+# 3.3.b.L
+sL = [1.5 1.8 2 3];
 
+
+figure (f)
+f+=1;
+plot (X, Y, 'o');
+
+for i = 1:length(sL)
+# compute the weights using observed input-output
+  wL = phi_L (X, X, sL(i)) \ Y;
+
+# plot the solution in the xp span
+  yL = phi_L(xp, X, sL(i)) * wL;
+  hold on
+  plot (xp, yL);
+  hold off
+  leg{i+1} = sprintf ('\\sigma = %0.1f', sL(i));
+endfor
+leg{1} = 'data';
+legend (leg);
+clear leg
+
+# 3.3.b.SE
+# choose a value for sigma
+sSE = [0.05 0.1 0.2 1];
+
+figure (f)
+f+=1;
+plot (X, Y, 'o');
+
+for i = 1:length (sSE)
+# compute the weights using observed input-output
+  wSE = phi_SE (X, sSE(i)) \ Y;
+
+# plot the solution in the xp span
+  ySE = phi_SE (xp, sSE(i)) * wSE;
+  hold on
+  plot (xp, ySE)
+  hold off
+  leg{i+1} = sprintf ('\\sigma = %0.2f', sSE(i));
+endfor
+leg{1} = 'data';
+legend (leg);
 
 
 
