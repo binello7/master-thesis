@@ -11,6 +11,7 @@ case_studies/*/*.sh
 case_studies/*/*/*.txt
 case_studies/*/gist_earth.m
 doc/IAHR/IAHR_Template
+doc/thesis/main-blx.bib
 *.docx
 *.bbl
 *.blg
@@ -19,6 +20,8 @@ doc/IAHR/IAHR_Template
 *.log
 *.nav
 *.out
+*.lof
+*.lot
 *.run.xml
 *.snm
 *.toc
