@@ -19,6 +19,7 @@
 close all
 clear all
 pkg load optim
+pkg load gpml
 
 ## To discuss
 #
@@ -215,10 +216,10 @@ dypo = dypp (xp, dp_pf, ee_simp);
 dyle = dylo (p_est, X, Y, 10);
 
 
-## Plot the interpolation results
-figure (f)
-f+=1;
-plot_CI (X, Y, xp, ye, p_est, dypo, '')
+### Plot the interpolation results
+#figure (f)
+#f+=1;
+#plot_CI (X, Y, xp, ye, p_est, dypo, '')
 
 
 ## 3.3 Linear filter
@@ -226,46 +227,63 @@ plot_CI (X, Y, xp, ye, p_est, dypo, '')
 sL = [1.5 1.8 2 3];
 
 
-figure (f)
-f+=1;
-plot (X, Y, 'o');
+#figure (f)
+#f+=1;
+#plot (X, Y, 'o');
 
-for i = 1:length(sL)
-# compute the weights using observed input-output
-  wL = phi_L (X, X, sL(i)) \ Y;
+#for i = 1:length(sL)
+## compute the weights using observed input-output
+#  wL = phi_L (X, X, sL(i)) \ Y;
 
-# plot the solution in the xp span
-  yL = phi_L(xp, X, sL(i)) * wL;
-  hold on
-  plot (xp, yL);
-  hold off
-  leg{i+1} = sprintf ('\\sigma = %0.1f', sL(i));
-endfor
-leg{1} = 'data';
-legend (leg);
-clear leg
+## plot the solution in the xp span
+#  yL = phi_L(xp, X, sL(i)) * wL;
+#  hold on
+#  plot (xp, yL);
+#  hold off
+#  leg{i+1} = sprintf ('\\sigma = %0.1f', sL(i));
+#endfor
+#leg{1} = 'data';
+#legend (leg);
+#clear leg
 
 # 3.3.b.SE
 # choose a value for sigma
 sSE = [0.05 0.1 0.2 1];
 
-figure (f)
-f+=1;
-plot (X, Y, 'o');
+#figure (f)
+#f+=1;
+#plot (X, Y, 'o');
 
-for i = 1:length (sSE)
-# compute the weights using observed input-output
-  wSE = phi_SE (X, sSE(i)) \ Y;
+#for i = 1:length (sSE)
+## compute the weights using observed input-output
+#  wSE = phi_SE (X, sSE(i)) \ Y;
 
-# plot the solution in the xp span
-  ySE = phi_SE (xp, sSE(i)) * wSE;
-  hold on
-  plot (xp, ySE)
-  hold off
-  leg{i+1} = sprintf ('\\sigma = %0.2f', sSE(i));
-endfor
-leg{1} = 'data';
-legend (leg);
+## plot the solution in the xp span
+#  ySE = phi_SE (xp, sSE(i)) * wSE;
+#  hold on
+#  plot (xp, ySE)
+#  hold off
+#  leg{i+1} = sprintf ('\\sigma = %0.2f', sSE(i));
+#endfor
+#leg{1} = 'data';
+#legend (leg);
+
+## Solve with GPML
+#meanfunc = @meanConst;
+meanfunc = [];
+covfunc  = {@covPoly, 'iso', 3};
+likfunc  = @likGauss;
+
+#hyp.mean = -1;
+hyp.mean = [];
+hyp.cov  = [2; log(2); log(4)];
+hyp.lik  = log (0.1);
+
+#hyp_min = minimize (hyp, @gp, -30, @infGaussLik, meanfunc, covfunc, likfunc, X, Y);
+
+[mu s2] = gp (hyp, @infExact, meanfunc, covfunc, likfunc, X, Y, xp);
+
+
 
 
 
