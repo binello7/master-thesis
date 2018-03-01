@@ -1,0 +1,37 @@
+\chapter{Introduction}
+\label{chp:introduction}
+
+%----------------------------------------------------------------------------------------
+
+% Define some commands to keep the formatting separated from the content 
+\newcommand{\keyword}[1]{\textbf{#1}}
+\newcommand{\tabhead}[1]{\textbf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{\bfseries#1}}
+\newcommand{\option}[1]{\texttt{\itshape#1}}
+
+%----------------------------------------------------------------------------------------
+
+Flooding and inundation have dramatically increased in the last years due to climate change.
+The frequency, as well as the magnitude of extreme rain events, leading to major inundations, have grown, making our capability to predict occurrence and effects more unreliable.
+To limit risks and damage, novel control, mitigation and warning measures are needed.
+Design and implementation of these need preliminary study of the situation based on data and information.
+Unfortunately, these are often not available, or not in the amount required for carrying out preliminary studies.
+
+Nowadays simulation offers a valid and very powerful tool for dealing with this problem.
+Hydrological numerical models of catchments can be built, where depending on the degree of detail required different processes are implemented: infiltration, evaporation, erosion, etc.
+Depending on the degree of detail chosen more or less accurate models can be achieved.
+These models are mainly based on topographical data of the catchment in question, which are then refined by assigning friction coefficients values, infiltration capacity values, hydraulic conductivity values, porosity values to the different zones of the catchment.
+Such models need to be calibrated.
+This means that by using optimization algorithms the parameters of the model are varied within certain ranges in order to reproduce at best a recorded output (e.g. river outlet hydrograph) generated from "known" initial conditions (e.g. initial soil saturation) and inputs (e.g. the recorded hyetograph).
+Once the model is calibrated it can be used to generate new data, from which new information about the given system can be learned and from which other conditions and new situations can be tested.
+
+The main drawback of simulation lays in its very high computational burden.
+For calibration alone several runs of the model are required.
+Every simulation can last from some minutes up to several hours, depending on the complexity of the model, the type of computer where the simulations are run, the duration of the event simulated, the resolution used for the model, etc.
+Once the model is calibrated several more runs are necessary in order to generate the desired dataset.
+The number of runs depends on the kind of study one would like to carry out.
+For uncertainty analysis for example, up to some thousands of simulations can be run, in order to study the influence that the variation of a parameter of the model (or its uncertain determination) has on the output.
+
+
+\section{Emulation}
