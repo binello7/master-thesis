@@ -53,9 +53,9 @@ miri = min (rain_intensities_h);
 mari = max (rain_intensities_h);
 mQmax = max (max( max(qt_bbound)));
 
-## Produce the plots
-# hydrographs plot
 
+## Produce the plots
+# plot: all hydrographs
 f=1;
 figure (f)
 f+=1;
@@ -74,7 +74,7 @@ drawPolygon3d (polyg, ':r', 'linewidth', 0.5);
 hold on
 plot3 (tt, rri_t, refline, 'linestyle', '--', 'linewidth', 0.5, 'color', 'k');
 for s = 1:nSat
-  leg{s} = sprintf ('\\Delta\\theta = %0.2f', soil_saturations(nSat+1-s));
+  leg{s} = sprintf ('\\theta_i = %0.2f', 1-soil_saturations(nSat+1-s));
   h3(s,:) = plot3 (tt, rri_t, qt_bbound(:,:,nSat+1-s), 'color', colr(nSat+1-s,:), 'linewidth', 1);
 endfor
 hold off
@@ -88,11 +88,10 @@ set (gca, 'box', 'off')
 xlabel ('t [min]');
 ylabel ('I [mm/h]');
 zlabel ('Q [m^3/s]');
-print ('hydrographs3d.eps', '-color')
 print ('hydrographs3d.png', '-r300')
 
 
-
+# plot: single hydrograph
 figure (f)
 f+=1;
 
@@ -167,8 +166,6 @@ print ('hydrograph.png', '-r300');
 ##print ('sampling_outputTQmax.eps', '-color');
 
 # topography plot
-topo_plt = false;
-if topo_plt
   load ('Inputs/topography.dat');
   X = topography(:,1); Y = topography(:,2); Z = topography(:,3);
   [X Y Z] = dataconvert ('octave', [Nx Ny], X, Y, Z);
@@ -187,8 +184,5 @@ if topo_plt
   ylabel ('Y [m]');
   zlabel ('Z [m]');
   print ('topography.png', '-r300');
-endif
-
-
 
 
