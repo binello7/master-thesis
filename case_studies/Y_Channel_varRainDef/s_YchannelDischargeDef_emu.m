@@ -16,7 +16,7 @@
 ## Author: Sebastiano Rusca <sebastiano.rusca@gmail.com>
 ## Created: 2018-02-06
 
-#clear all
+clear all
 pkg load gpml
 
 ## Load data
@@ -65,10 +65,11 @@ endfunction
 
 
 ## Extract the idx of Q exceeding Q threshold
-# training data
-Q_trhsh = 0.17; #[m3/s];
-idx_train = zeros (nss, nri);
 
+Q_trhsh = 0.17; #[m3/s];
+
+# training data
+idx_train = zeros (nss, nri);
 for i = 1:nri
   for s = 1:nss
     if isempty (find (qt_bbound(:,i,s) >= Q_trhsh, 1))
@@ -80,6 +81,7 @@ for i = 1:nri
     endif
   endfor
 endfor
+
 
 ## test data
 #j = 1;
@@ -97,6 +99,7 @@ endfor
 #  endfor
 #endfor
 
+
 ## validation data
 #idx_vals = zeros (1, length (rain_intensities_val));
 #for i = 1:length(rain_intensities_val)
@@ -109,108 +112,116 @@ endfor
 #  endif
 #endfor
 
-## svm classifier
-#idx_svm = zeros (1, length (rain_intensities_svm));
-#for i = 1:length(rain_intensities_svm)
-#  if isempty (find (qt_bbound_svm(i,:) >= Q_trhsh, 1))
-#    idx_svm(i) = 7*60;
-#  else
-#    idx_svm(i) = find (qt_bbound_svm(i,:) >= Q_trhsh, 1);
-     #threshold was exceeded between this index and the previous one -> average
-#    idx_svm(i) = idx_svm(i) - 0.5;
-#  endif
-#endfor
+
+# svm classifier
+idx_svm = zeros (length (rain_intensities_svm), 1);
+for i = 1:length(rain_intensities_svm)
+  if isempty (find (qt_bbound_svm(i,:) >= Q_trhsh, 1))
+    idx_svm(i,1) = 7*60;
+  else
+    idx_svm(i,1) = find (qt_bbound_svm(i,:) >= Q_trhsh, 1);
+    #threshold was exceeded between this index and the previous one -> average
+    idx_svm(i,1) = idx_svm(i,1) - 0.5;
+  endif
+endfor
+
+# converting the indexes in time
+t_Qtrain  = idx_train * dt / 60; #[min]
+#t_Qtest  = idx_test * dt / 60; #[min]
+#t_Qval   = transpose (idx_val * dt / 60); #[min]
+t_Qsvm    = idx_svm * dt / 60; #[min]
+
+## Convert \Delta\theta into \theta_i
+soil_saturations      = 1 - soil_saturations;
+soil_saturations_test = 1 - soil_saturations_test;
+soil_saturations_val  = 1 - soil_saturations_val;
+soil_saturations_svm  = 1 - soil_saturations_svm;
 
 
+## Building the emulators
+# create training data mesh
+[ri_train ss_train] = meshgrid (rain_intensities, soil_saturations);
 
-## converting the index in time
-#t_Qtrain   = idx_train * dt / 60; #[min]
-#t_Qtest = idx_test * dt / 60; #[min]
-#t_Qval = transpose (idx_val * dt / 60); #[min]
-#t_Qtsvm = transpose (idx_svm * dt / 60); #[min]
+# Emulator 1: classification
+ri_svm = [ri_train(:); rain_intensities_svm(:)];
+ss_svm = [ss_train(:); soil_saturations_svm(:)];
+x_svm  = [ri_svm ss_svm];
+y_svm  = [t_Qtrain(:); t_Qsvm(:)];
 
+# 1 positive, dangerous situation not reached
+y_svm(y_svm>=420) = 1;
 
-### Building the emulator
-## extracting the parameters making the regular grid
-#soil_saturations = 1 - soil_saturations;
-#sat_train = soil_saturations;
-#ri_train  = rain_intensities;
-#[ri_train sat_train] = meshgrid (ri_train, sat_train);
+# -1 negative, dangerous situation was reached
+y_svm(y_svm<420) = -1;
 
-## emu - SVM classifier
-#ri_svm = [ri_train(:); rain_intensities_svm(:)];
-#sat_svm = [sat_train(:); soil_saturations_svm(:)];
+# use the package gpml
+# mean function
+meanfunc = {@meanSum, {@meanConst, {@meanPoly,2}}};
+#meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
+#meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanProd,{@meanLinear,@meanLinear}}}};
+hyp.mean = [18;-15.2;-127;1.3;-10];
+#hyp.mean = [4;1;1];
+#hyp.mean = [418;-15;-127;9;36;1;1];
 
-## parameters sampling for plotting
-## x1: rain intensity, x2 = soil saturation
-#[x1 x2] = meshgrid ([linspace(min (ri_train(:)), max (ri_train(:)), 200)].', [linspace(0, 1, 100)].');
-#x = [x1(:) x2(:)];
-#n = length (x);
-# 
+# covariance function
+#covfunc = {@covMaternard, 1};
+covfunc = {@covNoise};
+sf = 1.0;
+hyp.cov = log([sf]);
 
-#x_svm = [ri_svm sat_svm];
-#t_Qsvm = [t_Qtrain(:); t_Qtsvm(:)];
-#t_Qsvm(t_Qsvm<420) = 1;
-#t_Qsvm(t_Qsvm>=420) = -1;
+# likelihood function
+likfunc = @likLogistic;
 
-#meanfunc = {@meanSum, {@meanConst, {@meanPoly,2}}};
-##meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
-##meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanProd,{@meanLinear,@meanLinear}}}};
-#hyp.mean = [18;-15.2;-127;1.3;-10];
-##hyp.mean = [4;1;1];
-##hyp.mean = [418;-15;-127;9;36;1;1];
-##covfunc = {@covMaternard, 1};
-#covfunc = {@covNoise};
-##ell = ones(2,1);
-#sf = 1.0;
-#hyp.cov = log([sf]);
-#likfunc = @likLogistic;
+# prior
 #prior.mean=cell(1,7);
 #prior.mean{7}={@priorClamped};
 #prior.mean{6}={@priorClamped};
 
+# inference method
 #infe={@infPrior, @infEP, prior};
 
-#hyp = minimize (hyp, @gp, -1e3, infe{2}, meanfunc, covfunc, likfunc, x_svm, t_Qsvm);
-#[a b c d lp] = gp (hyp, infe{2}, meanfunc, covfunc, likfunc, x_svm, t_Qsvm, x, ones(n, 1));
+hyp = minimize (hyp, @gp, -1e3, @infEP, meanfunc, covfunc, likfunc, x_svm, y_svm);
+[a b c d lp] = gp (hyp, @infEP, meanfunc, covfunc, likfunc, x_svm, y_svm, x, ones(n, 1));
 
-## 2D plot for SVM
-#figure (2)
-
-#plot (ri_train(t_Qtrain>=420), sat_train(t_Qtrain>=420), 'go', 'markerfacecolor', 'g',...
-#      ri_train(t_Qtrain<420), sat_train(t_Qtrain<420), 'ro', 'markerfacecolor', 'r');
-#hold on;
-#plot (rain_intensities_svm(t_Qtsvm>=420), soil_saturations_svm(t_Qtsvm>=420), '^g', 'markerfacecolor', 'g')
-#plot (rain_intensities_svm(t_Qtsvm<420), soil_saturations_svm(t_Qtsvm<420), '^r', 'markerfacecolor', 'r')
+# plot 1: classification emulator
+figure (2)
+plot (ri_train(t_Qtrain>=420), ss_train(t_Qtrain>=420), 'go', 'markerfacecolor', 'g',...
+      ri_train(t_Qtrain<420), ss_train(t_Qtrain<420), 'ro', 'markerfacecolor', 'r');
+hold on;
+plot (rain_intensities_svm(t_Qsvm>=420), soil_saturations_svm(t_Qsvm>=420), '^g', 'markerfacecolor', 'g')
+plot (rain_intensities_svm(t_Qsvm<420), soil_saturations_svm(t_Qsvm<420), '^r', 'markerfacecolor', 'r')
 #contourf(x1, x2, reshape(exp(lp), size(x1)), [0.25 0.5 0.75]);
 #colorbar
 #hold off
 
 
-
-## emu - time to peak
+# Emulator 2: regression
+# parameters sampling for plotting
+ri_min = min (rain_intensities);
+ri_max = max (rain_intensities);
+[ri_emu ss_emu] = meshgrid ([linspace(ri_min, ri_max, 200)].', [linspace(0, 1, 100)].');
 
 ## create sampling for the emulator
-#sat_emu = linspace (0, 1, 100);
+#ss_emu = linspace (0, 1, 100);
 #ri_emu  = linspace (min (min (ri_train)), max (max (ri_train)), 100);
-#[ri_emu sat_emu] = meshgrid (ri_emu, sat_emu);
+#[ri_emu ss_emu] = meshgrid (ri_emu, ss_emu);
 
 ## create grid for test and validation
-#[ri_test sat_test] = meshgrid (rain_intensities_test, soil_saturations_test);
+#[ri_test ss_test] = meshgrid (rain_intensities_test, soil_saturations_test);
 
 ### Generating the plot for the emulator
 ##
 #method = 'cubic';
-##t_Qts_emu_na = interp2 (ri_train, sat_train, t_Qtrain_na, ri_emu, sat_emu, 'nearest');
-#t_Qts_emu = interp2 (ri_train, sat_train, t_Qtrain, ri_emu, sat_emu, method);
+##t_Qts_emu_na = interp2 (ri_train, ss_train, t_Qtrain_na, ri_emu, ss_emu, 'nearest');
+#t_Qts_emu = interp2 (ri_train, ss_train, t_Qtrain, ri_emu, ss_emu, method);
 
 ## 3D plot of the emulator
 #figure (1)
-#htr = plot3 (ri_train, sat_train, t_Qtrain, 'ro', 'markerfacecolor', 'r');
+#htr = plot3 (ri_train, ss_train, t_Qtrain, 'ro', 'markerfacecolor', 'r');
 #hold on
-#hte = plot3 (ri_test, sat_test, t_Qtest, 'bo', 'markerfacecolor', 'b');
+#hte = plot3 (ri_test, ss_test, t_Qtest, 'bo', 'markerfacecolor', 'b');
 #hva = plot3 (rain_intensities_val, soil_saturations_val, t_Qval, 'go', 'markerfacecolor', 'g');
-#he = mesh (ri_emu, sat_emu, t_Qts_emu, 'edgecolor', 'k', 'facecolor', 'none');
+#he = mesh (ri_emu, ss_emu, t_Qts_emu, 'edgecolor', 'k', 'facecolor', 'none');
 #hold off
 #legend ([he, htr(1), hte(1), hva(1)], 'emulator', 'training', 'test', 'validation')
 #xlabel ('I [mm/h]')
@@ -225,9 +236,9 @@ endfor
 
 ### Performing test and validation
 ## test
-#[ri_test sat_test] = meshgrid (rain_intensities_test, soil_saturations_test);
+#[ri_test ss_test] = meshgrid (rain_intensities_test, soil_saturations_test);
 #tic
-#t_Qemu_test = interp2 (ri_train, sat_train, t_Qtrain, ri_test, sat_test, method);
+#t_Qemu_test = interp2 (ri_train, ss_train, t_Qtrain, ri_test, ss_test, method);
 #toc
 #[mae_test, idx_i, idx_j] = mae (t_Qemu_test, t_Qtest)
 #mae_test_perc = mae_test / t_Qtest(idx_i, idx_j) * 100
@@ -236,7 +247,7 @@ endfor
 
 ## validation
 #tic
-#t_Qemu_val = interp2 (ri_train, sat_train, t_Qtrain, rain_intensities_val, soil_saturations_val, method);
+#t_Qemu_val = interp2 (ri_train, ss_train, t_Qtrain, rain_intensities_val, soil_saturations_val, method);
 #toc
 #[mae_val, idx_i, idx_j] = mae (t_Qemu_val, t_Qval)
 #mae_val_perc = mae_val / t_Qval(idx_i, idx_j) * 100
