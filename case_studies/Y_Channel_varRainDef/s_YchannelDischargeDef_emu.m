@@ -161,12 +161,12 @@ hyp.mean = [18;-15.2;-127;1.3;-10];
 #covfunc = {@covMaternard, 1};
 covfunc = {@covNoise};
 #ell = ones(2,1);
-#sf = 1.0;
+sf = 1.0;
 hyp.cov = log([sf]);
 likfunc = @likLogistic;
-#prior.mean=cell(1,7);
-#prior.mean{7}={@priorClamped};
-#prior.mean{6}={@priorClamped};
+prior.mean=cell(1,7);
+prior.mean{7}={@priorClamped};
+prior.mean{6}={@priorClamped};
 
 infe={@infPrior, @infEP, prior};
 
@@ -212,12 +212,11 @@ hva = plot3 (rain_intensities_val, soil_saturations_val, t_Qval, 'go', 'markerfa
 he = mesh (ri_emu, sat_emu, t_Qts_emu, 'edgecolor', 'k', 'facecolor', 'none');
 hold off
 legend ([he, htr(1), hte(1), hva(1)], 'emulator', 'training', 'test', 'validation')
-xlabel ('ri [mm/h]')
-ylabel ('\Delta\theta [-]')
-zlabel ('t(Q_{thrsh}) [min]')
+xlabel ('I [mm/h]')
+ylabel ('\theta_i [-]')
+zlabel ('t_! [min]')
 grid off;
 view (124, 32)
-print ('emulator.eps', '-color')
 print ('emulator.png', '-r300')
 
 
