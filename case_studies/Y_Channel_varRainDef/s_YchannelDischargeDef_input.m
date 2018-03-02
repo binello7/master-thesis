@@ -83,7 +83,7 @@ ZZpb = repmat (Zpb, Ny, 1);
 ZZ = ZZpl + ZZpb + ZZg1 + ZZg2 + ZZg3;
 
 
-## Produce the plot
+## Produce the plot to verify correctness
 # import the gist_earth colorbar
 if ~exist ('gist_earth.m')
   matplotlib_cm ('gist_earth');
@@ -118,12 +118,13 @@ sim_duration = 9; #[h]
 sim_duration = sim_duration * 60^2; #[s]
 
 # intensity sampling
-rain_intensities = linspace (10, 35, 10); #[mm/h]
-rain_intensities = rain_intensities / (1000 * 60^2);
+rain_intensities = [linspace(10, 35, 10)].'; #[mm/h]
 save ('rain_intensities.dat', 'rain_intensities');
+rain_intensities = rain_intensities / (1000 * 60^2);
+
 
 # saturation sampling
-soil_saturations = linspace (0, 1, 5);
+soil_saturations = [linspace(0, 1, 5)].';
 save ('soil_saturations.dat', 'soil_saturations');
 
 ## Generate rain and parameters files
@@ -137,7 +138,7 @@ for i = 1:nri
   for s = 1:nsat
     suffix = sprintf ('_%01d%02d', s, i);
     dt   = 60;
-    saved_states = sim_duration /dt;
+    saved_states = sim_duration/dt;
     Ks   = 2e-6;
     psi_f = 0.09;
 
@@ -154,7 +155,7 @@ for i = 1:nri
                           'RainInit', 1, ...
                           'HydrCondCrustCoef', Ks, ...
                           'HydrCondSoilCoef', Ks, ...
-                          'WaterContentVal', soil_saturations(s), ...
+                          'DeltaWaterContentVal', soil_saturations(s), ...
                           'WetFrontSuccHeadVal', psi_f, ...
                           'MaxInfiltrationRateVal', 5.5e-6, ...
                           'RainFile', rainfile, ...
