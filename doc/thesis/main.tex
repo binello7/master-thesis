@@ -19,7 +19,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------------------------
-%  PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%  TEMPLATE PACKAGES
 %----------------------------------------------------------------------------------------
 
 \documentclass[
@@ -40,20 +40,51 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
-
 \usepackage{mathpazo} % Use the Palatino font by default
-
-\usepackage[backend=biber,style=authoryear,natbib=true]{biblatex}
-
+\usepackage[backend=biber,style=authoryear,natbib=true]{biblatex} % or backend=bibtex
+\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 \addbibresource{Bibliography.bib} % The filename of the bibliography
 
-\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
-
 %----------------------------------------------------------------------------------------
-%  EXTRA CONFIGURATIONS
+%  ADDITIONAL PACKAGES
 %----------------------------------------------------------------------------------------
 
+\usepackage{xargs}
 
+\usepackage{xcolor}
+
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+
+\usepackage{siunitx}
+%\sisetup{mode=text,range-phrase = {\text{~to~}}}
+\sisetup{
+  detect-weight = true,
+  range-phrase = {,}\ ,
+  range-units  = brackets,
+  open-bracket = [,
+  close-bracket= ],
+}
+
+\usepackage{threeparttable}
+
+%\usepackage{emptypage}
+
+\usepackage{bm}
+
+\usepackage{textcomp}
+
+\usepackage{listings}
+\lstset{
+  language=Octave,
+  morecomment = [l][\itshape\color{blue}]{\#}
+}
+
+%----------------------------------------------------------------------------------------
+%  NEW COMMANDS
+%----------------------------------------------------------------------------------------
+
+\newcommandx{\noteseb}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommand{\colseb}[1]{{\color{blue} Seb: #1}}
 
 %----------------------------------------------------------------------------------------
 %  MARGIN SETTINGS
@@ -66,6 +97,7 @@ headsepline, % Uncomment to get a line under the header
   bindingoffset=.5cm, % Binding offset
   top=1.5cm, % Top margin
   bottom=1.5cm, % Bottom margin
+  marginparwidth=100pt,
   %showframe, % Uncomment to show how the type block is set on the page
 }
 
@@ -141,32 +173,16 @@ headsepline, % Uncomment to get a line under the header
 \vfill
 \end{center}
 \end{titlepage}
+\newpage\null\thispagestyle{empty}\newpage
 
 %----------------------------------------------------------------------------------------
 %  DECLARATION PAGE
 %----------------------------------------------------------------------------------------
 
-\begin{declaration}
-\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
-
-\begin{itemize} 
-\item This work was done wholly or mainly while in candidature for a research degree at this University.
-\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-\item Where I have consulted the published work of others, this is always clearly attributed.
-\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-\item I have acknowledged all main sources of help.
-\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
-\end{itemize}
- 
-\noindent Signed:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
- 
-\noindent Date:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
-\end{declaration}
-
-\cleardoublepage
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{Figures/declaration-originality.pdf}
+\end{figure}
 
 %----------------------------------------------------------------------------------------
 %  ABSTRACT PAGE
@@ -174,7 +190,7 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
+Brief description of the thesis. Capture readers' interest. Mention/summarize everything that was done in the thesis.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -183,54 +199,35 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+\begin{itemize}
+\itemsep0em
+  \item Supervisors
+  \item Professor
+  \item Vasilis
+  \item Joao
+  \item Octave
+  \item FullSWOF\_2D
+  \item Inkscape
+\end{itemize}
 \end{acknowledgements}
+
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
+
+\textbf{FVM} & \textbf{F}inite \textbf{V}olume \textbf{M}ethod\\
+
+
+\end{abbreviations}
 
 %----------------------------------------------------------------------------------------
 %  TABLE OF CONTENTS
 %----------------------------------------------------------------------------------------
 
 \tableofcontents
-
-%----------------------------------------------------------------------------------------
-%  ABBREVIATIONS
-%----------------------------------------------------------------------------------------
-
-\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
-
-\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere\\
-\textbf{WSF} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or\\
-
-\end{abbreviations}
-
-%----------------------------------------------------------------------------------------
-%  PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%----------------------------------------------------------------------------------------
-
-\begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
-
-% The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
-
-Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
-%Constant Name & $Symbol$ & $Constant Value$ with units\\
-
-\end{constants}
-
-%----------------------------------------------------------------------------------------
-%  SYMBOLS
-%----------------------------------------------------------------------------------------
-
-\begin{symbols}{lll} % Include a list of Symbols (a three column table)
-
-$a$ & distance & \si{\meter} \\
-$P$ & power & \si{\watt} (\si{\joule\per\second}) \\
-%Symbol & Name & Unit \\
-
-\addlinespace % Gap to separate the Roman symbols from the Greek
-
-$\omega$ & angular frequency & \si{\radian} \\
-
-\end{symbols}
 
 %----------------------------------------------------------------------------------------
 %  THESIS BODY
@@ -244,8 +241,8 @@ $\omega$ & angular frequency & \si{\radian} \\
 % Uncomment the lines as you write the chapters
 
 \include{Chapters/1Introduction}
-\include{Chapters/2RelatedWork}
-\include{Chapters/3FloodWarningSystem}
+\include{Chapters/2MaterialMethods}
+\include{Chapters/3Results}
 \include{Chapters/4Discussion}
 \include{Chapters/5Conclusions}
 
@@ -265,6 +262,7 @@ $\omega$ & angular frequency & \si{\radian} \\
 % Uncomment the lines as you write the Appendices
 
 \include{Appendices/AppendixA}
+\include{Appendices/AppendixB}
 
 %----------------------------------------------------------------------------------------
 
