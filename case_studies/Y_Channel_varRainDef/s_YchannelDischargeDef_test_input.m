@@ -29,12 +29,16 @@ fname = @(s) fullfile (inputsFolder, s);
 # duration sampling
 
 # intensity sampling
-rain_intensities_test = [linspace(10, 35, 9)].'; #[mm/h]
+ri1 = 10 + ((35 - 10) / 9) / 2;
+ri2 = 35 - ((35 - 10) / 9) / 2;
+rain_intensities_test = [linspace(ri1, ri2, 9)].'; #[mm/h]
 save ('rain_intensities_test.dat', 'rain_intensities_test');
 rain_intensities_test = rain_intensities_test / (1000 * 60^2);
 
 # saturation sampling
-soil_saturations_test = [linspace(0, 1, 4)].';
+ss1 = 0 + ((1 - 0) / 4) / 2;
+ss2 = 1 - ((1 - 0) / 4) / 2;
+soil_saturations_test = [linspace(ss1, ss2, 4)].';
 save ('soil_saturations_test.dat', 'soil_saturations_test');
 
 ## Generate test parameters files
