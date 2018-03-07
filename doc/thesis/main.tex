@@ -93,8 +93,9 @@ headsepline, % Uncomment to get a line under the header
 %  NEW COMMANDS
 %----------------------------------------------------------------------------------------
 
-\newcommandx{\noteseb}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
-\newcommand{\colseb}[1]{{\color{blue} Seb: #1}}
+\newcommandx{\seb}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\jpi}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\jor}[2][1=]{\todo[linecolor=green,backgroundcolor=green!25,bordercolor=green,#1]{#2}}
 
 %----------------------------------------------------------------------------------------
 %  MARGIN SETTINGS
@@ -261,7 +262,7 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 %  BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-\printbibliography[heading=bibintoc] \noteseb{any rule for the bibliography? print ISBN? print url where document is available (if pdf)?}
+\printbibliography[heading=bibintoc] \seb{any rule for the bibliography? print ISBN? print url where document is available (if pdf)?}
 
 %----------------------------------------------------------------------------------------
 %  APPENDIX
