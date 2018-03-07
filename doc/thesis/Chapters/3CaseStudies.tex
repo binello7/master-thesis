@@ -89,7 +89,7 @@ Present and discuss briefly the results of this toy emulator.
 
 % ===================================================================================================
 \newpage
-\section{An hydrological emulator: estimating the \textit{time-to-peak}}
+\section{An hydrological emulator: estimating the \textit{time-to-threshold}}
 % ===================================================================================================
 
 With this case study it was decided to address a complex hydrological problem by means of emulation.
@@ -119,7 +119,7 @@ The coarser the grid the fewer the nodes where the finite volume (FV) equations 
 Another advantage of having a smooth topography, not presenting discontinuities, is that the solutions converge easily, and no grid refinement is necessary.
 The grid used is composed of $\num{100} \times \num{100}$ cells, giving a resolution of $\SI{20}{\meter} \times \SI{20}{\meter}.$
 
-\begin{figure}[htpb]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/topography.png}
   \caption{Synthetic topography composed of three Gaussian bumps on a sloping plane.}
@@ -143,7 +143,7 @@ For simplicity, a spatially uniform catchment was used, therefore the values fro
 Three \textit{wall boundary conditions} were set, for the upper and the two lateral boundaries.
 For the bottom boundary a \textit{Neumann boundary condition} was selected, allowing water to freely outflow through that boundary and making sure that all of the water is lost from here.
 
-\begin{table}[htpb]
+\begin{table}[h]
   \centering
   \caption{Parameters and setting fixed for all simulations.}
   \label{tab:simulations_parameters}
@@ -177,24 +177,55 @@ For the bottom boundary a \textit{Neumann boundary condition} was selected, allo
 %A \emph{test} dataset and a \emph{validation} dataset were also generated and can be found in the Appendix~\ref{Appendix}. \noteseb{verify if they are really added}
 
 
+
 The datasets used to build the emulator was extracted from the simulation outputs.
 The extraction was done in two steps.
 In the first step the outflow hydrographs were extracted from the output data. 
 This was done by summing up the cell discharge along the whole domain bottom boundary for every saved time-step (one value every \SI{60}{\second}).
 Result of this operation is a discharge values time series of \num{540} elements.
 The same procedure was repeated with every one of the \num{50} experiments.
+
 Fig.~\ref{fig:hydrographs3d} shows the extracted hydrographs.
 Here many interesting features can be observed.
 First of all it can be seen that experiments run with the two lowest rain intensities and low initial soil saturation generated no discharge.
+In the second place, simulations run with $\theta_i = 1$ always reached their peak discharge, and this happens quite quickly.
+Some of these show a second smaller increase after the first quick rising limb.
+This gets higher the higher the rain intensity.
+Some simulations show two "increase bumps" after the first rising limb.
+This effect is due to the topography.
+The topography used presents zones with very steep slopes and others with very flat ones.
+This causes that water droplets at the same distance from the outlet to reach it with different travel times.
+When the water from the inclines has reached the outlet, that coming from flat areas is still traveling downstream.
+After a given lapse of time this water reaches the outlet as well, giving rise to the bumps visible in the hydrographs.\\
 
-
-\begin{figure}[htpb]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{Figures/hydrographs3d.png}
   \caption{Response hydrographs for the \num{50} simulations at the catchment outlet. The red frame shows the end of the rain event. Depth-dimension shows the \emph{rain intensity} variable, while the \emph{initial saturation} variable is rendered by the colormap.}
   \label{fig:hydrographs3d}
 \end{figure}
 
+To build the \emph{time-to-threshold emulator}, the emulator giving the arc of time $t_!$ passed from the beginning of the rain event to the exceeding of the threshold discharge $Q_!$, a threshold discharge has to be established.
+For a real case study a characteristic discharge value would be set.
+This could be the discharge at which a bridge or the embankments downstream of the considered domain are overflown.
+Here this value can be chosen with greater freedom, and the effects of choosing different values can be studied.
+
+By looking at the hydrographs of Fig~\ref{fig:hydrographs3d} it can be observed that $t_!$ is a difficult quantity to predict.
+In fact, depending on the $Q_!$ set, there is a variable number of experiments not reaching the threshold, of experiments reaching it very quickly, or of experiment with similar conditions but very different $t_!$.
+Especially this last point can be better understood by comparing Fig~\ref{fig:hydrograph}.
+The quantity $t_!$ shows discontinuities.
+Within the region defined by the $Q_!$ and the $Q'_!$ lines the hydrograph presents a plateau.
+Here, a minimal variation of the threshold set can make the time-to-threshold fall towards $t_!$ or $t'_!$, hence causing a big jump in the value.
+
+
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/hydrograph.png}
+  \caption{bla bla bla}
+  \label{fig:hydrograph}
+\end{figure}
 
 \subsubsection{Building-up the classification emulator}
 
