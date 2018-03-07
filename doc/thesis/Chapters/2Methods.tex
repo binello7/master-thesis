@@ -12,26 +12,9 @@
 % ---------------------------------------------------------------------------------------------------
 
 
-% ===================================================================================================
-\section{Emulation}
-% ===================================================================================================
-
-
 % ---------------------------------------------------------------------------------------------------
-\subsection{Regression and interpolation methods}
+\subsection{Development of \textit{FullSWOF\_2D} interaction tools}
 % ---------------------------------------------------------------------------------------------------
-
-\begin{itemize}
-\itemsep0em
-  \item explain the work done on regression and interpolation
-  \item explain their relation with emulation
-  \item explian extrapolation, when it can be done and how reliable it can be
-\end{itemize}
-
-
-% ===================================================================================================
-\section{Development of \textit{FullSWOF\_2D} interaction tools}
-% ===================================================================================================
 
 \begin{itemize}
 \itemsep0em
@@ -76,8 +59,6 @@ The package includes the following functions, all of which are distributed under
 \textit{function x = center2node (cx, x0)}\\
 
 
-
-
 % ---------------------------------------------------------------------------------------------------
 \subsection*{node2center.m}
 % ---------------------------------------------------------------------------------------------------
@@ -103,67 +84,19 @@ A short usage example would be:
 
 
 % ===================================================================================================
-\section{Didactic example: emulator \noteseb{appropriate to use emulator here? other suggestions?} of " the weir equation"}
+\section{Emulation}
 % ===================================================================================================
+
+
+% ---------------------------------------------------------------------------------------------------
+\subsection{Regression and interpolation methods}
+% ---------------------------------------------------------------------------------------------------
 
 \begin{itemize}
 \itemsep0em
-  \item present it as a didactic example
-  \item use it to compare GP (prior knowledge) with e.g. deep neural networks: how many points can we have?
-  \item mention grid convergence study (results go in the appendix A)
-  \item mention problem with FullSWOF boundary conditions
-  \item define well results and methodology
+  \item explain the work done on regression and interpolation
+  \item explain their relation with emulation
+  \item explian extrapolation, when it can be done and how reliable it can be
 \end{itemize}
-
-% ---------------------------------------------------------------------------------------------------
-\subsection{Methodology}
-% ---------------------------------------------------------------------------------------------------
-
-Short methodology of how the mechanistic emulator of the weir equation was developed, without subdivision into further subsections.
-
-
-% ---------------------------------------------------------------------------------------------------
-\subsection{Results and discussion}
-% ---------------------------------------------------------------------------------------------------
-
-Present and discuss briefly the results of this toy emulator.
-
-
-% ===================================================================================================
-\section{Generating the synthetic topography}
-% ===================================================================================================
-
-
-
-
-
-
-
-% ===================================================================================================
-\section{Generating the datasets}
-% ===================================================================================================
-
-
-
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[width=0.75\textwidth]{Figures/hydrographs3d.png}
-  \caption{Response hydrographs of the \num{50} simulations at the catchment outlet.}
-  \label{fig:hydrographs3d}
-\end{figure}
-
-
-% ===================================================================================================
-\section{Building the emulator}
-% ===================================================================================================
-
-% ---------------------------------------------------------------------------------------------------
-\subsection{Classification emulator}
-% ---------------------------------------------------------------------------------------------------
-
-% ---------------------------------------------------------------------------------------------------
-\subsection{Time-to-threshold emulator}
-% ---------------------------------------------------------------------------------------------------
 
 
