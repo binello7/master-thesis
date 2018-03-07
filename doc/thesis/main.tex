@@ -79,6 +79,16 @@ headsepline, % Uncomment to get a line under the header
   morecomment = [l][\itshape\color{blue}]{\#}
 }
 
+\usepackage{amsmath}
+
+\usepackage{morefloats} % to allow LaTeX to place more than 18 floats
+
+\usepackage{float} % to enable the use of "H" position for floats
+
+\usepackage{graphicx}
+
+\usepackage{pdfpages}
+
 %----------------------------------------------------------------------------------------
 %  NEW COMMANDS
 %----------------------------------------------------------------------------------------
@@ -179,10 +189,7 @@ headsepline, % Uncomment to get a line under the header
 %  DECLARATION PAGE
 %----------------------------------------------------------------------------------------
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\textwidth]{Figures/declaration-originality.pdf}
-\end{figure}
+\includepdf[pages=-]{declaration-originality.pdf}
 
 %----------------------------------------------------------------------------------------
 %  ABSTRACT PAGE
@@ -254,7 +261,7 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 %  BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-\printbibliography[heading=bibintoc]
+\printbibliography[heading=bibintoc] \noteseb{any rule for the bibliography? print ISBN? print url where document is available (if pdf)?}
 
 %----------------------------------------------------------------------------------------
 %  APPENDIX
