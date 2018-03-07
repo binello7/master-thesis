@@ -122,7 +122,7 @@ text (t2+3, 0.033, 't\prime_!', 'fontweight', 'bold');
 
 
 hold off
-legend (sprintf ('\\Delta\\theta = %0.2f, I = %0.1f mm/h', soil_saturations(ss), rain_intensities_h(ri)),'location', 'northwest');
+legend (sprintf ('\\theta_i = %0.2f, I = %0.1f mm/h', 1-soil_saturations(ss), rain_intensities_h(ri)),'location', 'northwest');
 axis tight
 xlabel ('t [min]');
 ylabel ('Q [m^3/s]');
