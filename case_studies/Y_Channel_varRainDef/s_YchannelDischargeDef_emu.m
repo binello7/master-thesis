@@ -163,14 +163,14 @@ ri_max = max (rain_intensities);
 #x_svm  = [ri_svm ss_svm];
 #y_svm  = [t_Qtrain(:); t_Qsvm(:)];
 
-## -1 negative, dangerous situation was reached
-#y_svm(y_svm<420) = -1;
 
-## 1 positive, dangerous situation not reached
-#y_svm(y_svm>=420) = 1;
+## 1 positive, dangerous situation REACHED!
+#y_svm(y_svm<420) = 1;
+
+## -1 negative, dangerous situation NOT reached
+#y_svm(y_svm>=420) = -1;
 
 ### Use the package gpml
-
 ## mean function
 #meanfunc = {@meanSum, {@meanConst, {@meanPoly,2}}};
 ##hyp.mean = [1;1;1;1;1];
