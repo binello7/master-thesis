@@ -188,7 +188,7 @@ The same procedure was repeated with every one of the \num{50} experiments.
 Fig.~\ref{fig:hydrographs3d} shows the extracted hydrographs.
 Here many interesting features can be observed.
 First of all it can be seen that experiments run with the two lowest rain intensities and low initial soil saturation generated no discharge.
-In the second place, simulations run with $\theta_i = 1$ always reached their peak discharge, and this happens quite quickly.
+In the second place, simulations run with $\theta_i = \num{1}$ always reached their peak discharge, and this happens quite quickly.
 Some of these show a second smaller increase after the first quick rising limb.
 This gets higher the higher the rain intensity.
 Some simulations show two "increase bumps" after the first rising limb.
@@ -217,15 +217,17 @@ The quantity $t_!$ shows discontinuities.
 Within the region defined by the $Q_!$ and the $Q'_!$ lines the hydrograph presents a plateau.
 Here, a minimal variation of the threshold set can make the time-to-threshold fall towards $t_!$ or $t'_!$, hence causing a big jump in the value.
 
-
-
-
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/hydrograph.png}
-  \caption{bla bla bla}
+  \caption{Response hydrograph for $\theta_i = \num{0.5}$ and $I = \SI{32.2}{\milli\meter\per\hour}$. The discontinuity in the quantity $t_!$ is visible between the $Q_!$ and the $Q'_!$ lines, where the discharge presents a plateau.}
   \label{fig:hydrograph}
 \end{figure}
+
+$Q_!$ was set to \SI{10}{\percent} \noteseb{why this value? should I give any explanation?} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
+The time at which this value is exceeded for the first time was extracted from every hydrograph and forms the dataset for the \emph{regression emulator}.
+Another dataset for the \emph{classification emulator} was created by assigning the value \num{-1} to rain events not reaching the threshold and \num{1} to all of the others.
+
 
 \subsubsection{Building-up the classification emulator}
 
