@@ -38,7 +38,7 @@ In order to give more physical meaning to the equation and break up the dependen
   Q = \frac{2}{3}\: \mu\: B_w\: \sqrt{2g}\: h_w^{2/3}
 \end{equation}
 
-\noindent Where the coefficient $K$ was decomposed in more contributors: the weir width $B_w$, the gravitational acceleration component $\frac{2}{3}\: \sqrt{2g}$ \noteseb{$\sqrt{2g}$ looks very big} and the coefficient $\mu$, depending on the weir type (broad-crested/sharp-crested) and its particular form.
+\noindent Where the coefficient $K$ was decomposed in more contributors: the weir width $B_w$, the gravitational acceleration component $\frac{2}{3}\: \sqrt{2g}$ \seb{$\sqrt{2g}$ looks very big} and the coefficient $\mu$, depending on the weir type (broad-crested/sharp-crested) and its particular form.
 
 
 % ---------------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ For the experiment a synthetic catchment topography was used, which at first gla
 In reality the emulator is just exploiting the catchment specific behavior, which is of course different from one catchment to another, but the methodology applied here could be applied to whatever catchment.
 The emulator developed here, with the appropriate adjustments, could be exploited as an \emph{early flood warning tool}.
 
-As for the previous example, the simulations were run with the open source software \textit{FullSWOF\_2D-v.1.07.00} \autocite{delestre_fullswof:_2014} \noteseb{put the citation every time that it is mentioned?}, while the input files necessary for the simulations were prepared with \textit{GNU Octave 4.2.1} \autocite{octave_community_gnu_2018} \noteseb{how to cite this?} with the aid of the package \textit{fswof2d}.
+As for the previous example, the simulations were run with the open source software \textit{FullSWOF\_2D-v.1.07.00} \autocite{delestre_fullswof:_2014} \seb{put the citation every time that it is mentioned?}, while the input files necessary for the simulations were prepared with \textit{GNU Octave 4.2.1} \autocite{octave_community_gnu_2018} \seb{how to cite this?} with the aid of the package \textit{fswof2d}.
 
 
 % ---------------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ A paraboloid was added to the plane to promote the accumulation of water in the 
 This has a single outlet located close to the center of the domain's bottom boundary.
 
 The synthetic topography produced, in contrast to a real one, has the advantage of having a much smoother surface, which allows using a coarser grid resolution without losing topographical features.
-The coarser the grid the fewer the nodes where the finite volume (FV) equations have to be solved, which reduces the simulation runtime \noteseb{how does it decrease? linearly? quadratically?}. 
+The coarser the grid the fewer the nodes where the finite volume (FV) equations have to be solved, which reduces the simulation runtime \seb{how does it decrease? linearly? quadratically?}. 
 Another advantage of having a smooth topography, not presenting discontinuities, is that the solutions converge easily, and no grid refinement is necessary.
 The grid used is composed of $\num{100} \times \num{100}$ cells, giving a resolution of $\SI{20}{\meter} \times \SI{20}{\meter}.$
 
@@ -174,7 +174,7 @@ For the bottom boundary a \textit{Neumann boundary condition} was selected, allo
 \subsubsection{Extracting the datasets}
 
 %This data constitute the \emph{training} dataset for the emulator.
-%A \emph{test} dataset and a \emph{validation} dataset were also generated and can be found in the Appendix~\ref{Appendix}. \noteseb{verify if they are really added}
+%A \emph{test} dataset and a \emph{validation} dataset were also generated and can be found in the Appendix~\ref{Appendix}. \seb{verify if they are really added}
 
 
 
@@ -224,7 +224,7 @@ Here, a minimal variation of the threshold set can make the time-to-threshold fa
   \label{fig:hydrograph}
 \end{figure}
 
-$Q_!$ was set to \SI{10}{\percent} \noteseb{why this value? should I give any explanation?} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
+$Q_!$ was set to \SI{10}{\percent} \seb{why this value? should I give any explanation?} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
 The time at which this value is exceeded for the first time was extracted from every hydrograph and forms the dataset for the \emph{regression emulator}.
 Another dataset for the \emph{classification emulator} was created by assigning the value \num{-1} to rain events not reaching the threshold and \num{1} to all of the others.
 
