@@ -97,7 +97,7 @@
       \item Perform emulation in an \emph{hydrological} context
       \begin{itemize}
       %\itemsep0em
-        \item Hydrological emulator: \emph{time-to-threshold emulator}
+        \item Hydrological emulator: \emph{time-to-threshold}
       \end{itemize}
       \item Draw conclusions about emulation potential, especially applied to the \emph{hydrology},
             \emph{urban water} and \emph{water management} fields
@@ -113,13 +113,25 @@
 \section{Case study 1: weir equation}
 
   \begin{frame}
-    \frametitle{Experiment overview}
-    frame text
+    \frametitle{Mechanistic emulator: \emph{the weir equation}}
+    \textbf{Goal}: learn the weir equation from simulated data\\
+    \begin{alertblock}{Weir equation}
+      \setlength\abovedisplayskip{0pt}
+      \begin{equation*}
+        Q = \frac{2}{3}\: \textcolor{red}{\mu}\: B_w\: \sqrt{2g}\: h_{\"u}^{\textcolor{red}{a}},
+        \quad usu.\: \textcolor{red}{a = 3/2}
+      \end{equation*}
+    \end{alertblock}
   \end{frame}
 % * The weir equation was partially derived empirically
 % * It can be derived analytically by assuming no correction of velocity distribution
 %   is needed.
-% * In order to obtain 
+% * In order to obtain actual discharge it has to be accounted for correction of
+%   velocity distribution
+% * This is done by adding a coefficient C_d (or \mu) in front of the equation, which
+%   is dependent on the type and shape of weir
+% * To obtain the value of this coefficient the equation has to be fitted to 
+%   experimental data.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
