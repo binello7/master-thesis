@@ -1,0 +1,120 @@
+\documentclass[xcolor=dvipsnames, USenglish]{beamer}  %notes=show to print them in the generated pdf
+\input{../includes/beamer_basics.tex} % PACKAGES
+\input{../includes/mathsymbols.tex}   % SYMBOLS
+
+% ----------- extra packages
+\usepackage{../beamer_themes/beamerthemeEawag_blue} % Eawag style
+
+% ----------- Extra symbols
+\newcommand{\ccov}[1]{{\color{red}k}\left(#1\right)}
+\newcommand{\cmean}[1]{{\color{blue}m}\left(#1\right)}
+\newcommand{\sm}{\scalebox{0.5}{-1}}
+
+% ----------- For boxed equations
+\usepackage{amsmath}
+\usepackage{empheq}
+\usepackage[most]{tcolorbox}
+\newtcbox{\mymath}[1][]{%
+    nobeforeafter, math upper, tcbox raise base,
+    enhanced, colframe=blue!30!black,
+    colback=blue!30, boxrule=1pt,
+    #1}
+
+
+
+%----------------
+% title information
+\title{Master Thesis - Final Presentation}
+\subtitle{Applications of Emulation to the Hydrology Field\\\textcolor{Red}{not really just hydrology, e.g. weir equation}}
+\author[\texttt{sebastiano.rusca@eawag.ch}]{Sebastiano Rusca}
+\institute[Eawag]{Eawag: Swiss Federal Institute of Aquatic Science
+  and Technology}
+\date[12.03.2018]{March 12, 2018}
+
+% ====================================================================
+
+\begin{document}
+
+% ----------------
+% Title frame
+% load background for title
+\setbeamertemplate{background}{
+  \includegraphics[width=\paperwidth,height=\paperheight]
+  {../beamer_themes/background_title_blue.png}}
+{ \setbeamertemplate{footline}{} % no footer on title
+  \begin{frame}
+    \titlepage
+  \end{frame}
+}
+% load background for all other slides
+\setbeamertemplate{background}{
+\includegraphics[width=\paperwidth,height=\paperheight]
+{../beamer_themes/background_slides_blue.png}}
+\setbeamertemplate{footline}[Sebastiano Rusca] % set footer
+\addtocounter{framenumber}{-1}  % don't count title page
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------
+\section{Introduction}
+
+  \begin{frame}
+    \frametitle{Outline}
+    \begin{itemize}
+      \item Master thesis goals
+
+      \item What is emulation?
+     \end{itemize}
+  \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MASTER THESIS GOALS
+  \begin{frame}
+    \frametitle{Master thesis goals}
+    \begin{itemize}
+      \item Get an overview of emulation
+      \begin{itemize}
+        \item Learn about interpolation, intrapolation and extrapolation
+        \item Learn about Gaussian Processes
+      \end{itemize}
+      \item Perform emulation with a didactic example
+      \begin{itemize}
+      %\itemsep0em
+        \item Mechanistic emulator: \emph{the weir equation}
+      \end{itemize}
+      \item Perform emulation in a more real context
+      \begin{itemize}
+      %\itemsep0em
+        \item Hydrological emulator: \emph{time-to-threshold emulator}
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+
+  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE END
+  {
+  \setbeamertemplate{background}{}
+  \setbeamercolor{background canvas}{bg=black}
+  \setbeamercolor{normal text}{fg=white}
+  \usebeamercolor[fg]{normal text}
+  \begin{frame}[plain]
+    \centering
+    \Large{\textbf{THE END}}\\
+  \end{frame}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ADDITIONAL SLIDES
+% Links to repositories
+\section{Backup slides}
+  \begin{frame}
+    \frametitle{Links to my repositories}
+    \small{\url{https://bitbucket.org/binello7/fswof2d}}\\
+    \small{\url{https://bitbucket.org/binello7/master_thesis}}\\
+    \small{\url{https://bitbucket.org/binello7/master_thesis/wiki/Home}}
+  \end{frame}
+
+\end{document}
+
