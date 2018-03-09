@@ -31,10 +31,36 @@
   and Technology}
 \date[12.03.2018]{March 12, 2018}
 
+% Title suggestions
+% * use an active title: with a verb, or using "in", not "application of ... to ..."
+% * not a too bombastic one, "Emulation in hydrology" is too much
+% * try to use "shallow water equation", this is what we actually emulate
+% * first steps towards ...
+% * a guide to emulation in ...
+
+
 % ====================================================================
 
 \begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CODE
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
 
+\defverbatim[colored]\QinCode{
+\begin{minted}[fontsize=\scriptsize, 
+               numbersep=8pt,
+               gobble=4,
+               frame=lines,
+               bgcolor=bg,
+               framesep=2mm]{octave}
+
+      nQ = 25; # number of experiments
+      Qin = linspace (0.1, 10, nQ); # Qin values [m3/s]
+
+\end{minted}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ----------------
 % Title frame
 % load background for title
@@ -66,12 +92,14 @@
       \begin{itemize}
       %\itemsep0em
         \item A mechanistic emulator: \emph{learning the weir equation}
-        \item A hyrological emulator: \emph{estimating the time-to-threshold}
+        \item A hydrological emulator: \emph{estimating the time-to-threshold}
       \end{itemize}
       \item Conclusions
       \item Outlook
      \end{itemize}
   \end{frame}
+
+% "learning the weir equation" or "fitting the weir equation", depends on what is actually presented
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MASTER THESIS GOALS
@@ -104,6 +132,7 @@
     \end{itemize}
   \end{frame}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % WHAT IS EMULATION?
 
@@ -114,28 +143,55 @@
 
   \begin{frame}
     \frametitle{Mechanistic emulator: \emph{the weir equation}}
-    \textbf{Goal}: learn the weir equation from simulated data\\
+    \textbf{Goal}: fit the weir equation to simulated data\\
+    \vfill
     \begin{alertblock}{Weir equation}
       \setlength\abovedisplayskip{0pt}
       \begin{equation*}
-        Q = \frac{2}{3}\: \textcolor{red}{\mu}\: B_w\: \sqrt{2g}\: h_{\"u}^{\textcolor{red}{a}},
+        Q = \frac{2}{3}\: \textcolor{red}{\mu}\: B_w\: \sqrt{2g}\: h_w^{\textcolor{red}{a}},
         \quad usu.\: \textcolor{red}{a = 3/2}
       \end{equation*}
     \end{alertblock}
+    \vfill
+    \centering
+    $\boldsymbol{\mu :\,}$ \raisebox{-.2\height}{\includegraphics[width=0.8\textwidth]{img/weir_coefficients.png}}
+    \source{Boes, Robert. "Wasserbau - Vorlesungsmanuskript." ETH Z\"urich - VAW, 2016.}
   \end{frame}
-% * The weir equation was partially derived empirically
-% * It can be derived analytically by assuming no correction of velocity distribution
-%   is needed.
-% * In order to obtain actual discharge it has to be accounted for correction of
-%   velocity distribution
-% * This is done by adding a coefficient C_d (or \mu) in front of the equation, which
-%   is dependent on the type and shape of weir
+% * In this first case study we want to fit the weir equation to simulated data.
+% * In a while we will see what relation this has with emulation and machine learning.
+% * The weir equation can be derived analytically by assuming no friction losses and 
+%   a uniform velocity distribution.
+% * Results obtained are for a theoretical discharge, which diverges from empirical results, where
+%   the assumption mentioned don't hold.
+% * In order to obtain actual discharge a correction factor \mu has to be taken into account.
+% * \mu is dependent on the type and shape of weir (broad-crested/narrow-crested) and which
+%   particular shape.
 % * To obtain the value of this coefficient the equation has to be fitted to 
 %   experimental data.
+% * Here below some \mu-values for some weir types are shown
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CASE STUDY 1: GRID CONVERGENCE STUDY
+% CASE STUDY 1: STUDY SET-UP
+  \begin{frame}
+    \frametitle{Experiment overview}
+    \textbf{Input discharge}
+    \QinCode
+    \vfill
+    \textbf{Channel set-up}
+
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/weir.png}
+  \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CASE STUDY 1: SIMULATIONS RESULTS
+  \begin{frame}
+    \frametitle{Simulation results}
+    \includegraphics[width=0.5\textwidth]{img/free_surfaces.png}
+    \includegraphics[width=0.5\textwidth]{img/simulation_results.png}
+  \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,14 +200,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CASE STUDY 1: RESULTS AND DISCUSSION
 
+
+% * Importance of prior knowledge! a = 3/2 analytical, other values could fit better this
+%   data, but what if we had more values of Q? Then probably better 3/2, was found analytically!
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CASE STUDY 2: OVERVIEW
 \section{Case study 2: time-to-threshold}
 
-\begin{frame}
-  \frametitle{Experiment overview}
-  frame text
-\end{frame}
+  \begin{frame}
+    \frametitle{Hydrological emulator: \emph{time-to-threshold}}
+    frame text
+  \end{frame}
 
 
 
@@ -168,6 +228,9 @@
   \end{frame}
   }
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ADDITIONAL SLIDES
 % Links to repositories
@@ -178,6 +241,12 @@
     \small{\url{https://bitbucket.org/binello7/master_thesis}}\\
     \small{\url{https://bitbucket.org/binello7/master_thesis/wiki/Home}}
   \end{frame}
+
+% ------------------------------------------------------------------------------
+% Case study 1: grid convergence study
+
+
+
 
 \end{document}
 
