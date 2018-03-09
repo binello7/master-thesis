@@ -16,7 +16,7 @@
 ## Author: Sebastiano Rusca <sebastiano.rusca@gmail.com>
 ## Created: 2018-03-08
 
-clear all
+#clear all
 
 load ('input_Q.dat');
 load ('extracted_data.dat');
@@ -24,11 +24,20 @@ load ('extracted_data.dat');
 addpath ('~/Resources/gpml-matlab-v4.1-2017-10-19');
 startup
 
+## Functions
+
+function err = f_mse (y, yp)
+  err = 1 / length (y) * sum ((y - yp).^2);
+endfunction
+
+
+
+
 
 ## Remove unusable experiments
 i = 1;
 while i <= size (H)(2)
-  if weircenter_head(i) < 0.1 #0.3
+  if weircenter_head(i) < 0.3 #0.3
     weircenter_head(i) = [];
     Qin(i)             = [];
     H(:,i)             = [];
@@ -47,79 +56,111 @@ f = 1; # figure number
 Qin = sort (abs(Qin));
 hw = sort (h0 - weir_height);
 
-### Visualize the data
-#figure (f)
-#f+=1;
-#plot (Qin, hw, 'ok')
-#axis ([0 max(Qin) 0 max(hw)]);
-
 ## Trying different training data
 #
-#idx = 14;
-#xtrn = Qin(idx);
-#ytrn = hw(idx);
+xtrn = [0;hw.'];
+ytrn = [0;Qin.'];
 
-
-x = [10^-5;Qin.'];#0];
-y = [10^-5;hw.'];#0];
-xmax = max (x);
-ymax = max (y);
-
-
-xtrn = log10 (x);
-ytrn = log10 (y);
-#xtrn = x;
-#ytrn = y;
-
-
+xmax = max (xtrn);
+ymax = max (ytrn);
 
 
 ## Perform GP regression
 # meanfunction
-#meanfunc = {@meanPow,3/2,{@meanLinear}};
-#hyp.mean = 1;
-#meanfunc = {@meanPoly,2};
-#hyp.mean = [0;0];
-meanfunc = {@meanSum,{@meanConst,@meanLinear}};
-hyp.mean = [1;1];
+meanfunc{1} = {@meanPow,3/2,{@meanLinear}};
+m{1} = 1;
+meanfunc{2} = {@meanPoly,2};
+m{2} = [0;0];
+meanfunc{3} = {@meanPoly,3};
+m{3}= [0;0;0];
 
+#meanfunc = {@meanSum,{@meanConst,@meanLinear}};
+#hyp.mean = [1;1];
+#meanfunc = {@meanLinear};
+#hyp.mean = 1;
 
 # covariance function
 #covfunc = @covNoise;
-#hyp.cov = 0;
-#covfunc = @covZero;
-#hyp.cov = [];
-covfunc = {@covSEvlen,{@meanLinear}};
-hyp.cov = [1;0];
+#hyp.cov = 0; # log(sf)
+covfunc = @covZero;
+cov_a = [];
+#covfunc = {@covSEvlen,{@meanLinear}};
+#hyp.cov = [1;0];
 
 
 # likelihood function
 likfunc = @likGauss;
-hyp.lik = 0;
+lik_a = 0;
 
+for i = 1:3
+  hyp{i}.mean = m{i};
+  hyp{i}.cov = cov_a;
+  hyp{i}.lik = lik_a;
+endfor
 
-hyp = minimize (hyp, @gp, -1000, @infExact, meanfunc, covfunc, likfunc, xtrn, ytrn);
+args = {covfunc, likfunc, xtrn, ytrn};
 
-xp = [linspace(10^-5, xmax, 200)].';
-xp = log10 (xp);
+for i = 1:3
+  hyp{i} = minimize (hyp{i}, @gp, -1000, @infExact, meanfunc{i}, args{:});
+endfor
 
-[yp s2] = gp (hyp, @infExact, meanfunc, covfunc, likfunc, xtrn, ytrn, xp);
+xp = [linspace(0, xmax, 200)].';
 
-#xo_plot = xtrn;
-#yo_plot = ytrn;
-#xl_plot = xp;
-#yl_plot = yp;
-xo_plot = 10.^xtrn;
-yo_plot = 10.^ytrn;
-xl_plot = 10.^xp;
-yl_plot = 10.^yp;
+for i = 1:3
+  yp{i} = gp (hyp{i}, @infExact, meanfunc{i}, args{:}, xp);
+endfor
 
 figure (f)
 f+=1;
-plot (xo_plot, yo_plot, 'ok', xl_plot, yl_plot, '-b')
+plot (ytrn, xtrn, 'ok'),
+hold on
+col = {'b', 'r', 'g'};
+
+for i = 1:3
+  plot (yp{i}, xp, col{i})
+endfor
+hold off
+legend ('training dataset', 'weir eqn.', 'poly. deg.2', 'poly. deg.3')
 #axis ([0 xmax 0 ymax]);
 
-feval(covfunc{:},hyp.cov,xtrn)
+## Compute the error
+rand_idx = randperm (length (xtrn))(1:8)
+xtrn_short = xtrn(rand_idx);
+ytrn_short = ytrn(rand_idx);
+
+for k = 1:3
+  hyperr{k}.mean = hyp{k}.mean;
+  hyperr{k}.cov = hyp{k}.cov;
+  hyperr{k}.lik = hyp{k}.lik;
+endfor
+
+n = length (xtrn_short);
+indexes = 1:n;
+for i = 1:n-2
+  idx_off = nchoosek (indexes,i);
+  for j = 1:size(idx_off)(1)
+    printf ('%d of %d\n', j, nchoosek (n,i))
+    idx_trn = logical (ones (1,n));
+    idx_trn(idx_off(j,:)) = 0;
+    xe_trn = xtrn_short(idx_trn);
+    ye_trn = ytrn_short(idx_trn);
+    xe_tst = xtrn_short(!idx_trn);
+    ye_tst = ytrn_short(!idx_trn);
+    for k = 1:3
+      hyperr{k} = minimize (hyperr{k}, @gp, -1000, @infExact, meanfunc{k}, covfunc, likfunc, xe_trn, ye_trn);
+      ye_pred{k} = gp (hyperr{k}, @infExact, meanfunc{k}, covfunc, likfunc, xe_trn, ye_trn, xe_tst);
+      mse{j,k,i} = f_mse (ye_pred{k}, ye_tst);
+    end
+  endfor
+endfor
+
+for i=1:size (mse)(3)
+  for j=1:size (mse)(2)
+    mean_mse(i,j) = mean (cell2mat (mse(:,j,i)),1);
+  endfor
+endfor
+
+
 
 
 
