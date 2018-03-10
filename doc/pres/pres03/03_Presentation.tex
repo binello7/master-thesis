@@ -206,11 +206,35 @@
 % CASE STUDY 1: FITTING RESULTS
   \begin{frame}
     \frametitle{Fitting results}
-    frame text
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \small{Different fittings}\\
+      \includegraphics[width=\textwidth]{img/fitting_results.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \small{\emph{Model} vs. \emph{local} fitting}\\
+      \includegraphics[width=\textwidth]{img/fitting_errors.png}
+    \end{minipage}
   \end{frame}
+% * 3 different fittings were done
+% * Weir equation follows a power law, therefore the logarithm of the data was taken
+%   and a linear regression was performed with all data.
+%   values of \mu = 0.56 and a = 1.59 were found.
+% * A linear interpolation was performed. performs very bad at the beginning (few points),
+%   but quite good afterwards (almost overlaying).
+% * A spline interpolation was performed. This performs good even between points
+%   1 and 2 (almost overlaying).
+% * I wanted to test the robustness of the different methods
+% * I took a subset of the training dataset (otherwise computation too long) and
+%   performed cross-validation leaving out 1, 2, ... up to 10 points.
+% * Every time all possible combination of left-out points were tested and the
+%   mean squared error was computed.
+% * The plot shows the mean of the mean squared errors of all possible subsets by
+%   leaving out 1, 2, ... 10 points.
+% * When 10 points were left out just 4 were used for training: 1st, last + 2 random points.
 % * Plot with three types of fittings
 % * Performance of three types of fittings
-% * Explain that polynomial model can follow the data much easier
 % * What if little data then?
 % * What if we want to extrapolate?
 
