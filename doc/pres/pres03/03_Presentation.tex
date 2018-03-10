@@ -91,7 +91,7 @@
       \item Case studies
       \begin{itemize}
       %\itemsep0em
-        \item A mechanistic emulator: \emph{learning the weir equation}
+        \item A mechanistic emulator: \emph{fitting the weir equation}
         \item A hydrological emulator: \emph{estimating the time-to-threshold}
       \end{itemize}
       \item Conclusions
@@ -189,9 +189,30 @@
 % CASE STUDY 1: SIMULATIONS RESULTS
   \begin{frame}
     \frametitle{Simulation results}
-    \includegraphics[width=0.5\textwidth]{img/free_surfaces.png}
-    \includegraphics[width=0.5\textwidth]{img/simulation_results.png}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \small{Experiments free-surfaces}\\
+      \includegraphics[width=\textwidth]{img/free_surfaces.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \small{Experiments $h_w$ vs. $Q$}\\
+      \includegraphics[width=\textwidth]{img/simulation_results.png}
+    \end{minipage}
   \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CASE STUDY 1: FITTING RESULTS
+  \begin{frame}
+    \frametitle{Fitting results}
+    frame text
+  \end{frame}
+% * Plot with three types of fittings
+% * Performance of three types of fittings
+% * Explain that polynomial model can follow the data much easier
+% * What if little data then?
+% * What if we want to extrapolate?
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
