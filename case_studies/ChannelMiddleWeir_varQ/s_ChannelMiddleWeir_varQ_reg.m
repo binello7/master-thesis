@@ -27,8 +27,8 @@ load ('extracted_data.dat');
 ## Functions
 f_Qw = @(C,h,a) C*h.^a;
 
-function err = f_mse (y, yp)
-  err = 1 / length (y) * sum ((y - yp).^2);
+function err = f_rmse (y, yp)
+  err = sqrt (1 / length (y) * sum ((y - yp).^2));
 endfunction
 
 function err = f_mae (y, yp)
@@ -58,7 +58,6 @@ while i <= size (H)(2)
   i+=1;
 endwhile
 
-f = 1; # figure number
 
 # Transform the data
 Qin = sort (abs(Qin));
@@ -82,33 +81,19 @@ lytrn = log10 (ytrn);
 theta = lin_reg (lxtrn, lytrn);
 C = 10^theta(1);
 a = theta(2);
+mu = C / (2/3 * B * sqrt(2*9.81));
+
 
 # define evaluation points
-xp = linspace (0, xmax, 200);
+xp = linspace (0, xmax+0.1*xmax, 200);
 yp = zeros (length (xp), 3);
 
 # evaluate linear regression on xp
 yp(:,1) = f_Qw(C,xp,a);
 
 # perform linear and spline interpolations
-yp(:,2) = interp1 (xtrn, ytrn, xp, 'linear');
-yp(:,3) = interp1 (xtrn, ytrn, xp, 'spline');
-
-# plot the results
-
-figure (f)
-f+=1;
-plot (ytrn, xtrn, 'ok'),
-col = {'b', 'r', 'g'};
-
-hold on
-for i = 1:3
-  plot (yp(:,i), xp, col{i});
-endfor
-hold off
-
-legend ('training dataset', 'weir eqn.', 'lin. fit', 'spline fit', 'location', 'northwest')
-##axis ([0 xmax 0 ymax]);
+yp(:,2) = interp1 (xtrn, ytrn, xp, 'linear', 'extrap');
+yp(:,3) = interp1 (xtrn, ytrn, xp, 'spline', 'extrap');
 
 
 ## Compute cross-validation error
@@ -126,7 +111,7 @@ for i = 1:n2-2
   idx_off = nchoosek (indexes,i);
   for j = 1:size(idx_off)(1)
 #    printf ('%d of %d\n', j, nchoosek (n2,i))
-    idx_trn = logical (ones (1,n));
+    idx_trn = logical (ones (1,n1));
     idx_trn(idx_off(j,:)) = 0;
     xe_trn = xtrn_short(idx_trn);
     ye_trn = ytrn_short(idx_trn);
@@ -141,20 +126,63 @@ for i = 1:n2-2
     ye_pred{2} = interp1 (xe_trn, ye_trn, xe_tst, 'linear');
     ye_pred{3} = interp1 (xe_trn, ye_trn, xe_tst, 'spline');
     for k = 1:3
-      mse{j,k,i} = f_mse (ye_pred{k}, ye_tst);
+      rmse{j,k,i} = f_rmse (ye_pred{k}, ye_tst);
       mae{j,k,i} = f_mae (ye_pred{k}, ye_tst);
     endfor
   endfor
 endfor
 
-for i=1:size (mse)(3)
-  for j=1:size (mse)(2)
-    mean_mse(i,j) = mean (cell2mat (mse(:,j,i)),1);
+for i=1:size (rmse)(3)
+  for j=1:size (rmse)(2)
+    mean_rmse(i,j) = mean (cell2mat (rmse(:,j,i)),1);
     max_mae(i,j) = max (cell2mat (mae(:,j,i)),[],1);
   endfor
 endfor
 
-save ('data_MSE.dat', 'mean_mse');
+save ('data_RMSE.dat', 'mean_rmse');
+
+
+## Plot the results
+# plot 1: different fittings all data
+f = 1;
+figure (f)
+f+=1;
+plot (ytrn, xtrn, 'ok')
+col = {'b', 'r', 'g'};
+
+hold on
+for i = 1:3
+  plot (yp(:,i), xp, col{i});
+endfor
+hold off
+
+legend ('training dataset', sprintf ('weir equation\n(\\mu = %0.2f, a = %0.2f)', mu, a), 'linear fit', 'spline fit', 'location', 'northwest')
+axis tight;
+xlabel ('Q [m^3/s]');
+ylabel ('h_w [m]')
+print ('fitting_results.png', '-r300')
+
+
+# plot 2: fitting errors
+mean_rmse_cm = 100 * mean_rmse; # convert error in cm
+figure (f)
+f+=1;
+semilogy (mean_rmse_cm, col)
+axis tight;
+legend ('weir equation', 'linear fit', 'spline fit', 'location', 'northwest')
+xlabel ('left-out points')
+ylabel ('RMSE [cm]')
+
+xtickn = 1:length (mean_rmse);
+xtickl = num2cell (xtickn);
+for i = 1:length(mean_rmse)
+  xtickl{i} = num2str(xtickl{i});
+endfor
+
+set (gca, 'xtick', xtickn, 'xticklabel', xtickl);
+print ('fitting_errors.png', '-r300')
+
+
 
 # ------------------------------------------------------------------------------
 ## Perform GP regression
