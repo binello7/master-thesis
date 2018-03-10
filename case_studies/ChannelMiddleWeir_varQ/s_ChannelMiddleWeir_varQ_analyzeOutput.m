@@ -24,10 +24,10 @@ pkg load optim
 load ('input_Q.dat');
 load ('extracted_data.dat');
 
-#i = 1;
+i = 1;
 ## Remove unusable experiments
 #while i <= size (H)(2)
-#  if weircenter_head(i) < 0.05
+#  if weircenter_head(i) < 0.3
 #    weircenter_head(i) = [];
 #    Qin(i)             = [];
 #    H(:,i)             = [];
@@ -87,10 +87,10 @@ MSE(3) = 1/n * sum ((h0 - hweir (Qin, Pra)).^2);
 
 
 
-## Pre-analysis
-# plot of log(data)
-figure (1)
-plot (lh0, lQin, 'o')
+### Pre-analysis
+## plot of log(data)
+#figure (1)
+#plot (lh0, lQin, 'o')
 
 
 ## Generate the plots
@@ -111,22 +111,23 @@ ylabel ('h [m]')
 annotation ('textarrow', [0.4 0.45], [0.8 0.8], 'string', ' flow direction', ...
             'color', 'b', 'headlength', 6, 'headwidth', 6)
 
-print ('free_surfaces.eps', '-color');
 print ('free_surfaces.png', '-r300');
 
 # plot 2: Q - h relation for the 25 experiments
 figure (3)
-plot (Qin, h0, 'ko', Qt, hweir (Qt, [0.57, 2/3]), 'b', ...
-      Qt, hweir (Qt, [Pca, 2/3]), 'g', Qt, hweir (Qt, [Pra(1) Pra(2)]), 'r')
+h = plot (Qin, h0, 'bo', 'markerfacecolor', 'b')#, Qt, hweir (Qt, [0.57, 2/3]), 'b', ...
+#      Qt, hweir (Qt, [Pca, 2/3]), 'g', Qt, hweir (Qt, [Pra(1) Pra(2)]), 'r')
 xlabel ('Q [m^3/s]')
 ylabel ('h_{w} [m]')
+axis tight
+pause(1)
 
-legend ('simulated values', '1: trial-error fitting \mu = 0.570', ...
-        sprintf ('2: regression on \\mu, \\mu = %0.3f', Pca), ...
-        sprintf ('3: regression on \\mu and a, \\mu = %0.3f, a = %0.2f', Pra(1), 1/Pra(2)), 'location', 'northwest')
+print ('simulation_results.png', '-r300');
+#legend ('simulated values', '1: trial-error fitting \mu = 0.570', ...
+#        sprintf ('2: regression on \\mu, \\mu = %0.3f', Pca), ...
+#        sprintf ('3: regression on \\mu and a, \\mu = %0.3f, a = %0.2f', Pra(1), 1/Pra(2)), 'location', 'northwest')
 
-print ('points_interpolations.eps', '-color');
-print ('points_interpolations.png', '-r300');
+
 
 
 
