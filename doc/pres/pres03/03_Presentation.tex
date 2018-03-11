@@ -42,43 +42,9 @@
 % ====================================================================
 
 \begin{document}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CODE
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-
-
-\defverbatim[colored]\QinCode{
-\begin{minted}[fontsize=\scriptsize, 
-               numbersep=8pt,
-               gobble=4,
-               frame=lines,
-               bgcolor=bg,
-               framesep=2mm]{octave}
-
-      nQ = 25; # number of experiments
-      Qin = linspace (0.1, 10, nQ); # Qin values [m3/s]
-
-\end{minted}
-}
-
-
-%\defverbatim[colored]\inputCS2{
-%\begin{minted}[fontsize=\scriptsize, 
-%               numbersep=8pt,
-%               gobble=4,
-%               frame=lines,
-%               bgcolor=bg,
-%               framesep=2mm]{octave}
-
-%      rain_intensities = [linspace(10, 35, 10)].'; #[mm/h]
-%      soil_saturations = [linspace(0, 1, 5)].'; #[-]
-%      rain_duration    = 6; #[h]
-%      sim_duration     = 9; #[h]
-
-%\end{minted}
-%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % ----------------
 % Title frame
 % load background for title
@@ -210,7 +176,15 @@
   \begin{frame}
     \frametitle{Experiment overview}
     \textbf{Input discharge}
-    \QinCode
+    \inputminted[fontsize=\scriptsize,
+                firstline=1,
+                lastline=2,
+                numbersep=2pt,
+                gobble=0,
+                frame=lines,
+                bgcolor=bg,
+                framesep=2mm]{octave}
+                {code.m}
     \vfill
     \textbf{Channel set-up}
 
@@ -271,7 +245,7 @@
 %   leaving out 1, 2, ... 10 points.
 % * When 10 points were left out just 4 were used for training: 1st, last + 2 random points.
 % * From the plot we see some interesting features:
-% * The  linear fit always performs the worst, although not even that bad: RMS of ~2cm
+% * The  linear fit always performs the worst, although not even that bad: RMSE of ~2cm
 %   leaving out 1 point.
 % * The spline fit performs very good, better than the weir equation model thanks to its
 % * very high flexibility. However, its error increases very rapidly by reducing
@@ -300,7 +274,7 @@
 % * Building an emulator to estimate the time to threshold:
 %   Our hydraulic structures (bridges, embankments, ...) have thresholds for which they were
 %   sized. If those thresholds are exceeded, then the structure cannot fulfill its function.
-% * Measures have to be taken in this case, build up temporary flood-blocking measures,
+% * Measures have to be taken in this case, build up temporary flood-blocking barriers,
 %   evacuate people, etc.
 % * We want to build up an emulator able, for a given catchment, knowing the rain intensity
 %   over the catchment and the initial moisture content of its soil, to estimate after how long
@@ -312,8 +286,10 @@
   \begin{frame}
     \frametitle{Experiment overview}
     \centering
-    \includegraphics[width=0.5\textwidth]{img/topography.png}
-    \inputminted[fontsize=\scriptsize, 
+    \includegraphics[width=0.6\textwidth]{img/topography.png}
+    \inputminted[fontsize=\scriptsize,
+                firstline=6,
+                lastline=9,
                 numbersep=2pt,
                 gobble=0,
                 frame=lines,
