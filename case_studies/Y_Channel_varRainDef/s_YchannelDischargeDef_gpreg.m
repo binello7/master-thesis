@@ -44,82 +44,110 @@ load ('parameters.dat');
 # evaluation points
 ri_min = min (rain_intensities);
 ri_max = max (rain_intensities);
-nri = 200;
-nss = 100;
+nri = 80;
+nss = 80;
 [ri_emu ss_emu] = meshgrid ([linspace(ri_min, ri_max, nri)].', [linspace(0, 1, nss)].');
 
-## Create grid for training, test and validation
+## Create full vectors
 #
 [ri_train ss_train] = meshgrid (rain_intensities, soil_saturations);
+ri_train = ri_train(:);
+ss_train = ss_train(:);
+t_Qtrain = t_Qtrain(:);
 
 [ri_test ss_test] = meshgrid (rain_intensities_test, soil_saturations_test);
+ri_test = ri_test(:);
+ss_test = ss_test(:);
+t_Qtest = t_Qtest(:);
 
 ri_val = rain_intensities_val;
 ss_val = soil_saturations_val;
 
 
 ## Add random noise
-#ri_test    = ri_test + 0.01*randn (size(ri_test));
+ri_test    = ri_test + 0.01*randn (size(ri_test));
+ri_train    = ri_train + 0.01*randn (size(ri_train));
 #ss_test    = ss_test + 0.01*randn (size(ss_test));
 
-## Transform the data
-#t_Q
 
 ## Mean function
-meanfunc = {@meanConst};
-mn = 0;
-#meanfunc = {@meanPoly,4};
-#mn = [1;1;1;1;1;1;1;1];
+meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
+mn= [1;1;1];
+#meanfunc = {@meanConst};
+#mn = 0;
+#meanfunc = [];
+#mn = [];
+#meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanPoly,2}}};
+#mn = rand (7,1);
 
 
 # covariacne function
-#covfunc = {@covPoly,'ard',3};
-covfunc = {@covPPard,3};
-cv = [4 2.6 8];
-#prior.cov = cell(1,3);
-#prior.cov(3) = @priorClamped;
+#covfunc = {@covPoly,'iso',3};
+#cv = rand (3,1);
+#covfunc = @covNoise;
+#cv = 1;
+#covfunc = {@covPPard,3};
+#cv = [4 2.6 8];
+covfunc = {@covMaternard,1};
+cv = rand (3,1);
+#covfunc = @covSEard;
+#cv = rand (3,1);
+
+
+
 
 # likelihood function
 likfunc = @likGauss;
-lk = [-3];
+lk = [-2.5];
+
+
+
+# inference method
+#infe = @infExact;
+infe = {@infPrior, @infLOO, prior};
+#prior.lik = {@priorClamped};
+#prior.cov = cell(1,3);
+#prior.cov(3) = @priorClamped;
+
 
 ## Initialize the hyperparameters
 hyp.mean = mn;
 hyp.cov  = cv;
 hyp.lik  = lk;
 
-#prior.lik = {@priorClamped};
-
-infe = @infLOO;
-#infe = {@infPrior, @infLOO, prior};
 
 tf = t_Qtrain < 420;
 tftst = t_Qtest < 420;
 
-xtrn = [ri_train(tf)(:) ss_train(tf)(:); ri_test(tftst)(:) ss_test(tftst)(:)];
-ytrn = [t_Qtrain(tf)(:);t_Qtest(tftst)(:)];
 
-args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
-tic
-hyp = minimize (hyp, @gp, -1e3, args{:});
-
+xtrn = [ri_train(tf) ss_train(tf);ri_test(tftst)(:) ss_test(tftst)(:)];
+ytrn = [t_Qtrain(tf);t_Qtest(tftst)];
 xemu = [ri_emu(:) ss_emu(:)];
 
-[t_Qemu s2_emu] = gp (hyp, args{:}, xemu);
+args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
+
+tic
+hyp = minimize (hyp, @gp, -1e3, args{:});
+toc
+tic
+t_Qemu = gp (hyp, args{:}, xemu);
 toc
 
 t_Qemu = reshape (t_Qemu, size (ri_emu));
 
 
-ri_emu(t_Qemu>=420) = NA;
-ss_emu(t_Qemu>=420) = NA;
-t_Qemu(t_Qemu>=420) = NA;
+## Plot the emulator
+tfemu = t_Qemu >= 420;
+ri_emu(tfemu) = NA;
+ss_emu(tfemu) = NA;
+t_Qemu(tfemu) = NA;
+
 figure (3)
 htr = plot3 (ri_train(tf), ss_train(tf), t_Qtrain(tf),'ro', 'markerfacecolor', 'r');
 hold on
 hte = plot3 (ri_test(tftst), ss_test(tftst), t_Qtest(tftst), 'bo', 'markerfacecolor', 'b');
 hva = plot3 (rain_intensities_val, soil_saturations_val, t_Qval, 'go', 'markerfacecolor', 'g');
-he = mesh (ri_emu, ss_emu, t_Qemu, 'edgecolor', 'k', 'facecolor', 'none')
+he = mesh (ri_emu, ss_emu, t_Qemu, 'edgecolor', 'k', 'facecolor', 'none');
 hold off
 legend ([he, htr(1), hte(1), hva(1)], 'emulator', 'training', 'test', 'validation')
 xlabel ('I [mm/h]')
@@ -132,16 +160,15 @@ view (124, 32)
 ## Performing test and validation
 # test
 tic
-[t_Qemu_test s2_emu_test a b] = gp (hyp, args{:}, [ri_test(tftst)(:) ss_test(tftst)(:)]);
+t_Qemu_test = gp (hyp, args{:}, [ri_test(tftst) ss_test(tftst)]);
 toc
-mae_test = mae (t_Qemu_test, t_Qtest(tftst)(:))
-rmse_test = rmse (t_Qemu_test, t_Qtest(tftst)(:))
+mae_test = mae (t_Qemu_test, t_Qtest(tftst))
+rmse_test = rmse (t_Qemu_test, t_Qtest(tftst))
 
-## validation
-#tic
-#t_Qemu_val = interp2 (ri_train, ss_train, t_Qtrain, rain_intensities_val, soil_saturations_val, method);
-#toc
-#[mae_val, idx_i, idx_j] = mae (t_Qemu_val, t_Qval)
-#mae_val_perc = mae_val / t_Qval(idx_i, idx_j) * 100
-#rmse_val = rmse (t_Qemu_val, t_Qval)
+# validation
+tic
+t_Qemu_val = gp (hyp, args{:}, [ri_val ss_val]);
+toc
+mae_val = mae (t_Qemu_val, t_Qval)
+rmse_val = rmse (t_Qemu_val, t_Qval)
 
