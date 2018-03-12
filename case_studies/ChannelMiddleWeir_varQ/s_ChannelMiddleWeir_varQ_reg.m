@@ -143,6 +143,9 @@ save ('data_RMSE.dat', 'mean_rmse');
 
 
 ## Plot the results
+fontsize1 = 13;
+fontsize2 = 14;
+
 # plot 1: different fittings all data
 f = 1;
 figure (f)
@@ -156,10 +159,12 @@ for i = 1:3
 endfor
 hold off
 
-legend ('training dataset', sprintf ('weir equation\n(\\mu = %0.2f, a = %0.2f)', mu, a), 'linear fit', 'spline fit', 'location', 'northwest')
+l1 = legend ('training dataset', sprintf ('weir equation\n(\\mu = %0.2f, a = %0.2f)', mu, a), 'lin. interp.', 'cub. spl. interp.', 'location', 'northwest');
+set (l1, 'fontsize', 12)
 axis tight;
-xlabel ('Q [m^3/s]');
-ylabel ('h_w [m]')
+xlabel ('Q [m^3/s]', 'fontsize', fontsize2);
+ylabel ('h_w [m]', 'fontsize', fontsize2)
+set (gca, 'fontsize', fontsize1)
 print ('fitting_results.png', '-r300')
 
 
@@ -168,109 +173,17 @@ mean_rmse_cm = 100 * mean_rmse; # convert error in cm
 figure (f)
 f+=1;
 semilogy (mean_rmse_cm, col)
-axis tight;
-legend ('weir equation', 'linear fit', 'spline fit', 'location', 'northwest')
-xlabel ('left-out points')
-ylabel ('RMSE [cm]')
+axis tight
+l2 = legend ('weir equation', 'lin. interp.', 'cub. spl. interp.', 'location', 'northwest');
+set (l2, 'fontsize', 12)
+xlabel ('left-out points', 'fontsize', fontsize2)
+ylabel ('RMSE [cm]', 'fontsize', fontsize2)
 
 xtickn = 1:length (mean_rmse);
 xtickl = num2cell (xtickn);
 for i = 1:length(mean_rmse)
   xtickl{i} = num2str(xtickl{i});
 endfor
-
-set (gca, 'xtick', xtickn, 'xticklabel', xtickl);
+set (gca, 'xtick', xtickn, 'xticklabel', xtickl, 'fontsize', fontsize1);
 print ('fitting_errors.png', '-r300')
-
-
-
-# ------------------------------------------------------------------------------
-## Perform GP regression
-# meanfunction
-#meanfunc{1} = {@meanPow,3/2,{@meanLinear}};
-#m{1} = 1;
-#meanfunc{2} = {@meanPoly,2};
-#m{2} = [0;0];
-#meanfunc{3} = {@meanPoly,3};
-#m{3}= [0;0;0];
-
-#meanfunc = {@meanSum,{@meanConst,@meanLinear}};
-#hyp.mean = [1;1];
-#meanfunc = {@meanLinear};
-#hyp.mean = 1;
-
-# covariance function
-#covfunc = @covNoise;
-#hyp.cov = 0; # log(sf)
-#covfunc = @covZero;
-#cov_a = [];
-#covfunc = {@covSEvlen,{@meanLinear}};
-#hyp.cov = [1;0];
-
-
-# likelihood function
-#likfunc = @likGauss;
-#lik_a = 0;
-
-#for i = 1:3
-#  hyp{i}.mean = m{i};
-#  hyp{i}.cov = cov_a;
-#  hyp{i}.lik = lik_a;
-#endfor
-
-#args = {covfunc, likfunc, xtrn, ytrn};
-
-#for i = 1:3
-#  hyp{i} = minimize (hyp{i}, @gp, -1000, @infExact, meanfunc{i}, args{:});
-#endfor
-
-#xp = [linspace(0, xmax, 200)].';
-
-#for i = 1:3
-#  yp{i} = gp (hyp{i}, @infExact, meanfunc{i}, args{:}, xp);
-#endfor
-
-
-
-### Compute the error
-##rand_idx = randperm (length (xtrn))(1:8)
-#idx_short = [1 3 4 5 6 9 11 12 15 16 19 18 21 length(xtrn)];
-#xtrn_short = xtrn(idx_short);
-#ytrn_short = ytrn(idx_short);
-
-##for k = 1:3
-##  hyperr{k}.mean = hyp{k}.mean;
-##  hyperr{k}.cov = hyp{k}.cov;
-##  hyperr{k}.lik = hyp{k}.lik;
-##endfor
-
-#n = length (xtrn_short);
-#indexes = 1:n;
-#for i = 1:n-2
-#  idx_off = nchoosek (indexes,i);
-#  for j = 1:size(idx_off)(1)
-#    printf ('%d of %d\n', j, nchoosek (n,i))
-#    idx_trn = logical (ones (1,n));
-#    idx_trn(idx_off(j,:)) = 0;
-#    xe_trn = xtrn_short(idx_trn);
-#    ye_trn = ytrn_short(idx_trn);
-#    xe_tst = xtrn_short(!idx_trn);
-#    ye_tst = ytrn_short(!idx_trn);
-#    for k = 1:3
-#      hyperr{k} = minimize (hyperr{k}, @gp, -1000, @infExact, meanfunc{k}, covfunc, likfunc, xe_trn, ye_trn);
-#      ye_pred{k} = gp (hyperr{k}, @infExact, meanfunc{k}, covfunc, likfunc, xe_trn, ye_trn, xe_tst);
-#      mse{j,k,i} = f_mse (ye_pred{k}, ye_tst);
-#    end
-#  endfor
-#endfor
-
-#for i=1:size (mse)(3)
-#  for j=1:size (mse)(2)
-#    mean_mse(i,j) = mean (cell2mat (mse(:,j,i)),1);
-#  endfor
-#endfor
-
-
-
-
 
