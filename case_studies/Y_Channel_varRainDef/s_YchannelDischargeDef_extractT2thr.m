@@ -58,15 +58,15 @@ endfor
 
 # test data
 j = 1;
-idx_test = zeros (length (rain_intensities_test), length (soil_saturations_test));
+idx_test = zeros (length (soil_saturations_test), length (rain_intensities_test));
 for i = 1:length(rain_intensities_test)
   for s = 1:length(soil_saturations_test)
     if isempty (find (qt_bbound_test(j,:) >= Q_trhsh, 1))
-      idx_test(i,s) = 7*60;
+      idx_test(s,i) = 7*60;
     else
-      idx_test(i,s) = find (qt_bbound_test(j,:) >= Q_trhsh, 1);
+      idx_test(s,i) = find (qt_bbound_test(j,:) >= Q_trhsh, 1);
       #threshold was exceeded between this index and the previous one -> average
-      idx_test(i,s) = idx_test(i,s) - 0.5;
+      idx_test(s,i) = idx_test(s,i) - 0.5;
     endif
     j+=1;
   endfor
