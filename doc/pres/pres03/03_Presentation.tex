@@ -68,8 +68,9 @@
   \begin{frame}
     \frametitle{Outline}
     \begin{itemize}
-      \item Master thesis goals
       \item What is emulation?
+      \item Why to emulate?
+      \item What are the tools for emulating?
       \item Case studies
       \begin{itemize}
       %\itemsep0em
@@ -83,49 +84,71 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% MASTER THESIS GOALS
-  \begin{frame}
-    \frametitle{Master thesis goals}
-    \begin{itemize}
-      \item Get an overview of emulation
-      \begin{itemize}
-        \item Learn about \emph{interpolation}, \emph{intrapolation} and \emph{extrapolation}
-        \item Learn about \emph{Gaussian Processes}
-      \end{itemize}
-      \item Find an appropriate \emph{open source} hydrological simulator
-      \begin{itemize}
-      %\itemsep0em
-        \item Learn its \emph{functioning} and \emph{customize} it for the required scope
-        \item Produce \emph{datasets} usable for emulation
-      \end{itemize}
-      \item Perform emulation with a \emph{didactic} example
-      \begin{itemize}
-      %\itemsep0em
-        \item Mechanistic emulator: \emph{the weir equation}
-      \end{itemize}
-      \item Perform emulation in a \emph{hydrological} context
-      \begin{itemize}
-      %\itemsep0em
-        \item Hydrological emulator: \emph{time-to-threshold}
-      \end{itemize}
-      \item Draw conclusions about emulation potential, especially applied to the \emph{hydrology},
-            \emph{urban water} and \emph{water management} fields
-    \end{itemize}
-  \end{frame}
+%% MASTER THESIS GOALS
+%  \begin{frame}
+%    \frametitle{Master thesis goals}
+%    \begin{itemize}
+%      \item Get an overview of emulation
+%      \begin{itemize}
+%        \item Learn about \emph{interpolation}, \emph{intrapolation} and \emph{extrapolation}
+%        \item Learn about \emph{Gaussian Processes}
+%      \end{itemize}
+%      \item Find an appropriate \emph{open source} hydrological simulator
+%      \begin{itemize}
+%      %\itemsep0em
+%        \item Learn its \emph{functioning} and \emph{customize} it for the required scope
+%        \item Produce \emph{datasets} usable for emulation
+%      \end{itemize}
+%      \item Perform emulation with a \emph{didactic} example
+%      \begin{itemize}
+%      %\itemsep0em
+%        \item Mechanistic emulator: \emph{the weir equation}
+%      \end{itemize}
+%      \item Perform emulation in a \emph{hydrological} context
+%      \begin{itemize}
+%      %\itemsep0em
+%        \item Hydrological emulator: \emph{time-to-threshold}
+%      \end{itemize}
+%      \item Draw conclusions about emulation potential, especially applied to the \emph{hydrology},
+%            \emph{urban water} and \emph{water management} fields
+%    \end{itemize}
+%  \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % WHAT IS EMULATION?
+\section{Emulation}
   \begin{frame}
     \frametitle{What is emulation?}
-    bla bla
+    Emulating means building an \emph{ad hoc} data-driven surrogate model which
+    closely mimics the behavior of the simulator on which it is based
+
+    \begin{figure}[b]
+      \centering
+        \subfigure[Simulator]{
+          \includegraphics[width=0.4\textwidth]{img/simulation.png}
+          }\hspace{.5cm}
+        \subfigure[Emulator]{
+           \includegraphics[width=0.4\textwidth]{img/emulation.png}
+           }
+    \end{figure}
+    \centering
+    \source{"Model Order Reduction and Emulation." EmuMore's blog, March 9, 2018}
   \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% GAUSSIAN PROCESSES, MACHINE LEARNING
+% WHY EMULATING?
   \begin{frame}
-    \frametitle{Machine learning techniques}
+    \frametitle{Why to emulate?}
+    frame text
+  \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TOOLS FOR EMULATING
+  \begin{frame}
+    \frametitle{What are the tools for emulation?}
     bla bla
   \end{frame}
 
@@ -215,6 +238,7 @@
       \small{Experiments $h_w$ vs. $Q$}\\
       \includegraphics[width=\textwidth]{img/simulation_results.png}
     \end{minipage}
+    \vfill
   \end{frame}
 
 
