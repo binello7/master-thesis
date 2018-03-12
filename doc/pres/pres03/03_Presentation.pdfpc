@@ -2,12 +2,18 @@
 03_Presentation.pdf
 [notes]
 ### 1
-Outline
+OUTLINE
+* As you have seen from the title my presentation is about emulation.
+* So we'll begin by having a closer look at what emulation actually is and what potential it has.
+* We'll continue by brifly exploring the tools need for emulating, and in particular the tools I used.
+* We will then have a closer look at two applications of emulation: a more didactic one and an applied one.
+* I'll then draw my conclusions and give my point of view about possible future applications of emulation for flood prediction.
 ### 2
 Goals
 here my goals
 - goal 21
 - goal 2
+
 ### 3
 Emulation
 ### 4
@@ -19,15 +25,16 @@ Intro CS 1
 * In this first case study we want to fit the weir equation to simulated data.
 * In a while we will see what relation this has with emulation and machine learning.
 * The weir equation can be derived analytically by assuming no friction losses and 
-   a uniform velocity distribution.
- * Results obtained are for a theoretical discharge, which diverges from empirical results, where
-   the assumption mentioned don't hold.
- * In order to obtain actual discharge a correction factor \mu has to be taken into account.
- * \mu is dependent on the type and shape of weir (broad-crested/narrow-crested) and which
-   particular shape.
- * To obtain the value of this coefficient the equation has to be fitted to 
-   experimental data.
- * Here below some \mu-values for some weir types are shown### 7
+  a uniform velocity distribution.
+* Results obtained are for a theoretical discharge, which diverges from empirical results, where
+  the assumption mentioned don't hold.
+* In order to obtain actual discharge a correction factor \mu has to be taken into account.
+* \mu is dependent on the type and shape of weir (broad-crested/narrow-crested) and which
+  particular shape.
+* To obtain the value of this coefficient the equation has to be fitted to 
+  experimental data.
+* Here below some \mu-values for some weir types are shown
+### 7
 Set-up CS 1
 ### 8
 Simulation results CS 1
