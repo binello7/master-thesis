@@ -45,14 +45,6 @@ load ('parameters.dat');
 #  m = max (max ((abs ((y_sim - y_obs) ./ y_obs * 100))));
 #endfunction
 
-## RMSE%: root mean sqaure error
-#function re = rmse (y_sim, y_obs)
-#  y_sim = y_sim(:);
-#  y_obs = y_obs(:);
-#  N = length (y_obs);
-#  re = sqrt (1/N * sum ((y_sim - y_obs).^2));
-#endfunction
-
 
 ## SVM classification with GP
 # create training data mesh
@@ -153,24 +145,3 @@ hold off
 xlabel ('I [mm/h]')
 ylabel ('\theta_i [-]')
 
-
-
-
-## ------------------------------------------------------------------------------
-### Building the emulators
-## create training data mesh
-#[ri_train ss_train] = meshgrid (rain_intensities, soil_saturations);
-
-### Adding random noise
-#ss_train   = ss_train + 0.01*randn (size(ss_train));
-#ri_train   = ri_train + 0.01*randn (size(ri_train));
-
-
-## create points to evaluate the emulators
-#ri_min = min (rain_intensities);
-#ri_max = max (rain_intensities);
-#[ri_emu ss_emu] = meshgrid ([linspace(ri_min, ri_max, 200)].', [linspace(0, 1, 100)].');
-
-## ------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------
