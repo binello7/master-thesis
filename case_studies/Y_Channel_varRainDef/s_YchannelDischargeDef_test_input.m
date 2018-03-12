@@ -39,6 +39,7 @@ rain_intensities_test = rain_intensities_test / (1000 * 60^2);
 ss1 = 0 + ((1 - 0) / 4) / 2;
 ss2 = 1 - ((1 - 0) / 4) / 2;
 soil_saturations_test = [linspace(ss1, ss2, 4)].';
+soil_saturations_test = 1 - soil_saturations_test;
 save ('soil_saturations_test.dat', 'soil_saturations_test');
 
 ## Generate test parameters files

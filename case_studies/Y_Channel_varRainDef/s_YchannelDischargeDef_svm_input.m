@@ -34,6 +34,7 @@ rain_intensities_svm = rain_intensities_svm / (1000 * 60^2);
 
 # saturation sampling
 soil_saturations_svm = [0.2 0.4 0.65 0.95 0.55 0.7 0.05 0.8].';
+soil_saturations_svm  = 1 - soil_saturations_svm;
 save ('soil_saturations_svm.dat', 'soil_saturations_svm');
 
 ## Generate svm parameters files

@@ -34,6 +34,7 @@ rain_intensities_val  = rain_intensities_val / (1000 * 60^2);
 
 # saturation sampling
 soil_saturations_val  = [0.1 0.8 0.5 0.2 0.6 0.2].';
+soil_saturations_val  = 1 - soil_saturations_val;
 save ('soil_saturations_val.dat', 'soil_saturations_val');
 
 

@@ -125,6 +125,7 @@ rain_intensities = rain_intensities / (1000 * 60^2);
 
 # saturation sampling
 soil_saturations = [linspace(0, 1, 5)].';
+soil_saturations = 1 - soil_saturations;
 save ('soil_saturations.dat', 'soil_saturations');
 
 ## Generate rain and parameters files
