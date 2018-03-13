@@ -17,10 +17,11 @@
 ## Created: 2018-03-11
 
 #clear all
+pkg load gpml
 
 addpath ('../../mfiles/functions');
-addpath ('~/Resources/gpml-matlab-v4.1-2017-10-19');
-startup
+#addpath ('~/Resources/gpml-matlab-v4.1-2017-10-19');
+#startup
 
 
 ## Load data
@@ -66,8 +67,7 @@ ss_val = soil_saturations_val;
 
 ## Add random noise
 ri_test    = ri_test + 0.01*randn (size(ri_test));
-ri_train    = ri_train + 0.01*randn (size(ri_train));
-#ss_test    = ss_test + 0.01*randn (size(ss_test));
+#ri_train    = ri_train + 0.01*randn (size(ri_train));
 
 
 ## Mean function
@@ -88,10 +88,10 @@ mn= [1;1;1];
 #cv = 1;
 #covfunc = {@covPPard,3};
 #cv = [4 2.6 8];
-covfunc = {@covMaternard,1};
-cv = rand (3,1);
-#covfunc = @covSEard;
+#covfunc = {@covMaternard,1};
 #cv = rand (3,1);
+covfunc = @covSEard;
+cv = rand (3,1);
 
 
 
@@ -103,11 +103,11 @@ lk = [-2.5];
 
 
 # inference method
-#infe = @infExact;
-infe = {@infPrior, @infLOO, prior};
 #prior.lik = {@priorClamped};
 #prior.cov = cell(1,3);
 #prior.cov(3) = @priorClamped;
+#infe = {@infPrior, @infLOO, prior};
+infe = @infExact;
 
 
 ## Initialize the hyperparameters
@@ -120,8 +120,8 @@ tf = t_Qtrain < 420;
 tftst = t_Qtest < 420;
 
 
-xtrn = [ri_train(tf) ss_train(tf);ri_test(tftst)(:) ss_test(tftst)(:)];
-ytrn = [t_Qtrain(tf);t_Qtest(tftst)];
+xtrn = [ri_train(tf) ss_train(tf)];#ri_test(tftst)(:) ss_test(tftst)(:)];
+ytrn = [t_Qtrain(tf)];#t_Qtest(tftst)];
 xemu = [ri_emu(:) ss_emu(:)];
 
 args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
@@ -171,4 +171,9 @@ t_Qemu_val = gp (hyp, args{:}, [ri_val ss_val]);
 toc
 mae_val = mae (t_Qemu_val, t_Qval)
 rmse_val = rmse (t_Qemu_val, t_Qval)
+
+tic
+t_Qemu_1val = gp (hyp, args{:}, [30 0.1])
+toc
+
 
