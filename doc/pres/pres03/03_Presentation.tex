@@ -70,6 +70,7 @@
     \begin{itemize}
       \item What is emulation?
       \item Why to emulate?
+      \item When to emulate?
       \item What are the tools for emulating?
       \item Case studies
       \begin{itemize}
@@ -77,42 +78,9 @@
         \item A mechanistic emulator: \emph{fitting the weir equation}
         \item A hydrological emulator: \emph{estimating the time-to-threshold}
       \end{itemize}
-      \item Conclusion
-      \item Outlook
+      \item Conclusion \& outlook
      \end{itemize}
   \end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% MASTER THESIS GOALS
-%  \begin{frame}
-%    \frametitle{Master thesis goals}
-%    \begin{itemize}
-%      \item Get an overview of emulation
-%      \begin{itemize}
-%        \item Learn about \emph{interpolation}, \emph{intrapolation} and \emph{extrapolation}
-%        \item Learn about \emph{Gaussian Processes}
-%      \end{itemize}
-%      \item Find an appropriate \emph{open source} hydrological simulator
-%      \begin{itemize}
-%      %\itemsep0em
-%        \item Learn its \emph{functioning} and \emph{customize} it for the required scope
-%        \item Produce \emph{datasets} usable for emulation
-%      \end{itemize}
-%      \item Perform emulation with a \emph{didactic} example
-%      \begin{itemize}
-%      %\itemsep0em
-%        \item Mechanistic emulator: \emph{the weir equation}
-%      \end{itemize}
-%      \item Perform emulation in a \emph{hydrological} context
-%      \begin{itemize}
-%      %\itemsep0em
-%        \item Hydrological emulator: \emph{time-to-threshold}
-%      \end{itemize}
-%      \item Draw conclusions about emulation potential, especially applied to the \emph{hydrology},
-%            \emph{urban water} and \emph{water management} fields
-%    \end{itemize}
-%  \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,15 +109,72 @@
 % WHY EMULATING?
   \begin{frame}
     \frametitle{Why to emulate?}
-    frame text
+      Simulation has great "power" \textbf{but}:
+      \begin{itemize}
+        \item Often all of this power is not actually needed
+        \item The price to pay is a high computational cost
+      \end{itemize}
+      \vspace{.5cm}
+      Emulation of \emph{shallow water equation} can reach a speedup of $\boldsymbol{10^5 \times}$
+      \begin{itemize}
+        \item \emph{Real-time} applications can be done
+        \item Very efficient for e.g. \emph{uncertainty estimation}
+      \end{itemize}
   \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% WHEN TO EMULATE
+  \begin{frame}
+    \frametitle{When to emulate?}
+    \only<1>{
+    \emph{When we do not need to exploit all of the simulator's power}\\
+    \vfill
+    \textbf{An example}: outflow from a reservoir
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/v_distribution.png}
+    \source{https://www.fluidflowltd.com/projects}
+    }
+    \only<2>{
+    We plot the results:
+    \begin{equation*}
+      Q = f(h)\,?
+    \end{equation*}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.5\textwidth]{img/tank_points.png}
+    \end{figure}
+    }
+    \only<3>{
+    From the plot we manage to establish:
+    \begin{equation*}
+      Q = c \cdot A_{outlet} \cdot \sqrt{2 g \cdot h}
+    \end{equation*}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.5\textwidth]{img/tank_line.png}
+    \end{figure}
+    }
+  \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TOOLS FOR EMULATING
   \begin{frame}
     \frametitle{What are the tools for emulation?}
-    bla bla
+    \begin{itemize}
+    \setlength{\itemsep}{10pt}%
+      \item A simulator for generating the data
+      \begin{itemize}
+        \item used: \textit{FullSWOF\_2D}
+      \end{itemize}
+      \item A programming language for extracting the needed data
+      \begin{itemize}
+        \item used: \textit{GNU Octave}
+      \end{itemize}
+      \item A data regression method
+      \begin{itemize}
+        \item used: \textit{linear regression, Gaussian processes}
+      \end{itemize}
+    \end{itemize}
   \end{frame}
 
 
@@ -258,7 +283,7 @@
     \end{minipage}
     \vfill
     \pause
-    \small{\textbf{Take home message}: if we have the right model we do not need much data to perform a good fitting}
+    \small{\textbf{Take home message}: if an accurate model is identified there is no need of much data for doing good predictions}
   \end{frame}
 % * 3 different fittings were done
 % * Weir equation follows a power law, therefore the logarithm of the data was taken
@@ -410,8 +435,28 @@
 % CASE STUDY 2: EMULATE THE TIME-TO-THRESHOLD
   \begin{frame}
     \frametitle{\emph{Time-to-threshold} emulator}
+    \only<1>{
     \centering
-    \includegraphics[width=0.8\textwidth]{img/emulator.png}
+    \includegraphics[width=0.8\textwidth]{img/emulator2.png}
+    }
+    \only<2>{
+    \centering
+    \textbf{Validation performance}\\
+    \begin{table}[htpb]
+      \centering
+      \begin{tabular}{cc}
+        \toprule
+        MAE [min] & RMSE [min]\\
+        \midrule
+        21.8 & 10.8\\
+        \bottomrule
+      \end{tabular}
+    \end{table}
+    Duration one simulation: $\approx 30\,min$\\
+    Duration one emulator-evaluation: $\approx 0.012\,s$
+    \vfill
+    \textbf{speedup factor}: $1.5 \cdot 10^5$
+    }
   \end{frame}
 
 
@@ -420,19 +465,30 @@
 \section{Conclusion}
 
   \begin{frame}
-    \frametitle{Conclusion}
-    bla bla
+    \frametitle{Conclusion \& Outlook}
+    \begin{itemize}
+      \item Emulation approach is intrinsic to science
+      \item Gaussian processes are a useful tool to:
+      \begin{itemize}
+      \itemsep0em
+        \item incorporate prior knowledge in the modeling process
+        \item learn something about the functional relationship between the response and the predictors
+      \end{itemize}
+      \item Case studies illustrate a subset of the wide range of potential applications of emulation
+      \item Good accuracies at reproducing the simulator behavior can be reached but how good do we reproduce reality?
+      \item Open science and open source software are the way to proceed if we want to given an answer to this question
+    \end{itemize}
   \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % OUTLOOK
-\section{Outlook}
+%\section{Outlook}
 
-  \begin{frame}
-    \frametitle{Outlook}
-    bla bla
-  \end{frame}
+%  \begin{frame}
+%    \frametitle{Outlook}
+%    bla bla
+%  \end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -463,7 +519,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ADDITIONAL SLIDES
 % Links to repositories
-\section{Backup slides}
+\section{Additional slides}
   \begin{frame}
     \frametitle{Links to my repositories}
     \small{\url{https://bitbucket.org/binello7/fswof2d}}\\
