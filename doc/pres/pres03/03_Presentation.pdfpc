@@ -1,142 +1,256 @@
-[file]
-03_Presentation.pdf
 [notes]
 ### 1
 OUTLINE
-* As you have seen from the title my presentation is about emulation.
-* So we'll begin by having a closer look at what emulation actually is and what potential it has.
-* We'll continue by brifly exploring the tools need for emulating, and in particular the tools I used.
-* We will then have a closer look at two applications of emulation: a more didactic one and an applied one.
-* I'll then draw my conclusions and give my point of view about possible future applications of emulation for flood prediction.
-### 2
-Goals
-here my goals
-- goal 21
-- goal 2
 
+* As you saw from the title my presentation is about emulation.
+
+* So I'll begin by giving an overview about emulation
+
+* I will then move to two case studies
+
+* And I'll finish by drawing my conclusions
+### 2
+WHAT IS EMULATION
+
+* So, first of all "what is emulation?"
+
+* Emulation can be defined as "BUILDING AN AD HOC DATA-DRIVEN SURROGATE MODEL WHICH CLOSELY MIMICS THE BEHAVIOR OF THE SIMULATOR ON WHICH IT IS BASED"
+
+* We can imagine this is our simulator, solving the shallow water equation over a regular uniform grid
+
+* The simulator has to go through all internal states and solve the shallow water equation at every node before giving the desired output, for example the discharge at the channel outlet
+
+* With emulation we skip those steps: we use sampled inputs-outputs datasets of the simulator to establish an input-output functional relationship.
 ### 3
-Emulation
+WHY TO EMULATE?
+
+* Why sholud we then emulate?
+
+* Simulation, due to its power, is becoming very popular in many applications, but still has some drawbacks
+
+* Often we don't care about the internal states of the system. Its power is here unexploited
+
+* The price for internal states is very high: simulation runs take very long
+
+* Emulators of the shallow water equation can reach speedups up to 100'000 times in comparison with the simulator on which they are based
+
+* With such speedups we can for example:
+
+  * perform real-time simuations
+
+  * perform uncertainty estimations, were many simulation runs are necessary
 ### 4
-Machine Learning
+WHEN TO EMULATE
+
+* Let's have a closer look at "when we can emulate"
+
+* Emulators are the right tool when we don't need to exploit the full power of a simulator
+
+* Let's see this with an example:
+
+* We want to know the outflow from this reservoir depending on the water depth
+
+* We therefore run simulations, which give the output seen here
+
+* From the velocity distributiom we reconstruct the discharge through the outlet
+
+* We repeat the experiment with different heights of water
+
+* We plot the results
+
+* From the plot we manage to establish that our points follow the equation shown here
+
+* We now don't need the simulator anymore, we can just use the equation we found
 ### 5
-Beginning case studies
+WHAT ARE THE TOOLS FOR EMULATION?
+* We've just had an introduction about Emulation
+
+* Let's now see which tools are needed for emulation
+
+* As you saw emulation need a simulator
+
+* In my case this was FullSWOF_2D, an overland flow simulator solving the shallow water equation. It is an open source software
+
+* A lot of work is done on data, for this reason a programming language is needed. This for me was "GNU Octave" another open source tool.
+
+* In order to establish inputs-outputs functional relationships a regression method is needed. I used linerar regression in my first case study and Gaussian processes in my second
 ### 6
-Intro CS 1
-* In this first case study we want to fit the weir equation to simulated data.
-* In a while we will see what relation this has with emulation and machine learning.
-* The weir equation can be derived analytically by assuming no friction losses and 
-  a uniform velocity distribution.
-* Results obtained are for a theoretical discharge, which diverges from empirical results, where
-  the assumption mentioned don't hold.
-* In order to obtain actual discharge a correction factor \mu has to be taken into account.
-* \mu is dependent on the type and shape of weir (broad-crested/narrow-crested) and which
-  particular shape.
-* To obtain the value of this coefficient the equation has to be fitted to 
-  experimental data.
-* Here below some \mu-values for some weir types are shown
+CASE STUDIES
+
+* We will now see the application to two case study
 ### 7
-Set-up CS 1
+MECHANISTIC EMULATOR: THE WEIR EQUATION
+
+* In this first case study we want to fit the weir equation to simulated data
+
+* The weir equation establishes the relationship between water height above a weir and the discharge
+
+* It depends on two parameters, \mu and a
+
+* \mu depends on the shape of the weir. It is shown here below
+
+* a is usually taken as 1.5 but I decided to fit it too by regression
 ### 8
-Simulation results CS 1
+SIMULATIONS SET-UP
+
+* To perform the fit I first had to build up the dataset
+
+* I therefore generated in Octave the topography of a flat channel with a weir in the middle
+
+* Here you can obeserve the actual set-up of the channel
+
+* I ran simulations with 25 different inflow discharges
+
+* The left side of the weir was initially filled with water, to this the different discharges were added
+
+* From the simualtions I extracted the water height above the weir, hw
 ### 9
-Fitting results CS 1
-* 3 different fittings were done
-* Weir equation follows a power law, therefore the logarithm of the data was taken
-  and a linear regression was performed with all data.
-  values of \mu = 0.56 and a = 1.59 were found.
-* A linear interpolation was performed. performs very bad at the beginning (few points),
-  but quite good afterwards (almost overlaying).
-* A spline interpolation was performed. This performs good even between points
-  1 and 2 (almost overlaying).
-* I wanted to test the robustness of the different methods
-* I took a subset of the training dataset (14 points, otherwise computation too long) and
-  performed cross-validation leaving out 1, 2, ... up to 10 points.
-* Every time all possible combination of left-out points were tested and the
-  mean squared error was computed.
-* The plot shows the mean of the mean squared errors of all possible subsets by
-  leaving out 1, 2, ... 10 points.
-* When 10 points were left out just 4 were used for training: 1st, last + 2 random points.
-* From the plot we see some interesting features:
-* The  linear fit always performs the worst, although not even that bad: RMSE of ~2cm
-  leaving out 1 point.
-* The spline fit performs very good, better than the weir equation model thanks to its
-* very high flexibility. However, its error increases very rapidly by reducing
-  the number of training points. There is no prior knowledge encoded in the spline model,
-  it is just a fit to the data. When there are few training points the spline can move
-  very freely in between, and get far from the points generated by the process.
-* With 9 and 10 points left out the spline model performs worse than the weir equation model.
-* The weir equation encodes prior knowledge: the physics of the process.
-* The error here grows very slowly, the model performs very well even if trained on 4 points, 
-  and here actually better than the spline model.
-* Take home message: if we have knowledge about the process we don't need data
+SIMULATIONS RESULTS
+
+* Here you can see the free surface profiles of the 25 experiments
+
+* and here the plot of height above the weir VS discharge
+
+* Simulations with low inflow discharges did not work. The water outflew from the upper boundary instead of overflowing the weir
+
+* These points were discarded
 ### 10
-Intro CS 2
-* Building an emulator to estimate the time to threshold:
-  Our hydraulic structures (bridges, embankments, ...) have thresholds for which they were
-  sized. If those thresholds are exceeded, then the structure cannot fulfill its function.
-* Measures have to be taken in this case, build up temporary flood-blocking barriers,
-  evacuate people, etc.
-* We want to build up an emulator able, for a given catchment, knowing the rain intensity
-  over the catchment and the initial moisture content of its soil, to estimate after how long
-  the threshold discharge value at its outlet will be exceeded.
-* Such an emulator could for example be used as an early flood warning system
+FITTING RESULTS
+
+* The first plot shows three fits to the points
+
+* The blue is the weir equation. The parameters \mu and a were found by linear regression. The cuve fits the data very well
+ 
+* The red one is a linear interpolation between the points. Except between the first two points it also fits well the data
+
+* The green one is a cubic spline interpolation between the points. Difficult from here to know if it better fits the data
+
+* In order to see which model fits the data at best I did a cross-validation
+
+* I first removed one point, fitted the model on the remaining points and tried to predict the removed point
+
+* I did the same by removing up to 10 points and exploring all the possible combinations
+
+* The root mean squared error is plotted here VS the left out points
+
+* We see that the linear interpolation always performs at worst
+
+* The spline is very good at interpolating points, because it is very flexible. However when points are removed its performance decreases very rapidly
+
+* The weir equation represents the functional relationship between the data. Even if few points are left its error remains very small
+
+* From this we can draw the following take home message: IF WE HAVE A GOOD MODEL, WE DON'T NEED MUCH DATA FOR DOING GOOD PREDICTIONS
 ### 11
-Set-up CS 2
-* For this case study the synthetic topography that you see here was created using
-  the open source tool "GNU Octave"
-* This represents a catchment of 2 km x 2 km and is composed of three "Gaussian bumps"
-  on a sloping plane. The three Gaussian bumps generate a Y-shaped channel which goes
-  from the top of the catchment up to the bottom.
-* The synthetic topography presents a surface which is very smooth. This way a coarse
-  grid resolution can be used, without having loss of important features.
-* As for the first case study, the simulator "FullSWOF_2D" was used for running the simulations.
-* 50 different rain events were simulated on this topography.
-* Every simulated rain event is distinguished by a different combination of the parameters
-  initial soil moisture content and rain intensity. 
-* All of the other simulation parameters were kept the same.
-* A linearly spaced grid was used for the parameters sampling:
-* 10 Rain intensity values were taken in the interval \[10, 35\] mm/h and 5 initial
-  moisture content values were taken in the interval \[0, 1\].
-* The rain event duration was set to 6 hours and the simulation duration to 9.
-* This is in order to observe the behavior after the rain has stopped.
-* The domain boundary conditions were set to "wall boundary condition", except from the lower one.
-* This way water can only outflow through the lower boundary.
-* Spatially distributed parameters such as Manning coefficients, hydraulic conductivity and maximum
-  infiltration rate were kept uniform over the domain.
-* The initial soil moisture content was also applied uniformly to the domain.
+HYDROLOGICAL EMULATOR: TIME-TO-THRESHOLD
+
+* We'll now move on to the second case study, an emulator to estimate the time-to-threshold
+
+* First of all "What is the time to threshold?"
+
+* Our hydraulic structures (bridges, embankments, ...) have thresholds for which they were sized
+
+* If those are exceeded, then the structure cannot fulfill its function
+
+* We want to be able to estimate, given rain intensity and initial soil saturation of a catchment, how long it takes for this threshold at a specific point to be exceeded
+
+* Such an emulator could be used as flood warning system
 ### 12
-Simulation results CS 2
-* Here we can see the results extracted from the simulations. The plot shows the
-  different hydrographs at the channel outlet generated by the 50 different simulations.
-* The x-axis shows the time and z-axis the discharge. The y-axis corresponds 
-  to rain intensity. The initial soil saturation theta_i is indicated by the
-  different color tones. The red frame indicates the end of the rain events. From there
-  all hydrographs start to recess.
-* We can notice that some rain events produced absolutely no channel discharge.
-* Those with high initial soil saturation reached their peak discharge very fast.
-* Many hydrographs show an interesting behavior: a first plateau after some time,
-  where it seems that discharge won't grow any more, followed by one or two bumpy 
-  increases. These bumps are given by the topography. Two droplets at the same distance
-  from the outlet don't necessary have the same travel time. Those coming from
-  the "Gaussian mountains" will travel faster due to the slope. Those bumps are then
-  given by the water from the "plain" which is arriving later.
+SIMULATION SET-UP
+
+* The synthetic topography that you see here was produced with "Octave" and was used for running all simulations
+
+* Its shape generates a channel which runs down to the lowest point
+
+* The advantage of using a synthetic topography is its smoothness. This way we can use coarse resolutions without losing important features
+
+* 50 simulations were run, all representing different rain events:
+
+* Every rain event is characterized by a different rain intensity and initial soil saturation
+
+* The rain was uniformly and constantly applied to the topography during 6 hours
+
+* The values used for the initial soil saturations are also uniformly distributed over the catchment
+
+* The simulation duration was set to 9 hours in order to observe the behavior after the rain has stopped
 ### 13
-Dataset extraction CS 2
-* The emulator we want to build should estimate the time needed by a given
-  rain event to generate the channel threshold discharge.
-* For this a threshold has to be chosen.
-* Here we can see, that depending on the threshold value Q! that we select,
-  the time-to-threshold t! can vary enormously: in the hydrograph raising limb
-  region fair variations of Q-threshold have almost no effect.
-* In the plateau region shown here by the two black lines the opposite is true:
-  a very small variation of the threshold value causes huge sudden variations 
-  of the time-to-threshold.
-* We conclude that the time-to-threshold is a very discontinuous quantity,
-  which is therefore very challenging to emulate.
-### 14
-Classification CS 2
-* In order to simplify the emulation task we first built a classifier 
+SIMULATION RESULTS
+
+* From the simulations the discharge at the channel outlet was extracted
+
+* Here is where we want to predict the time-to-threshold
+
+* This plot represents the hydrographs at the outlet generated by the 50 simulations
+
+* Rain intensity is plotted on the y-axis and for initial saturation a color scale is used
+
+* The red frame represents the end of the rain events
+
+* We can notice that some rain events produced absolutely no channel discharge while those with high initial soil saturation reached their peak discharge very fast
+
+* Many hydrographs show an interesting behavior: a first plateau after some time, followed by one or two bumps
+
+* Let's take a closer look at one of these hydrographs### 14
+EMULATOR DATASET EXTRACTION
+* Here we better see this plateau and the following bumps
+
+* These can be explained by the fact that water coming down from the "mountains" travels faster than that from the flat areas, generating different arrival waves
+
+* For the emulator we want to build we need to choose a threshold discharge
+
+* We see that the threshold set plays a major role in the time-to-threshold found
+
+* In the plateau region small variations of the threshold discharge can cause abrupt variations of the time to threshold
+
+* The time to threshold is a discontinuous quantity therefore challenging to predict
+
+* We fixed a threshold and we decided to separate the emulation task in two parts
 ### 15
-Emulator CS 2
+RAIN EVENTS CLASSIFICATION
+
+* In this first part we classified the rain events
+
+* The points on the plot represent different combinations of rain intensitiy and initial soil saturation
+
+* The red ones are those where the threshold was exceeded, while the green ones are those were it wasn't
+
+* A Gaussian process based classificator was used
+
+* The black line generated is the one separating points exceeding the threshold from those not exceeding the threshold
+
+* Only the points exceeding the threshold were then passed to the time-to-threshold emulator 
 ### 16
-Conclusion
+TIME-TO-THRESHOLD EMULATOR
+
+* The plot shows the emulator built on the points passed from the classifier, the red ones
+
+* The blue points were used to test the model
+
+* The green ones for validating it
+
+* The surface is the emulator: it computes the time-to-threshold over the whole domain
+
+* This is to sum up the main results
+
+* Maximum absolute error on the validation dataset is 21.8 min
+
+* Root mean squared error is 10.8
+
+* Here wee see how much faster is the emulator in comparison with the simulator
+### 17
+CONCLUSION
+
+* And finally the conclusion and the outlook of my master thesis
+
+* Emulation approach is intrinsic to science: it is actually fitting a model to some data
+
+* Gaussian processes are a useful tool for emulation
+
+  * They allow incorporation of prior knowledge in the model
+
+  * Functional relationships between the data can be learnt from them
+
+* Emulation can be applied to a wide range of applications
+
+* Emulation can accuratly reproduce results from a simulator... but how good can we reproduce reality?
+
+* Open science and open software is the way to proceed if we want to answer this and other questions
