@@ -28,11 +28,11 @@ load ('extracted_data.dat');
 f_Qw = @(C,h,a) C*h.^a;
 
 function err = f_rmse (y, yp)
-  err = sqrt (1 / length (y) * sum ((y - yp).^2));
+  err = sqrt (meansq (y(:) - yp(:)));
 endfunction
 
 function err = f_mae (y, yp)
-  err = max (abs (y - yp));
+  err = max (abs (y(:) - yp(:)));
 endfunction
 
 function theta = lin_reg (x,y)
@@ -78,9 +78,9 @@ lxtrn = log10 (xtrn);
 lytrn = log10 (ytrn);
 
 ## Perform linear regression
-theta = lin_reg (lxtrn, lytrn);
-C = 10^theta(1);
-a = theta(2);
+theta = polyfit (lxtrn, lytrn, 1);
+C = 10^theta(2);
+a = theta(1);
 mu = C / (2/3 * B * sqrt(2*9.81));
 
 
@@ -89,7 +89,7 @@ xp = linspace (0, xmax+0.1*xmax, 200);
 yp = zeros (length (xp), 3);
 
 # evaluate linear regression on xp
-yp(:,1) = f_Qw(C,xp,a);
+yp(:,1) = 10.^polyval(theta, xp); % this should be f_Qw(C,xp,a);
 
 # perform linear and spline interpolations
 yp(:,2) = interp1 (xtrn, ytrn, xp, 'linear', 'extrap');
@@ -104,41 +104,66 @@ ytrn_short = ytrn(idx_short);
 lxtrn_short = lxtrn(idx_short);
 lytrn_short = lytrn(idx_short);
 
-n1 = length (xtrn_short);
-indexes = 2:n1-1;
-n2 = length (indexes);
-for i = 1:n2-2
-  idx_off = nchoosek (indexes,i);
-  for j = 1:size(idx_off)(1)
-#    printf ('%d of %d\n', j, nchoosek (n2,i))
-    idx_trn = logical (ones (1,n1));
-    idx_trn(idx_off(j,:)) = 0;
-    xe_trn = xtrn_short(idx_trn);
-    ye_trn = ytrn_short(idx_trn);
-    xe_tst = xtrn_short(!idx_trn);
-    ye_tst = ytrn_short(!idx_trn);
-    lxe_trn = lxtrn_short(idx_trn);
-    lye_trn = lytrn_short(idx_trn);
-    theta_e = lin_reg (lxe_trn, lye_trn);
-    C_e = 10^theta_e(1);
-    a_e = theta_e(2);
-    ye_pred{1} = f_Qw (C_e, xe_tst, a_e);
-    ye_pred{2} = interp1 (xe_trn, ye_trn, xe_tst, 'linear');
-    ye_pred{3} = interp1 (xe_trn, ye_trn, xe_tst, 'spline');
-    for k = 1:3
-      rmse{j,k,i} = f_rmse (ye_pred{k}, ye_tst);
-      mae{j,k,i} = f_mae (ye_pred{k}, ye_tst);
+if !exist('data_RMSE.dat','file')
+  n1 = length (xtrn_short);
+  indexes = 2:n1-1;
+  n2 = length (indexes) - 2;
+
+  idx_off = cell (1,n2);
+  n_idx = zeros(1,n2);
+  for i = 1:n2
+    idx_off{i} = nchoosek (indexes,i);
+    n_idx(i) = length (idx_off{i}); 
+  endfor
+  n_idx_total = sum (n_idx);
+
+
+  for i = 1:n2
+    toremove = idx_off{i};
+    rmse{i} = zeros (n_idx(i),3);
+
+    for j = 1:n_idx(i)
+  #    printf ('%d of %d\n', j, nchoosek (n2,i))
+      idx_trn = logical (ones (1,n1));
+      idx_trn(toremove(j,:)) = false;
+      
+      # local trainig sets
+      xe_trn = xtrn_short(idx_trn);
+      ye_trn = ytrn_short(idx_trn);
+      ## log of data
+      lxe_trn = lxtrn_short(idx_trn);
+      lye_trn = lytrn_short(idx_trn);
+
+      # local test sets
+      idx_tst = !idx_trn;
+      xe_tst = xtrn_short(idx_tst);
+      ye_tst = ytrn_short(idx_tst);
+      ## log of data
+      lxe_tst = lxtrn_short(idx_tst);
+
+      theta_e = polyfit (lxe_trn, lye_trn, 1);
+      %C_e = 10^theta_e(2);
+      %a_e = theta_e(1);
+      
+      ye_pred = zeros (length(xe_tst),3);
+      ye_pred(:,3) = 10.^polyval (theta, lxe_tst); % same as f_Qw (C_e, xe_tst, a_e);
+      ye_pred(:,1) = interp1 (xe_trn, ye_trn, xe_tst, 'linear');
+      ye_pred(:,2) = interp1 (xe_trn, ye_trn, xe_tst, 'spline');
+      for k = 1:3
+        rmse{i}(j,k) = f_rmse (ye_pred(:,k), ye_tst);
+        mae{i}(j,k) = f_mae (ye_pred(:,k), ye_tst);
+      endfor
     endfor
   endfor
-endfor
 
-for i=1:size (rmse)(3)
-  for j=1:size (rmse)(2)
-    mean_rmse(i,j) = mean (cell2mat (rmse(:,j,i)),1);
-    max_mae(i,j) = max (cell2mat (mae(:,j,i)),[],1);
-  endfor
-endfor
+endif
+mean_rmse = cell2mat (cellfun (@mean, rmse, 'uniformOutput', false).');
+std_rmse = cell2mat (cellfun (@std, rmse, 'uniformOutput', false).');
 
+mean_mae = cell2mat (cellfun (@mean, mae, 'uniformOutput', false).');
+std_mae = cell2mat (cellfun (@std, mae, 'uniformOutput', false).');
+
+break
 save ('data_RMSE.dat', 'mean_rmse');
 
 
@@ -172,18 +197,19 @@ print ('fitting_results.png', '-r300')
 mean_rmse_cm = 100 * mean_rmse; # convert error in cm
 figure (f)
 f+=1;
-semilogy (mean_rmse_cm, col)
+semilogy (length(idx_short)-((length(mean_rmse_cm)-1:-1:0)-4).',mean_rmse_cm, col)
 axis tight
 l2 = legend ('weir equation', 'lin. interp.', 'cub. spl. interp.', 'location', 'northwest');
 set (l2, 'fontsize', 12)
-xlabel ('left-out points', 'fontsize', fontsize2)
+xlabel ('# of points', 'fontsize', fontsize2)
+#xlabel ('left-out points', 'fontsize', fontsize2)
 ylabel ('RMSE [cm]', 'fontsize', fontsize2)
 
-xtickn = 1:length (mean_rmse);
-xtickl = num2cell (xtickn);
-for i = 1:length(mean_rmse)
-  xtickl{i} = num2str(xtickl{i});
-endfor
-set (gca, 'xtick', xtickn, 'xticklabel', xtickl, 'fontsize', fontsize1);
+#xtickn = 1:length (mean_rmse);
+#xtickl = num2cell (xtickn);
+#for i = 1:length(mean_rmse)
+#  xtickl{i} = num2str(xtickl{i});
+#endfor
+#set (gca, 'xtick', xtickn, 'xticklabel', xtickl, 'fontsize', fontsize1);
 print ('fitting_errors.png', '-r300')
 
