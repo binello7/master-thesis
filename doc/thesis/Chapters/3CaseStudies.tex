@@ -1,59 +1,123 @@
 \chapter{Case studies}
 \label{chp:case_studies}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
+\noindent{\LARGE\textbf{Case study 1}}\\
+% ==============================================================================
+\section{A mechanistic emulator: fitting the \emph{weir equation}}
+% ==============================================================================
 
-% ===================================================================================================
-\section{A mechanistic emulator: learning the \emph{weir equation}}
-% ===================================================================================================
+% ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%  * present it as a didactic example
+%  * use it to compare GP (prior knowledge) with e.g. deep neural networks: how many points can we have?
+%  * mention grid convergence study (results go in the appendix)
+%  * mention problem with FullSWOF boundary conditions
+%  * define well results and methodology
+%  * such an emulator can be improved -> modified to compute slope in order to have a given mu value
+%  * state all of the goals of the CS: learn weir eq. from simulation, apply curve fitting, get a feeling for simulation accuracy
+% ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-\begin{itemize}
-\itemsep0em
-  \item present it as a didactic example
-  \item use it to compare GP (prior knowledge) with e.g. deep neural networks: how many points can we have?
-  \item mention grid convergence study (results go in the appendix)
-  \item mention problem with FullSWOF boundary conditions
-  \item define well results and methodology
-  \item such an emulator can be improved -> modified to compute slope in order to have a given mu value
-  \item state all of the goals of the CS: learn weir eq. from simulation, apply curve fitting, get a feeling for simulation accuracy
-  \item 
-\end{itemize}
-
-As a first case study where to apply the acquired knowledge, it was decided to build an utterly mechanistic emulator.
-The main goal of this case study is to try to learn the \emph{weir equation} from simulated data instead of from experimental data.
+As a first case study to apply the acquired knowledge, it was decided to build an utterly mechanistic emulator.
+The main goal of this case study is to try to fit the \emph{weir equation} to simulated data instead of to experimental data.
 Here we basically rediscover the way science has always been done, by observing, measuring and trying to find mathematical relationships, with the biggest difference being the fact that the experimental set-up is completely computer built.\\
 
-The \emph{weir equation} computes the discharge $Q$ over a weir as a function of the water depth over the weir itself ($h_w$).
-In its simplest form the weir equation can be written as
+The \emph{weir equation} is a partially theoretical equation that computes the discharge $Q$ over a weir as a function of the water depth above the weir itself ($h_w$).
+The equation can be derived from the Bernoulli equation under certain assumptions \autocite{bos_discharge_1989} and can be found under many different forms.
+The form used here is the one proposed by \emph{Francis} \autocite{walcott_weir_1907}.
 
-\begin{equation}
-  Q = K\: h_w^{3/2}
+\begin{equation}\label{eq:weir_eq}
+  Q = C \cdot L \cdot h_w^{3/2}
 \end{equation}
 
-\noindent Where the coefficient $K$ is the only parameter which has to be determined by fitting the model to the data, e.g. by solving the \emph{least squares problem}.
+\noindent Where the empirical coefficients $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution. $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
 
-In order to give more physical meaning to the equation and break up the dependencies of the coefficient $K$, the equation can be put under the form
-
-\begin{equation}
-  Q = \frac{2}{3}\: \mu\: B_w\: \sqrt{2g}\: h_w^{2/3}
-\end{equation}
-
-\noindent Where the coefficient $K$ was decomposed in more contributors: the weir width $B_w$, the gravitational acceleration component $\frac{2}{3}\: \sqrt{2g}$ \seb{$\sqrt{2g}$ looks very big} and the coefficient $\mu$, depending on the weir type (broad-crested/sharp-crested) and its particular form.
+In addition to the parametric model (weir equation) two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the data points.\\
 
 
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+\subsection{Brief experiment description}
+% ------------------------------------------------------------------------------
+
+\seb{explain the experiment very generally. Put the section title or leave it with no section title with the upper part?}
+ 
+ For this experiment simulations were run in a flat rectangular channel.
+A weir with a trapezoidal cross section is located at the channel half-length.
+As initial condition the upstream side of the weir was filled with water up to the weir crest.
+At the domain top boundary a constant inflow discharge was set, while at the bottom boundary water could freely outflow.
+As the simulation runs, the inflow water flows down the channel, overflows the weir and leaves the domain through the lower boundary.
+After some time the simulation reaches the \emph{steady-state conditions}: inflow, discharge over the weir and outflow have the same magnitude and the water height above the weir, measured \SI{1.2}{\meter} before the weir, has stabilized.
+At this point the value $h_w$ was extracted and was coupled with the discharge value $Q$ generating it.
+This pair $(Q, h_w)$ constitute a \emph{predictor-response} set of the dataset to which the weir equation was fitted.
+This procedure was applied to all of the experiments run, where only the inflow value $Q$ was varied from one experiment to the other.
+\num{25} experiments were conducted with $Q$ linearly spaced in the range \SIrange{0.1}{10}{\cubic\meter\per\second}.\\
+
+In order to ensure the convergence of the simulator solution, and therefore the quality of the experimental results, a \emph{grid convergence study} was performed prior to the experiment.
+For this, the simulation with the highest discharge was repeated with successive grid refinements
+The value of the variable of interest, water height, was then compared between the different simulations to find at which grid resolution the solution has stabilized.
+
+
+% ------------------------------------------------------------------------------
 \subsection{Material and methods}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+
+\subsubsection{Generating the topography}
+
+The topography used for running the simulations was generated in \textit{Octave} and represents a flat channel of \SI{40}{\meter} length with a weir placed at its midpoint, at \SI{20}{\meter} distance from the top boundary.
+The channel cross section is a rectangle of \SI{4}{\meter} width and the weir has a trapezoidal shape.
+Fig.~\ref{fig:weir_scheme} shows the geometry of the channel.
+The weir has a crest width of \SI{2}{\meter} and therefore belongs to the \emph{broad-crested} class. The $C$ coefficient for broad-crested weirs with vertical walls and \SI{2}{\meter} crest width varies between \num{1.36} and \num{1.53}, depending on the water height $h_w$ \autocite{brown_urban_2009}.
+We therefore expect a value close to this. A 3D overview of the channel can be found in the appendix \ref{app:channel_topography} \seb{add a 3D plot of the channel?}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Figures/weir_scheme.png}
+  \caption{fig:Weir bla bla}
+  \label{fig:weir_scheme}
+\end{figure}
 
 
-% ---------------------------------------------------------------------------------------------------
+\subsubsection{Performing the grid convergence study}
+
+Accuracy of simulation results, as well as simulation runtime, are dependent on the mesh resolution chosen.
+In order to find an appropriate mesh resolution, a \emph{mesh study} has to be run before the actual experiment is performed.
+Increasing grid refinements are tested for the problem which is to solve and a convergence criterion is established.
+If the Grid Convergence Index (GCI) is used, then a GCI lower than \SI{5}{\percent} for the last refinement is usually taken as a criterion \autocite{ali_grid_2009}.\\
+
+For the mesh study \num{7} simulations were run by varying only the grid resolution.
+Squared cells were used and the inflow discharge was set to the highest discharge value of the experiment, corresponding to \SI{10}{\cubic\meter\per\second}.
+This discharge is the one generating the highest flow velocities.
+If convergence under these conditions is reached, then convergence for lower discharges is also assured.
+
+\begin{table}[h]
+  \centering
+  \caption{Summary of simulations runtime, grid resolution and other related parameters for the mesh convergence study.}
+  \label{tab:mesh_study}
+  \begin{tabular}{crrcccccr}
+    \toprule
+%    \rowfont{\bfseries}
+    \multirow{2}{*}{\#} & \multicolumn{1}{c}{Nx} & \multicolumn{1}{c}{Ny} & \multicolumn{1}{c}{Lx} & \multicolumn{1}{c}{Ly} & \multicolumn{1}{c}{dx} & \multicolumn{1}{c}{dy} & \multicolumn{1}{c}{Q} & \multicolumn{1}{c}{runtime} \\
+       & \multicolumn{1}{c}{$[\mbox{--}]$} & \multicolumn{1}{c}{$[\mbox{--}]$} & \multicolumn{1}{c}{$[\si{\meter}]$} & \multicolumn{1}{c}{$[\si{\m}]$} & \multicolumn{1}{c}{$[\si{\m}]$} & \multicolumn{1}{c}{$[\si{\m}]$} & \multicolumn{1}{c}{$[\si{\cubic\m\per\s}]$} & \multicolumn{1}{c}{$[\si{\minute}]$} \\
+    \midrule
+    1  & 2             & 20            & 4               & 40          & 2.00        & 2.00        & 10                      & 0.00 \\
+    2  & 4             & 40            & 4               & 40          & 1.00        & 1.00        & 10                      & 0.07 \\
+    3  & 8             & 80            & 4               & 40          & 0.50        & 0.50        & 10                      & 0.60 \\
+    4  & 20            & 200           & 4               & 40          & 0.20        & 0.20        & 10                      & 9.00 \\
+    5  & 40            & 400           & 4               & 40          & 0.10        & 0.10        & 10                      & 69.60 \\
+    6  & 80            & 800           & 4               & 40          & 0.05        & 0.05        & 10                      & 537.72 \\
+    7  & 100           & 1'000         & 4               & 40          & 0.04        & 0.04        & 10                      & 1'048.40 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+% ------------------------------------------------------------------------------
 \subsection{Results and discussion}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
-Present and discuss briefly the results of this toy emulator.
+Present and discuss briefly the results of this toy emulator.\\
 
 
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 %An \textit{early flood warning tool} in an essential component of an \textit{early flood warning system}.
 %An early flood warning system has to be understood as an integrated system of tools and plans to detect and respond to flood emergencies \autocite{icimod_early_2018}.
 %This can be managed by the community themselves and if designed, implemented and operated correctly can make the difference between tragedy and survival.
@@ -83,14 +147,15 @@ Present and discuss briefly the results of this toy emulator.
 %The first emulator classifies a rain event based on the forecasted \emph{average rain intensity} and \emph{current soil saturation} into two groups: rain events generating discharge exceeding a chosen threshold ($Q_!$) and rain events not generating discharge exceeding the threshold.
 %For events exceeding the threshold a second emulator is developed.
 %This predicts the time the rain event will need to produce the threshold discharge $Q_!$ at the outlet of the catchment.
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
 
-
-% ===================================================================================================
 \newpage
+
+\noindent{\LARGE\textbf{Case study 2}}
+%===============================================================================
 \section{An hydrological emulator: estimating the \textit{time-to-threshold}}
-% ===================================================================================================
+%===============================================================================
 
 With this case study it was decided to address a complex hydrological problem by means of emulation.
 The problem we want to solve is estimating the time needed for a channel conveying water from a catchment to reach a certain threshold discharge ($Q_!$) at its outlet as a function of rain intensity and initial soil saturation.
@@ -102,9 +167,9 @@ The emulator developed here, with the appropriate adjustments, could be exploite
 As for the previous example, the simulations were run with the open source software \textit{FullSWOF\_2D-v.1.07.00} \autocite{delestre_fullswof:_2014} \seb{put the citation every time that it is mentioned?}, while the input files necessary for the simulations were prepared with \textit{GNU Octave 4.2.1} \autocite{octave_community_gnu_2018} \seb{how to cite this?} with the aid of the package \textit{fswof2d}.
 
 
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 \subsection{Material and methods}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
 \subsubsection{The synthetic topography}
 
@@ -235,9 +300,9 @@ Another dataset for the \emph{classification emulator} was created by assigning 
 \subsubsection{Building-up the regression emulator}
 
 
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 \subsection{Results and discussion}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
 \begin{itemize}
 \itemsep0em
