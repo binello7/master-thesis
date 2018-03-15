@@ -18,9 +18,9 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  TEMPLATE PACKAGES
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \documentclass[
 11pt, % The default document font size, options: 10pt, 11pt, 12pt
@@ -45,9 +45,9 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 \addbibresource{Bibliography.bib} % The filename of the bibliography
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  ADDITIONAL PACKAGES
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \usepackage{xargs}
 
@@ -89,17 +89,27 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{pdfpages}
 
-%----------------------------------------------------------------------------------------
-%  NEW COMMANDS
-%----------------------------------------------------------------------------------------
+\usepackage{booktabs}
 
+\usepackage{array}
+
+\usepackage{tabu}
+
+\usepackage{longtable}
+
+\usepackage{multirow}
+
+%-------------------------------------------------------------------------------
+%  NEW COMMANDS
+%-------------------------------------------------------------------------------
 \newcommandx{\seb}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
 \newcommandx{\jpi}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\jor}[2][1=]{\todo[linecolor=green,backgroundcolor=green!25,bordercolor=green,#1]{#2}}
 
-%----------------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
 %  MARGIN SETTINGS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \geometry{
   paper=a4paper, % Change to letterpaper for US letter
@@ -112,9 +122,9 @@ headsepline, % Uncomment to get a line under the header
   %showframe, % Uncomment to show how the type block is set on the page
 }
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  THESIS INFORMATION
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \thesistitle{Thesis Title} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
@@ -142,9 +152,9 @@ headsepline, % Uncomment to get a line under the header
 
 \pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  TITLE PAGE
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \begin{titlepage}
 \begin{center}
@@ -186,24 +196,24 @@ headsepline, % Uncomment to get a line under the header
 \end{titlepage}
 \newpage\null\thispagestyle{empty}\newpage
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  DECLARATION PAGE
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \includepdf[pages=-]{declaration-originality.pdf}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  ABSTRACT PAGE
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 Brief description of the thesis. Capture readers' interest. Mention/summarize everything that was done in the thesis.
 \end{abstract}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  ACKNOWLEDGEMENTS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
@@ -223,27 +233,44 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 \end{acknowledgements}
 
 
-%----------------------------------------------------------------------------------------
-%	ABBREVIATIONS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------ABBREVIATIONS
+%-------------------------------------------------------------------------------
 
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 
 \textbf{FV} & \textbf{F}inite \textbf{V}olume\\
 \textbf{FVM} & \textbf{F}inite \textbf{V}olume \textbf{M}ethod\\
-
+\textbf{GCI} & \textbf{G}rid \textbf{C}onvergence \textbf{I}ndex\\
 
 \end{abbreviations}
 
-%----------------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+%	SYMBOLS
+%-------------------------------------------------------------------------------
+
+\begin{symbols}{lll} % Include a list of Symbols (a three column table)
+
+$Nx$ & Number of cells in x-direction & \mbox{--} \\
+$Ny$ & Number of cells in y-direction & \mbox{--} \\
+$Q$  & Discharge                      & \si{\cubic\meter\per\second} \\
+%Symbol & Name & Unit \\
+
+%\addlinespace % Gap to separate the Roman symbols from the Greek
+
+\end{symbols}
+
+
+%-------------------------------------------------------------------------------
 %  TABLE OF CONTENTS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \tableofcontents
 
-%----------------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
 %  THESIS BODY
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \mainmatter % Begin numeric (1,2,3...) page numbering
 
@@ -258,15 +285,15 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 \include{Chapters/4Discussion}
 \include{Chapters/5Conclusions}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \printbibliography[heading=bibintoc] \seb{any rule for the bibliography? print ISBN? print url where document is available (if pdf)?}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %  APPENDIX
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \appendix % Cue to tell LaTeX that the following "chapters" are Appendices
 
@@ -275,6 +302,6 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 
 \include{Appendices/Appendix}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \end{document}  
