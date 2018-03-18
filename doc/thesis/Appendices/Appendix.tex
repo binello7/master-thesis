@@ -1,12 +1,27 @@
 % Appendix
-
 \chapter{Appendix}
-\label{Appendix}
 
-\section{Training dataset}
-\label{sec:training_dataset}
 
-\begin{table}[htpb]
+\seb{change appendix name or way it is displayed. I want to have just 1 appendix}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Figures/channel.png}
+  \caption{Topography of the channel used for \emph{case study 1}. The channel presents no walls because "wall boundary conditions" were chosen in \textit{FullSWOF\_2D} for the two lateral boundaries.}
+  \label{fig:channel}
+\end{figure}
+\seb{does it make sense to put this figure?}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/convergence_center.png}
+  \caption{Measured free surface height at the weir midpoint as a function of the grid resolution used.}
+  \label{fig:convergence_center}
+\end{figure}
+
+
+\begin{table}[H]
   \centering
   \caption{Emulator training dataset}
   \label{tab:training_dataset}
@@ -20,10 +35,8 @@
   \end{tabular}
 \end{table}
 
-\section{Testing dataset}
-\label{sec:testing_dataset}
 
-\begin{table}[htpb]
+\begin{table}[H]
   \centering
   \caption{Emulator test dataset}
   \label{tab:test_dataset}
@@ -37,10 +50,8 @@
   \end{tabular}
 \end{table}
 
-\section{Validation dataset}
-\label{sec:validation_dataset}
 
-\begin{table}[htpb]
+\begin{table}[H]
   \centering
   \caption{Emulator validation dataset}
   \label{tab:validation_dataset}
@@ -55,12 +66,10 @@
 \end{table}
 
 
-\section{Detailed validation performance}
-
-\begin{table}[htpb]
+\begin{table}[H]
   \centering
   \caption{Emulator performance on every validation point}
-  \label{tab:}
+  \label{tab:validation_performance}
   \begin{tabular}{lccc}
     \toprule
      & \textbf{1} & \textbf{2} & \textbf{3}\\
@@ -70,6 +79,3 @@
     \bottomrule
   \end{tabular}
 \end{table}
-
-
-
