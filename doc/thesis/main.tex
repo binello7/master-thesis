@@ -73,12 +73,6 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{textcomp}
 
-\usepackage{listings}
-\lstset{
-  language=Octave,
-  morecomment = [l][\itshape\color{blue}]{\#}
-}
-
 \usepackage{amsmath}
 
 \usepackage{morefloats} % to allow LaTeX to place more than 18 floats
@@ -99,12 +93,24 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{multirow}
 
+\usepackage{minted}
+
+\usepackage[super]{nth} % to use automatic ordinal number (1st, 2nd, ...)
+
 %-------------------------------------------------------------------------------
-%  NEW COMMANDS
+%  NEW COMMANDS AND DEFINITIONS
 %-------------------------------------------------------------------------------
 \newcommandx{\seb}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
 \newcommandx{\jpi}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\jor}[2][1=]{\todo[linecolor=green,backgroundcolor=green!25,bordercolor=green,#1]{#2}}
+
+%\renewcommand{\appendix}{
+%  \setcounter{chapter}{0}%
+%  \setcounter{section}{0}%
+%  \gdef\@chapapp{\appendixname}%
+%  \gdef\thechapter{\@Alph\c@chapter}}
+
+\definecolor{light-gray}{gray}{0.95}
 
 
 %-------------------------------------------------------------------------------
@@ -251,9 +257,14 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 
 \begin{symbols}{lll} % Include a list of Symbols (a three column table)
 
-$Nx$ & Number of cells in x-direction & \mbox{--} \\
-$Ny$ & Number of cells in y-direction & \mbox{--} \\
-$Q$  & Discharge                      & \si{\cubic\meter\per\second} \\
+$dx$      & Grid spacing in x-direction    & \si{\m} \\
+$dy$      & Grid spacing in x-direction    & \si{\m} \\
+$Lx$      & Domain length in x-direction   & \si{\m} \\
+$Ly$      & Domain length in y-direction   & \si{\m} \\
+$Nx$      & Number of cells in x-direction & 1 \\
+$Ny$      & Number of cells in y-direction & 1 \\
+$Q$       & Discharge                      & \si{\cubic\m\per\s} \\
+$t_{max}$ & Simulation duration            & \si{\s} \\
 %Symbol & Name & Unit \\
 
 %\addlinespace % Gap to separate the Roman symbols from the Greek
