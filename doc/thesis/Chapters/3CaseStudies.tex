@@ -26,7 +26,7 @@ The equation can be derived from the Bernoulli equation under certain assumption
 The form used here is the one proposed by \emph{Francis} \autocite{walcott_weir_1907}.
 
 \begin{equation}\label{eq:weir_eq}
-  Q = C \cdot L \cdot h_w^{3/2}
+  Q = \textcolor{red}{C} \cdot L \cdot h_w^{\textcolor{red}{a}}\, , \quad \mbox{usu. } \textcolor{red}{a = 3/2}
 \end{equation}
 
 \noindent Where the empirical coefficients $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution. $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
@@ -181,20 +181,51 @@ For the experiment was therefore decided to use $(Nx, Ny) = (\num{40}, \num{400}
 %...............................................................................
 \subsubsection{Extract the dataset}
 %...............................................................................
-The weir equation computes the discharge over the weir as a function of the water height $h_w$ under steady state conditions.
-By analyzing the results it was assessed, that those are reached after $\approx \SI{30
+The weir equation computes the discharge over the weir as a function of the water height $h_w$ under steady-state conditions.
+By analyzing the results it was assessed, that those are reached after $\approx \SI{50}{\s}$.
+After this time, small oscillation of the water surface are still present.
+To get rid of these, a time averaged free surface from $t = \SI{100}{\s}$ to $t = \SI{200}{\s}$ was computed.
+Fig.~\ref{fig:free_surfaces} presents the free surface profiles of the \num{25} experiments at steady-state conditions.
+The three lowest profiles correspond to the simulations run with the three lowest inflow discharge. 
+As initial condition the weir upstream side of the channel was filled with water to the weir's height.
+The fact that these three profiles are lower than the initial condition indicates that something went wrong with the simulation and water was lost from the top boundary.
+These three simulations were discarded for the continuation of the experiment.
+The height value for the remaining simulations was extracted \SI{1.2}{\m} before the weir base, to be sure not to be measuring in the acceleration zone, happening in proximity of the weir crest.
+At this point a space average over the channel breadth was taken.
+The procedure was repeated for all of the experiments.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/free_surfaces.png}
+  \caption{Free surface profiles along the channel axis for the \num{25} experiments.}
+  \label{fig:free_surfaces}
+\end{figure}
 
 
 %...............................................................................
 \subsubsection{Perform the fitting}
 %...............................................................................
+The weir equation (Eq.~\ref{eq:weir_eq}) was fitted to the dataset previously extracted by performing a linear regression.
+Data were linearized by taking the logarithm:
 
+\begin{equation}
+  \log(Q) = \log(C) + \log(L) + a \cdot \log(h_w)
+\end{equation}
+
+and the values of the parameters $a$ and $C$ were determined.
+The performance of the fitted weir equation should be compared with that of a linear interpolation through the points and that of a cubic spline interpolation.
+Therefore, the points were interpolated with both methods.
 
 
 %...............................................................................
 \subsubsection{Compute the error}
 %...............................................................................
+To evaluate the performance of the three models, training points were successively removed, the models were trained on the remaining training points and it was tried to predict the missing points.
+For an amount $k$ of points removed all possible combinations were tested. The number of model evaluations follows:
 
+\begin{equation}
+  \binom{n}{k} = \frac{n!}{k!\left(n-k\right)!}
+\end{equation}
 
 
 %-------------------------------------------------------------------------------
@@ -257,8 +288,9 @@ As for the previous example, the simulations were run with the open source softw
 %-------------------------------------------------------------------------------
 \subsection{Material and methods}
 %-------------------------------------------------------------------------------
-
+%...............................................................................
 \subsubsection{Generating the topography}
+%...............................................................................
 
 The topography used represents a catchment of size $\SI{2}{\kilo\meter} \times \SI{2}{\kilo\meter}$ and it is visible in Fig.~\ref{fig:topography}.
 It is composed of a sloping plane with three Gaussian bumps on the top.
@@ -278,9 +310,9 @@ The grid used is composed of $\num{100} \times \num{100}$ cells, giving a resolu
   \label{fig:topography}
 \end{figure}
 
-
+%...............................................................................
 \subsubsection{Setting-up the simulations}
-
+%...............................................................................
 The dataset required for building the emulator was generated by running \num{50} simulations with different combinations of the variables \emph{rain intensity} ($I$) and \emph{initial soil saturation} ($\theta_i$).
 The initial soil saturation, being a spatially distributed variable, was kept uniform over the whole domain.
 The rain intensity was kept constant and was uniformly applied over the domain, also since \textit{FullSWOF\_2D}, at this stage of development, only allows for uniformly distributed rain events \autocite{laguerre_documentation_2016}.
@@ -322,13 +354,11 @@ For the bottom boundary a \textit{Neumann boundary condition} was selected, allo
   \end{threeparttable}
 \end{table}
 
-
+%...............................................................................
 \subsubsection{Extracting the datasets}
-
-%This data constitute the \emph{training} dataset for the emulator.
-%A \emph{test} dataset and a \emph{validation} dataset were also generated and can be found in the Appendix~\ref{Appendix}. \seb{verify if they are really added}
-
-
+...............................................................................
+This data constitute the \emph{training} dataset for the emulator.
+A \emph{test} dataset and a \emph{validation} dataset were also generated and can be found in the Appendix~\ref{Appendix}. \seb{verify if they are really added}
 
 The datasets used to build the emulator was extracted from the simulation outputs.
 The extraction was done in two steps.
