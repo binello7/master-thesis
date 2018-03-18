@@ -18,6 +18,7 @@
 
 close all
 clear all
+load ('input_variables.dat');
 ## Load the variables
 # load variables if not present in workspace
 if !exist ('H', 'var')
@@ -27,7 +28,7 @@ endif
 
 Y_max(2:end) = Y_max(2:end) + 0.5 * dy(2:end);
 perc_diff_middleweir_h = abs (diff (middleweir_head)) ...
-                         ./ middleweir_head(2:end) * 100;
+                         ./ (middleweir_head(2:end)+weir_height) * 100;
 perc_diff_H_max = abs (diff (H_max)) ./ H_max(2:end) * 100;
 perc_diff_Y_max = abs (diff (Y_max)) ./ Y_max(2:end) * 100;
 
@@ -41,18 +42,20 @@ endfor
 
 # plot 1: water head over the middle of the weir
 figure (1)
-plot (dy, middleweir_head, '-o');
+plot (dy, middleweir_head+weir_height, '-o');
 #title ('Convergence at center of weir')
-xlabel ('dy [m]');
-ylabel ('height over weir [m]')
+xlabel ('dy / m');
+ylabel ('h / m')
+axis tight
 print ('convergence_center.png', '-r300');
 
 # plot 2: % variation over the middle of the weir
 figure (2)
 semilogy (dy(2:end), perc_diff_middleweir_h, 'r-o');
 #title ('% variation at center of weir')
-xlabel ('dy [m]');
-ylabel ('h variation [%]')
+xlabel ('dy / m');
+ylabel ('\Delta h / %')
+axis tight
 print ('diff_center.png', '-r300');
 
 # plot 3: maximum water head
@@ -61,6 +64,7 @@ plot (dy, H_max, '-o');
 #title ('Convergence max water depth')
 xlabel ('dy [m]');
 ylabel ('h_{max} [m]')
+axis tight
 print ('convergence_hmax.png', '-r300');
 
 # plot 4: % variation maximum water head
@@ -68,7 +72,8 @@ figure (4)
 semilogy (dy(2:end), perc_diff_H_max, 'r-o');
 #title ('% variation max water depth')
 xlabel ('dy [m]');
-ylabel ('h_{max} variation [%]')
+ylabel ('\Delta h_{max} [%]')
+axis tight
 print ('diff_hmax.png', '-r300');
 
 # plot 5: distance at which max water head occurs
@@ -77,11 +82,12 @@ plot (dy, Y_max, '-o');
 #title ('Convergence max water depth location')
 xlabel ('dy [m]');
 ylabel ('h_{max} location [m]')
+axis tight
 print ('convergence_ymax.png', '-r300');
 
 # plot 7: profile along che middle of the channel
 figure (7)
-plot (Y{1}, Z{1}, 'k', 'linewidth', 2);
+plot ([0;Y{1};Ly], [0;Z{1};0], 'k', 'linewidth', 2);
 Yp{1} = Y{1};
 for i = 1:nExp
   if i > 1
@@ -91,12 +97,13 @@ for i = 1:nExp
   plot (Yp{i}, HZ{i}((length (HZ{i}):-1:1)));
   hold off;
 endfor
-#title ('Free surface profiles')
+
 legend ('channel profile', leg{:}, 'location', 'northeast');
 annotation ('textarrow', [0.3 0.35], [0.7 0.7], 'string', ' flow direction', ...
             'color', 'b', 'headlength', 6, 'headwidth', 6)
-xlabel ('Ly [m]');
-ylabel ('h [m]')
+xlabel ('y / m');
+ylabel ('h / m');
+axis tight
 print ('water_profiles.png', '-r300')
 
 
