@@ -1,20 +1,65 @@
 \chapter{Methods}
 \label{chp:methods}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
-% ===================================================================================================
+% ==============================================================================
 \section{Simulation in hydrology}
-% ===================================================================================================
+% ==============================================================================
 
-
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 \subsection{FullSWOF\_2D-v1.07.00}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+
+The simulator chosen to produce the datasets for the later emulation task is \textit{FullSWOF\_2D-v1.07.00} \autocite{delestre_fullswof:_2017}. FullSWOF (Full Shallow Water equations for Overland Flow) is an \emph{open source} software solving the Shallow Water equations using finite volumes and methods especially chosen for hydrodynamic purposes \autocite{the_fullswof_team_fullswof_2018}.\\
+
+In order to run simulations the software needs at least the following inputs:
+
+\begin{itemize}
+\itemsep0em
+  \item a \emph{parameters file}
+  \item a \emph{topography file}
+  \item an \emph{initial conditions file}
+\end{itemize}
+
+\paragraph{Parameters file} A text file defining the values set for all of the simulation parameters. This can be generated with the function \textit{params2file} of the fswof2d package, where to every parameter a default value is already given and only parameter values different from the default ones have to be modified. Simulation parameters include:
+
+\begin{itemize}
+\itemsep0em
+  \item Number of cells (x and y directions)
+  \item Simulation duration
+  \item Number of intermediate states saved
+  \item Domain length
+  \item Domain width
+  \item Boundary conditions specifications
+  \item Various settings for the numerical schemes
+  \item Different physical parameters (friction coefficient, initial soil saturation, soil thickness, soil hydraulic conductivity, maximal infiltration)
+\end{itemize}
+
+The physical parameters are spatially distributed. A unique value for the whole domain can be used or a value for every cell can be defined by giving to the simulator a text file specifying all of the values.\\
+
+Output is written to five different \emph{output files}.
+To one file only the initial state (at $t = \SI{0}{\s}$) of the simulation is written.
+This corresponds to the initial conditions file.
+To a second file the final state of the simulation is saved (at $t = t_{max}$).
+A third file stores the whole evolution of the simulation: it begins with the initial conditions and ends with the final state.
+In between the intermediate results are stored.
+How many intermediate results to saved is set by the user in the parameters file.
+The fourth file stores the information relative to the water budget.
+How much water was lost through the boundaries, how much infiltrated and how much is present over the topography.
+The fifth is just a copy of the parameters file.
+It is useful to know which parameters were set to generate the given output.
+
+\paragraph{Topography file} FullSWOF\_2D solves the Shallow Water equation over a regular uniform grid. The computational domain is therefore a rectangle and the cells composing it are rectangles too, all with the same size. The topography file is a text file specifying the x,y,z coordinates of the center of every cell.
+
+\paragraph{Initial conditions file} A text file defining the initial conditions of the simulation. It specifies the \emph{water depth}, the \emph{flow velocity in x} and the \emph{flow velocity in y} for all cells of the domain. All of these can also be set to \num{0}.\\
+
+Water can enter the domain through the boundaries (\emph{imposed discharge}) or with the rain. If the option rain is chosen, a \emph{rain file} has to be provided. This defines the hyetograph of the rain event, the rain intensity as a function of time. The rain is uniformly applied to the domain.
 
 
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 \subsection{Development of \textit{FullSWOF\_2D} interaction tools}
-% ---------------------------------------------------------------------------------------------------
+\label{sec:fswof_interaction_tools}
+% ------------------------------------------------------------------------------
 
 \begin{itemize}
 \itemsep0em
@@ -53,16 +98,14 @@ The package includes the following functions, all of which are distributed under
   \item topo2file.m
 \end{itemize}
 
-% ---------------------------------------------------------------------------------------------------
-\subsection*{center2node.m}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------ubsection*{center2node.m}
+% ------------------------------------------------------------------------------
 \textit{function x = center2node (cx, x0)}\\
 
 
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 \subsection*{node2center.m}
-% ---------------------------------------------------------------------------------------------------
-\textit{function cx = node2center (x)}\\
+% ------------------------------------------------------------------------------\textit{function cx = node2center (x)}\\
 
 \textit{FullSWOF\_2D} uses a regular uniform grid in order to solve the \emph{shallow water equation} with the finite volume method (FVM).
 The equations are solved at the center of every cell.
@@ -70,27 +113,30 @@ After creating the vector defining the grid nodes, one can use the \textit{cente
 This is particularly useful because the $(x,y)$ coordinates saved to the \textit{topography} file have to be the coordinates of the cell centers.
 A short usage example would be:
 
-\begin{lstlisting}
-  # define the domain length in x-direction
-  Lx = 100;
-  # define the number of nodes
-  Nx = 200;
-  # create nodes of the regular grid in x-direction
-  xn = linspace (0, Lx, Nx);
-  # create vector of cell centers
-  xc = node2cdenter (xn);
-\end{lstlisting}
+%\begin{lstlisting}
+%  # define the domain length in x-direction
+%  Lx = 100;
+%  # define the number of nodes
+%  Nx = 200;
+%  # create nodes of the regular grid in x-direction
+%  xn = linspace (0, Lx, Nx);
+%  # create vector of cell centers
+%  xc = node2cdenter (xn);
+%\end{lstlisting}
 
 
 
-% ===================================================================================================
+% ==============================================================================
 \section{Emulation}
-% ===================================================================================================
+% ==============================================================================
+\begin{itemize}
+\itemsep0em
+  \item add a scheme with the workflow for emulation!!
+\end{itemize}
 
-
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 \subsection{Regression and interpolation methods}
-% ---------------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
 \begin{itemize}
 \itemsep0em
