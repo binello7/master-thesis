@@ -97,26 +97,25 @@ MSE(3) = 1/n * sum ((h0 - hweir (Qin, Pra)).^2);
 fontsize1 = 13;
 fontsize2 = 14;
 
+#-------------------------------------------------------------------------------
 # plot 1: longitudinal profile for the 25 experiments
-i1 = 150; i2 = 240;
-plt_span_Y = i1:i2;
-plt_span_Z = i2:-1:i1;
-#plt_span_Y = 1:length (Y);
-#plt_span_Z = length (Y):-1:1;
+i1 = 150; i2 = 261;
+Y = flipud (Y);
+plt_span = i1:i2;
 figure (2)
-plot (Y(plt_span_Y), Z(plt_span_Z), '-k', 'linewidth', 3);
+plot (Y(plt_span), Z(plt_span), '-k', 'linewidth', 3);
 hold on
-plot (Y(plt_span_Y), water (Z(plt_span_Z), HZ(plt_span_Z,:)));
+plot (Y(plt_span), water (Z(plt_span), HZ(plt_span,:)));
 hold off
 axis equal
-xlabel ('Ly [m]', 'fontsize', fontsize2);
-ylabel ('h [m]', 'fontsize', fontsize2);
+xlabel ('y / m', 'fontsize', fontsize2);
+ylabel ('h / m', 'fontsize', fontsize2);
 annotation ('textarrow', [0.4 0.45], [0.8 0.8], 'string', ' flow direction', ...
             'color', 'b', 'headlength', 6, 'headwidth', 6, 'fontsize', fontsize2);
 set (gca, 'fontsize', fontsize1);
 print ('free_surfaces.png', '-r300');
 
-
+#-------------------------------------------------------------------------------
 # plot 2: Q - h relation for the 25 experiments
 figure (3)
 plot ([0 Qin], [0 h0], 'bo', 'markerfacecolor', 'b')#, Qt, hweir (Qt, [0.57, 2/3]), 'b', ...
