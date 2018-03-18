@@ -13,6 +13,7 @@ case_studies/*/gist_earth.m
 doc/IAHR/IAHR_Template
 doc/thesis/main-blx.bib
 doc/pres/pres03/_minted-*
+doc/thesis/_minted-*
 *.vrb
 *.docx
 *.bbl
