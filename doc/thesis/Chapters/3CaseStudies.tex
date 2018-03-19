@@ -19,19 +19,20 @@
 
 As a first case study to apply the acquired knowledge, it was decided to build an utterly mechanistic emulator.
 The main goal of this case study is to try to fit the \emph{weir equation} to simulated data instead of to experimental data.
-Here we basically rediscover the way science has always been done, by observing, measuring and trying to find mathematical relationships, with the biggest difference being the fact that the experimental set-up is completely computer built.\\
+Here we basically rediscover the way science has always been done: by observing, measuring and trying to find mathematical relationships.
+The biggest difference is the fact that the experimental set-up is completely computer built.\\
 
-The \emph{weir equation} is a partially theoretical equation that computes the discharge $Q$ over a weir as a function of the water depth above the weir itself ($h_w$).
+The \emph{weir equation} is a partially theoretical equation that provides an estimate of the discharge $Q$ over a weir as a function of the water depth above the weir itself ($h_w$).
 The equation can be derived from the Bernoulli equation under certain assumptions \autocite{bos_discharge_1989} and can be found under many different forms.
-The form used here is the one proposed by \emph{Francis} \autocite{walcott_weir_1907}.
+The form used here is the one proposed by \emph{Francis} \autocite{walcott_weir_1907}:
 
 \begin{equation}\label{eq:weir_eq}
   Q = \textcolor{red}{C} \cdot L \cdot h_w^{\textcolor{red}{a}}\, , \quad \mbox{usu. } \textcolor{red}{a = 3/2}
 \end{equation}
 
-\noindent Where the empirical coefficients $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution. $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
+\noindent Where the empirical coefficient $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution. $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
 
-In addition to the parametric model (weir equation) two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the data points.\\
+In addition to the parametric model (weir equation) two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the simulated data points.\\
 
 
 %-------------------------------------------------------------------------------
@@ -40,20 +41,20 @@ In addition to the parametric model (weir equation) two non-parametric local tec
 
 \seb{explain the experiment very generally. Put the section title or leave it with no section title with the upper part?}
  
- For this experiment simulations were run in a flat rectangular channel.
+For this experiment simulations were run in a flat rectangular channel.
 A weir with a trapezoidal cross section is located at the channel half-length.
 As initial condition the upstream side of the weir was filled with water up to the weir crest.
 At the domain top boundary a constant inflow discharge was set, while at the bottom boundary water could freely outflow.
 As the simulation runs, the inflow water flows down the channel, overflows the weir and leaves the domain through the lower boundary.
 After some time the simulation reaches the \emph{steady-state conditions}: inflow, discharge over the weir and outflow have the same magnitude and the water height above the weir, measured \SI{1.2}{\meter} before the weir, has stabilized.
 At this point the value $h_w$ was extracted and was coupled with the discharge value $Q$ generating it.
-This pair $(Q, h_w)$ constitute a \emph{predictor-response} set of the dataset to which the weir equation was fitted.
-This procedure was applied to all of the experiments run, where only the inflow value $Q$ was varied from one experiment to the other.
-\num{25} experiments were conducted with $Q$ linearly spaced in the range \SIrange{0.1}{10}{\cubic\meter\per\second}. \seb{give e.g. in appendix the discharge values used?}\\
+\num{25} experiments were conducted with $Q$ linearly spaced in the range \SIrange{0.1}{10}{\cubic\meter\per\second}.
+All simulated pairs $(Q, h_w)$ constitute an observational \emph{predictor-response} set to which the weir equation was fitted.
+ \seb{give e.g. in appendix the discharge values used?}\\
 
 In order to ensure the convergence of the simulator solution, and therefore the quality of the experimental results, a \emph{grid convergence study} was performed prior to the experiment.
 For this, the simulation with the highest discharge was repeated with successive grid refinements
-The value of the variable of interest, water height, was then compared between the different simulations to find at which grid resolution the solution has stabilized.
+The value of the variable of interest, water height, was then compared between the different simulations to find at which grid resolution the solution stabilizes.
 
 
 %-------------------------------------------------------------------------------
@@ -83,7 +84,7 @@ After generating the topography to be used for the experiment the simulation par
 
 The simulation was done with no rain and no infiltration.
 This way, water just enters the system through the top boundary and leaves it through the bottom one.
-For this a \emph{Neumann} boundary condition was chosen for at the bottom, while an \emph{imposed discharge} boundary condition was set at the inflow boundary.
+For this a \emph{Neumann} boundary condition was chosen at the bottom, while an \emph{imposed discharge} boundary condition was set at the inflow boundary.
 This boundary condition needs two values to be specified: the magnitude of the inflow and an imposed water height, which is used under supercritical flow conditions.
 The \num{25} inflow discharges used were obtained with the following \emph{Octave/MATLAB} code.\\
 
@@ -108,7 +109,7 @@ For the channel a uniform Manning roughness coefficient of \SI{0.03}{\s\per\m\to
 
 Since infiltration was not active for the simulations, all of the parameters relative to the soil model did not have to be set.
 
-The number of cells in x, and in y direction were defined according to the grid convergence study conducted.
+The number of cells in x, and in y direction were defined according to the grid convergence study explained here below.
 
 %...............................................................................
 \subsubsection{Conduct the grid convergence study}
@@ -145,7 +146,7 @@ Tab.~\ref{tab:mesh_study} summarizes the simulations main characteristics.
     4  & 20            & 200           & 4               & 40          & 0.20        & 0.20        & 10                      & 9.00 \\
     5  & 40            & 400           & 4               & 40          & 0.10        & 0.10        & 10                      & 69.60 \\
     6  & 80            & 800           & 4               & 40          & 0.05        & 0.05        & 10                      & 537.72 \\
-    7  & 100           & 1'000         & 4               & 40          & 0.04        & 0.04        & 10                      & 1'048.40 \\
+    7  & 100           & 1000         & 4               & 40          & 0.04        & 0.04        & 10                      & 1048.40 \\
     \bottomrule
   \end{tabular}
 \end{table} \seb{put runtime here? Or somehow separate it, or do not put it at all?}
@@ -155,7 +156,7 @@ It can be noticed that for $Ny =$ \numlist{20;40;80} the water depth is visibly 
 This means that the solution has not converged yet.
 Results for $Ny =$ \numlist{400;800;1000} are very close, since the lines are almost overlapping.
 $Ny =$ \num{200} shows a similar profile shape, but the height is still diverging quite a bit from the successive refinements.
-To better observe the variations between the different refinements, the $h$ value at a specific point was observed, and its convergence was studied.
+To better observe the variations between the different refinements, the $h$ value convergence at a specific point was studied.
 
 \seb{how to indicate units in graphs / diagrams? (unit)? [unit]? /unit?}
 \begin{figure}[h]
@@ -165,7 +166,8 @@ To better observe the variations between the different refinements, the $h$ valu
   \label{fig:water_profiles}
 \end{figure}
 
-In Fig.~\ref{fig:diff_center} the percent variation in the value of $h$ measured at the weir midpoint can be observed. Absolute $h$ measured values at this point can be observed in Fig.~\ref{fig:convergence_center} in the appendix. 
+In Fig.~\ref{fig:diff_center} the percent variation in the value of $h$ measured at the weir midpoint can be observed.
+Measured absolute $h$ values at this point can be observed in Fig.~\ref{fig:convergence_center} in the appendix. 
 At the \nth{4} refinement the percent variation is smaller than \SI{0.01}{\percent}.
 This variation is small enough to assert that the solution has satisfactory converged.
 For the experiment was therefore decided to use $(Nx, Ny) = (\num{40}, \num{400})$ corresponding to a grid resolution of \SI{0.10}{\m} in both x and y directions. The simulation runtime of $\approx \SI{1}{\hour} \SI{10}{\minute}$, required for this resolution is still quite acceptable.
@@ -182,15 +184,15 @@ For the experiment was therefore decided to use $(Nx, Ny) = (\num{40}, \num{400}
 \subsubsection{Extract the dataset}
 %...............................................................................
 The weir equation computes the discharge over the weir as a function of the water height $h_w$ under steady-state conditions.
-By analyzing the results it was assessed, that those are reached after $\approx \SI{50}{\s}$.
+These are reached after $\approx \SI{50}{\s}$ of simulation.
 After this time, small oscillation of the water surface are still present.
 To get rid of these, a time averaged free surface from $t = \SI{100}{\s}$ to $t = \SI{200}{\s}$ was computed.
 Fig.~\ref{fig:free_surfaces} presents the free surface profiles of the \num{25} experiments at steady-state conditions.
-The three lowest profiles correspond to the simulations run with the three lowest inflow discharge. 
+The three lowest profiles correspond to the simulation runs with the three lowest inflow discharges. 
 As initial condition the weir upstream side of the channel was filled with water to the weir's height.
 The fact that these three profiles are lower than the initial condition indicates that something went wrong with the simulation and water was lost from the top boundary.
-These three simulations were discarded for the continuation of the experiment.
-The height value for the remaining simulations was extracted \SI{1.2}{\m} before the weir base, to be sure not to be measuring in the acceleration zone, happening in proximity of the weir crest.
+These simulations were discarded for the continuation of the experiment.
+The height value for the remaining simulations was extracted \SI{1.2}{\m} before the weir base, to avoid observations in the acceleration zone, happening in proximity of the weir crest.
 At this point a space average over the channel breadth was taken.
 The procedure was repeated for all of the experiments.
 
@@ -205,14 +207,14 @@ The procedure was repeated for all of the experiments.
 %...............................................................................
 \subsubsection{Perform the fitting}
 %...............................................................................
-The weir equation (Eq.~\ref{eq:weir_eq}) was fitted to the dataset previously extracted by performing a linear regression.
-Data were linearized by taking the logarithm:
+The weir equation (Eq.~\ref{eq:weir_eq}) was fitted to the dataset previously extracted using linear regression.
+The original weir equation is non-linear with respect to the parameters, it was thus linearized by taking the logarithm:
 
 \begin{equation}
   \log(Q) = \log(C) + \log(L) + a \cdot \log(h_w)
 \end{equation}
 
-and the values of the parameters $a$ and $C$ were determined.
+\noindent and the values of the parameters $a$ and $C$ were determined.
 The performance of the fitted weir equation should be compared with that of a linear interpolation through the points and that of a cubic spline interpolation.
 Therefore, the points were interpolated with both methods.
 
@@ -220,19 +222,25 @@ Therefore, the points were interpolated with both methods.
 %...............................................................................
 \subsubsection{Compute the error}
 %...............................................................................
-To evaluate the performance of the three models, training points were successively removed, the models were trained on the remaining training points and it was tried to predict the missing points.
+To evaluate the performance of the three models, an increasing number of observations were removed, the models were trained on the remaining observations and it was tried to predict the ones removed.
 For an amount $k$ of points removed all possible combinations were tested. The number of model evaluations follows:
 
 \begin{equation}
   \binom{n}{k} = \frac{n!}{k!\left(n-k\right)!}
 \end{equation}
 
+\noindent Since this number grows very fast a subset of the initial dataset was used.
+This can be found in Tab.~\ref{tab:dataset_error} in the appendix.
+The first and last points of the dataset were kept during all the cross-validation experiment in order to avoid wild extrapolation at the boundaries of the predictor space.
+From the remaining \num{12} points all possible combinations of \num{1} to \num{10} points were removed.
+The mean squared error (MSE) of every combination was computed and the average MSE for the removal of \num{1} up to \num{10} points was taken.
+
 
 %-------------------------------------------------------------------------------
 \subsection{Results and discussion}
 %-------------------------------------------------------------------------------
 
-Present and discuss briefly the results of this toy emulator.\\
+
 
 
 %-------------------------------------------------------------------------------
@@ -356,7 +364,7 @@ For the bottom boundary a \textit{Neumann boundary condition} was selected, allo
 
 %...............................................................................
 \subsubsection{Extracting the datasets}
-...............................................................................
+%...............................................................................
 This data constitute the \emph{training} dataset for the emulator.
 A \emph{test} dataset and a \emph{validation} dataset were also generated and can be found in the Appendix~\ref{Appendix}. \seb{verify if they are really added}
 
