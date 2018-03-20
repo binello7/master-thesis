@@ -79,9 +79,8 @@ lytrn = log10 (ytrn);
 
 ## Perform linear regression
 theta = polyfit (lxtrn, lytrn, 1);
-C = 10^theta(2);
+C = 10^theta(2) / B;
 a = theta(1);
-mu = C / (2/3 * B * sqrt(2*9.81));
 
 
 # define evaluation points
@@ -89,11 +88,11 @@ xp = linspace (0, xmax+0.1*xmax, 200);
 yp = zeros (length (xp), 3);
 
 # evaluate linear regression on xp
-yp(:,1) = 10.^polyval(theta, xp); % this should be f_Qw(C,xp,a);
+yp(:,3) = 10.^polyval(theta, log10 (xp)); % this should be f_Qw(C,xp,a);
 
 # perform linear and spline interpolations
-yp(:,2) = interp1 (xtrn, ytrn, xp, 'linear', 'extrap');
-yp(:,3) = interp1 (xtrn, ytrn, xp, 'spline', 'extrap');
+yp(:,1) = interp1 (xtrn, ytrn, xp, 'linear', 'extrap');
+yp(:,2) = interp1 (xtrn, ytrn, xp, 'spline', 'extrap');
 
 
 ## Compute cross-validation error
@@ -146,7 +145,8 @@ if !exist('data_RMSE.dat','file')
       %a_e = theta_e(1);
       
       ye_pred = zeros (length(xe_tst),3);
-      ye_pred(:,3) = 10.^polyval (theta, lxe_tst); % same as f_Qw (C_e, xe_tst, a_e);
+      ye_pred(:,3) = 10.^polyval (theta, lxe_tst); % same as f_Qw (C_e, xe_tst,
+                                                   %               a_e);
       ye_pred(:,1) = interp1 (xe_trn, ye_trn, xe_tst, 'linear');
       ye_pred(:,2) = interp1 (xe_trn, ye_trn, xe_tst, 'spline');
       for k = 1:3
@@ -163,20 +163,20 @@ std_rmse = cell2mat (cellfun (@std, rmse, 'uniformOutput', false).');
 mean_mae = cell2mat (cellfun (@mean, mae, 'uniformOutput', false).');
 std_mae = cell2mat (cellfun (@std, mae, 'uniformOutput', false).');
 
-break
 save ('data_RMSE.dat', 'mean_rmse');
 
 
+#-------------------------------------------------------------------------------
 ## Plot the results
-fontsize1 = 13;
-fontsize2 = 14;
+fontsize1 = 10;
+fontsize2 = 11;
 
 # plot 1: different fittings all data
 f = 1;
 figure (f)
 f+=1;
 plot (ytrn, xtrn, 'ok')
-col = {'b', 'r', 'g'};
+col = {'r', 'g', 'b'};
 
 hold on
 for i = 1:3
@@ -184,11 +184,13 @@ for i = 1:3
 endfor
 hold off
 
-l1 = legend ('training dataset', sprintf ('weir equation\n(\\mu = %0.2f, a = %0.2f)', mu, a), 'lin. interp.', 'cub. spl. interp.', 'location', 'northwest');
+l1 = legend ('training dataset', 'lin. interp.', 'cub. spl. interp.', ...
+             sprintf ('weir equation\n(C = %0.2f, a = %0.2f)', C, a), ...
+             'location', 'northwest');
 set (l1, 'fontsize', 12)
 axis tight;
-xlabel ('Q [m^3/s]', 'fontsize', fontsize2);
-ylabel ('h_w [m]', 'fontsize', fontsize2)
+xlabel ('Q / m^3/s', 'fontsize', fontsize2);
+ylabel ('h_w / m', 'fontsize', fontsize2)
 set (gca, 'fontsize', fontsize1)
 print ('fitting_results.png', '-r300')
 
@@ -199,7 +201,8 @@ figure (f)
 f+=1;
 semilogy (length(idx_short)-((length(mean_rmse_cm)-1:-1:0)-4).',mean_rmse_cm, col)
 axis tight
-l2 = legend ('weir equation', 'lin. interp.', 'cub. spl. interp.', 'location', 'northwest');
+l2 = legend ('lin. interp.', 'cub. spl. interp.', 'weir equation', ...
+             'location', 'northwest');
 set (l2, 'fontsize', 12)
 xlabel ('# of points', 'fontsize', fontsize2)
 #xlabel ('left-out points', 'fontsize', fontsize2)
