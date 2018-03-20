@@ -10,7 +10,7 @@
 %:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 %  * present it as a didactic example
 %  * use it to compare GP (prior knowledge) with e.g. deep neural networks: how many points can we have?
-%  * mention grid convergence study (results go in the appendix)
+%  * mention grid convergence study (results go in the Appendix)
 %  * mention problem with FullSWOF boundary conditions
 %  * define well results and methodology
 %  * such an emulator can be improved -> modified to compute slope in order to have a given mu value
@@ -50,7 +50,7 @@ After some time the simulation reaches the \emph{steady-state conditions}: inflo
 At this point the value $h_w$ was extracted and was coupled with the discharge value $Q$ generating it.
 \num{25} experiments were conducted with $Q$ linearly spaced in the range \SIrange{0.1}{10}{\cubic\meter\per\second}.
 All simulated pairs $(Q, h_w)$ constitute an observational \emph{predictor-response} set to which the weir equation was fitted.
- \seb{give e.g. in appendix the discharge values used?}\\
+ \seb{give e.g. in Appendix the discharge values used?}\\
 
 In order to ensure the convergence of the simulator solution, and therefore the quality of the experimental results, a \emph{grid convergence study} was performed prior to the experiment.
 For this, the simulation with the highest discharge was repeated with successive grid refinements
@@ -68,7 +68,7 @@ The channel cross section is a rectangle of \SI{4}{\meter} width and the weir ha
 Fig.~\ref{fig:weir_scheme} shows the geometry of the channel.
 The weir has a crest width of \SI{2}{\meter} and therefore belongs to the \emph{broad-crested} class. The $C$ coefficient for broad-crested weirs with vertical walls and \SI{2}{\meter} crest width varies between \num{1.36} and \num{1.53}, depending on the water height $h_w$ \autocite{brown_urban_2009}.
 We therefore expect a value close to this.
-A 3D overview of the channel can be found in the appendix \ref{app:channel_topography} \seb{add a 3D plot of the channel?}.
+A 3D overview of the channel can be found in the Appendix \ref{app:channel_topography} \seb{add a 3D plot of the channel?}.
 
 \begin{figure}[h]
   \centering
@@ -167,7 +167,7 @@ To better observe the variations between the different refinements, the $h$ valu
 \end{figure}
 
 In Fig.~\ref{fig:diff_center} the percent variation in the value of $h$ measured at the weir midpoint can be observed.
-Measured absolute $h$ values at this point can be observed in Fig.~\ref{fig:convergence_center} in the appendix. 
+Measured absolute $h$ values at this point can be observed in Fig.~\ref{fig:convergence_center} in the Appendix. 
 At the \nth{4} refinement the percent variation is smaller than \SI{0.01}{\percent}.
 This variation is small enough to assert that the solution has satisfactory converged.
 For the experiment was therefore decided to use $(Nx, Ny) = (\num{40}, \num{400})$ corresponding to a grid resolution of \SI{0.10}{\m} in both x and y directions. The simulation runtime of $\approx \SI{1}{\hour} \SI{10}{\minute}$, required for this resolution is still quite acceptable.
@@ -220,7 +220,7 @@ Therefore, the points were interpolated with both methods.
 
 
 %...............................................................................
-\subsubsection{Compute the error}
+\subsubsection{Compute the error}\label{sec:compute_error}
 %...............................................................................
 To evaluate the performance of the three models, an increasing number of observations were removed, the models were trained on the remaining observations and it was tried to predict the ones removed.
 For an amount $k$ of points removed all possible combinations were tested. The number of model evaluations follows:
@@ -230,10 +230,10 @@ For an amount $k$ of points removed all possible combinations were tested. The n
 \end{equation}
 
 \noindent Since this number grows very fast a subset of the initial dataset was used.
-This can be found in Tab.~\ref{tab:dataset_error} in the appendix.
+This can be found in Tab.~\ref{tab:dataset_error} in the Appendix.
 The first and last points of the dataset were kept during all the cross-validation experiment in order to avoid wild extrapolation at the boundaries of the predictor space.
 From the remaining \num{12} points all possible combinations of \num{1} to \num{10} points were removed.
-The mean squared error (MSE) of every combination was computed and the average MSE for the removal of \num{1} up to \num{10} points was taken.
+The root mean squared error (RMSE) of every combination was computed and the average RMSE for the removal of \num{1} up to \num{10} points was taken.
 
 
 %-------------------------------------------------------------------------------
@@ -278,10 +278,88 @@ The value obtained for $C$ assumes that $C$ does not vary with $h_w$.
 Moreover, the weir used for the experiment has a trapezoidal cross section instead of a rectangular one.
 \cite{tracy_discharge_1957} investigated how the coefficient $C$ varies with different weir shapes.
 For a weir with sloping walls the $C$ coefficient increases, because the head losses in comparison to one with vertical walls are lower.
-The difference in the $C$ coefficient observed here can be explained by this phenomenon.
+The difference in the $C$ coefficient observed here can be explained by this phenomenon.\\
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/fitting_errors.png}
+  \caption{Mean RMSE of the three different models as a function of the number of points used to train the models.}
+  \label{fig:fitting_errors}
+\end{figure}
+
+In Fig.~\ref{fig:fitting_errors} the RMSE obtained by cross-validation as explained in Sec.~\ref{sec:compute_error} are displayed.
+No matter how many points are used, the linear interpolation always performs at worst.
+By increasing the number of points its performance improves quite rapidly, but not enough to reach that of the other two models.
+The process generating the points does not have a linear behavior.
+Despite the improvement of its performance, this model will never approximate the process generating the points as well as the others.
+
+The results for the cubic spline interpolation confirm what was already observed in the previous plot.
+This is a good model at mimicking the process originating the points.
+Its performance goes from slightly worse than that of the weir equation model up to almost \num{2} order of magnitude better.
+By reducing the number of points, the error of this model increases exponentially.
+Thanks to its flexibility, the cubic spline interpolation shows very small errors when fitted with many points.
+This model, by definition, interpolates through all of the training points.
+If the training points are close to each other, the chance of interpolating an "unseen" point in the middle of two others, or at least to pass very close are very high.
+By increasing this distance these chances decrease quite fast, since the cubic spline interpolation is not a very suitable model to describe the behavior of the process.
+For this reason the error increases exponentially.
+
+The weir equation model used minimizes the least-square-error of the fit, without necessarily interpolating through the points.
+It is a very inflexible model, only two parameters can be varied to improve the quality of fit, while many more observations are available.
+For this reason the interpolation through the points cannot be achieved, unless the observations were originated exactly by the model chosen.
+The results shown here are the best which can be achieved with it.
+Because interpolation cannot be obtained, it error decreases very slowly with increasing number of points.
+The inflexibility of this model represents its weakness but at the same time its strength.
+This is in fact a very robust model, which still produces good results when few observations are available.
+It shows almost no decline in performance with reducing number of points.
+
+Although its performance is outperformed by the cubic spline interpolation, when more than \num{4} observations are taken, use of this model can still be considered: the error, in spite of being higher than the one obtained with the cubic spline interpolation, is still very little compared with the values of $h$ measured.
+In a practical application in hydraulics the difference between the two models could be neglected and one could opt for the most stable one, to stay on the safe side when few points are available.
+Fig.~\ref{fig:boxplot_models} in the Appendix summarizes the performance of the three models when using $[\numrange{4}{13}]$ \# of points.
+Here it can be seen that the RMSE for the weir equation is higher on average respect to the cubic spline interpolation but still very low (in the order of $\approx \SI{1}{\centi\meter}$).
+Its variation is almost inexistent, the box plot is practially described by a line.\\
+
+A closer comparison between the two best models (Fig.~\ref{fig:fitting_std}) shows new interesting features.
+The cubic spline interpolation is very sensitive to which points are removed when many are removed.
+The standard deviation on its RMSE by changing which observations are removed increases by a factor of \num{60} when \num{4} resp. \num{13} points are used.
+The opposite is observed for the weir equation model.
+This is more sensitive to which observation is removed when only few of them are removed and becomes less sensitive as fewer observations are used to fit the model.
+However, the variation here when \num{4} resp. \num{13} points are used is only $\approx \num{6} \times$.
+
+When considering this the weir equation can still do better when up to \num{6} points are used, and not just by \num{4} as it was indicated by Fig.~\ref{fig:fitting_errors}.
+In the weir equation model proposed by \cite{brown_urban_2009}, the coefficient $C$ varies as a function of $h_w$.
+The shorter the weir width, the wider becomes the range of values for the $C$ coefficient.
+If a functional relationship $f:h_w \mapsto C$ had been established, then a weir equation model better fitting the data would have been obtained.
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/fitting_std.png}
+  \caption{Closer comparison of the weir equation and the cubic spline interpolation models.}
+  \label{fig:fitting_std}
+\end{figure}
+
+
+From this example the importance of the equilibrium \emph{prior knwoledge} -- \emph{data availability} can be seen.
+Some "interpolation methods" \seb{is it correct "interpolation methods"? how could I call them otherwise?}, e.g. \emph{neural networks} in machine learning (ML), are very data-greedy.
+These can perform very well when a big training dataset is available, but fail if not enough data is available.
+When obtaining new observations is computationally very costly, like it is the case with some simulations, "interpolation methods" allowing the encoding of prior knowledge can turn out to be very useful.
+Gaussian processes (GP) represent a good example.
+When the physical laws governing a process are known, i.e. its partial differential equations, it can be tried to encode them in the GP used.
+If the information embedded is correct the result will be very similar to the one observed with the weir equation: it does not matter how many points are available, the results will still be good.
+If the model of the process is found, no more observation are needed.
+These are simply given by the evaluation of the model.
+
+Moreover the technique just explained can give further insight and can help us learn new functional relationships about the process which is studied.
+If the GP chosen performs good, then the functional relationships encoded in it are somehow closely linked with the process itself.
+New relationships and dependencies between predictors used and responses observed can be established and we can therefore shed new light on the mechanistic of the process.
 
 
 
+%finish with take home message
+
+
+
+\seb{should I add a plot of the residues, to see if the weir equation is the "actual model" generating the points?}
 
 %-------------------------------------------------------------------------------
 %An \textit{early flood warning tool} in an essential component of an \textit{early flood warning system}.
