@@ -36,7 +36,7 @@ In addition to the parametric model (weir equation) two non-parametric local tec
 
 
 %-------------------------------------------------------------------------------
-\subsection{Brief experiment description}
+\subsection{Brief experiment description}\label{sec:cs1_brief_description}
 %-------------------------------------------------------------------------------
 
 \seb{explain the experiment very generally. Put the section title or leave it with no section title with the upper part?}
@@ -239,6 +239,46 @@ The mean squared error (MSE) of every combination was computed and the average M
 %-------------------------------------------------------------------------------
 \subsection{Results and discussion}
 %-------------------------------------------------------------------------------
+% * importance of prior knowledge -> even if few points we can obtain good
+%   models. Not the case without (lin. interp, spline interp.)
+
+
+In Fig.~\ref{fig:simulations_results} the $(Q, h_w)$ pairs extracted from the simulations are plotted.
+The gap in the lower part of the plot is due to the data that had to be discarded.
+These points represent the dataset which was used to fit the weir equation and the other two models.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/simulations_results.png}
+  \caption{Plot of the $(Q, h_w)$ pairs extracted from the simulations. Points corresponding to the unsuccessful simulations have already been discarded. This produces the gap visible in the left part of the plot.}
+  \label{fig:simulations_results}
+\end{figure}
+
+The fit of the different models to the dataset is displayed in Fig.~\ref{fig:fitting_results}.
+It can immediately be observed that the linear interpolation fails to capture the initial trend shown by the weir equation and the cubic spline interpolation.
+This is due to two main reasons.
+The first one is that the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
+Moreover, in this region the weir equation presents its maximum curvature.
+This makes the linear interpolation diverge even faster.
+
+From the second to the last point all models seem to perform good: the three lines are almost perfectly overlaying, meaning that all give very similar results.
+Some divergences can be observed in proximity of data points, especially between the weir equation and the other two models: this is due to the fact that the two interpolations \emph{interpolate} the points, whereas the curve obtained for the weir equation represents the best linear fit to the points (\mintinline{octave}{polyfit (x, y, 1)}).
+This minimizes the least-squares-error of the fit \autocite{eaton_gnu_2016}, which does not necessarily means interpolating through the points.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/fitting_results.png}
+  \caption{Fit of the three models to the simulated dataset. In blue the weir equation with $C = \num{1.65}$ and $a = \num{1.59}$, in red the linear interpolation through the points and in green the cubic spline interpolation.}
+  \label{fig:fitting_results}
+\end{figure}
+
+For the fitting of the weir equation the values $C = 1.65$ and $a = 1.59$ were found.
+As mentioned in Sec.~\ref{sec:cs1_brief_description} for a weir of \SI{2}{\m} breadth and vertical walls $C$-values in the range $[\numrange{1.36}{1.53}]$ are expected, depending on the magnitude of $h_w$.
+The value obtained for $C$ assumes that $C$ does not vary with $h_w$.
+Moreover, the weir used for the experiment has a trapezoidal cross section instead of a rectangular one.
+\cite{tracy_discharge_1957} investigated how the coefficient $C$ varies with different weir shapes.
+For a weir with sloping walls the $C$ coefficient increases, because the head losses in comparison to one with vertical walls are lower.
+The difference in the $C$ coefficient observed here can be explained by this phenomenon.
 
 
 
