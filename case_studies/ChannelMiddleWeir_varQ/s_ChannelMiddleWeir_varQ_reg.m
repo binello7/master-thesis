@@ -17,6 +17,7 @@
 ## Created: 2018-03-08
 
 #clear all
+pkg load statistics
 
 load ('input_Q.dat');
 load ('extracted_data.dat');
@@ -184,10 +185,10 @@ for i = 1:3
 endfor
 hold off
 
-l1 = legend ('training dataset', 'lin. interp.', 'cub. spl. interp.', ...
+legend ('training dataset', 'lin. interp.', 'cub. spl. interp.', ...
              sprintf ('weir equation\n(C = %0.2f, a = %0.2f)', C, a), ...
              'location', 'northwest');
-set (l1, 'fontsize', 12)
+set (gco, 'fontsize', 12)
 axis tight;
 xlabel ('Q / m^3/s', 'fontsize', fontsize2);
 ylabel ('h_w / m', 'fontsize', fontsize2)
@@ -195,18 +196,18 @@ set (gca, 'fontsize', fontsize1)
 print ('fitting_results.png', '-r300')
 
 
-# plot 2: fitting errors
-mean_rmse_cm = 100 * mean_rmse; # convert error in cm
+# plot 2: error plot without std
 figure (f)
 f+=1;
-semilogy (length(idx_short)-((length(mean_rmse_cm)-1:-1:0)-4).',mean_rmse_cm, col)
+npoints = length(indexes) - (1:n2).' + 2;
+semilogy (npoints, mean_rmse, col)
 axis tight
-l2 = legend ('lin. interp.', 'cub. spl. interp.', 'weir equation', ...
-             'location', 'northwest');
-set (l2, 'fontsize', 12)
+legend ('lin. interp.', 'cub. spl. interp.', 'weir equation', ...
+             'location', 'northeast');
+set (gco, 'fontsize', 12)
 xlabel ('# of points', 'fontsize', fontsize2)
 #xlabel ('left-out points', 'fontsize', fontsize2)
-ylabel ('RMSE [cm]', 'fontsize', fontsize2)
+ylabel ('RMSE / m', 'fontsize', fontsize2)
 
 #xtickn = 1:length (mean_rmse);
 #xtickl = num2cell (xtickn);
@@ -215,4 +216,65 @@ ylabel ('RMSE [cm]', 'fontsize', fontsize2)
 #endfor
 #set (gca, 'xtick', xtickn, 'xticklabel', xtickl, 'fontsize', fontsize1);
 print ('fitting_errors.png', '-r300')
+
+
+# plot 3: error plot with std
+eu = std_rmse(:,2:3);
+el = eu;
+mask_l = mean_rmse(:,2:3) - eu < 0;
+el(mask_l) = mean_rmse(:,2:3)(mask_l);
+figure (f)
+f+=1;
+e = errorbar (repmat (npoints,1,2), mean_rmse(:,2:3), el, eu, '~');
+for i = 1:2
+  set (e(i), 'color', col{i+1});
+endfor
+#set(gca, 'yscale', 'log');
+axis tight;
+legend ('cub. spl. interp.', 'weir equation', 'location', 'northeast');
+xlabel ('# of points', 'fontsize', fontsize2);
+ylabel ('RMSE / m', 'fontsize', fontsize2);
+print ('fitting_std.png', '-r300')
+
+
+# plot 4: boxplot
+figure (f)
+f+=1;
+bp = boxplot (mean_rmse);
+axis ([0.5 3.5]);
+set (gca, 'xtick', [1 2 3], 'xticklabel', ... 
+    {'lin. interp.', 'cub. spl. interp.', 'weir equation'});
+ylabel ('RMSE / m')
+print ('boxplot_models.png', '-r300');
+
+
+
+
+
+## shadow plot
+#rgb = {[255 0 0]/255; [0 255 0]/255; [0 0 255]/255};
+#ergb = {[255 77 77]/255; [77 255 77]/255; [77 77 255]/255};
+#frgb = {[255 179 179]/255; [179 255 179]/255; [179 179 255]/255};
+
+#shadow  = [mean_rmse + 2*std_rmse; flipdim(mean_rmse - 2*std_rmse,1)];
+#shadow(shadow<0) = 0;
+#figure (f)
+#f+=1;
+#hold on
+#for i = 1:3
+#  hf = fill ([npoints; flipdim(npoints,1)], shadow(:,i), frgb{i});
+##  plot (npoints, mean_rmse(:,i), rgb{i})
+#endfor
+#hold off
+ 
+
+
+
+
+
+
+
+
+
+
 
