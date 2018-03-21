@@ -24,19 +24,26 @@ pkg load optim
 load ('input_Q.dat');
 load ('extracted_data.dat');
 
-i = 1;
-## Remove unusable experiments
-while i <= size (H)(2)
-  if weircenter_head(i) < 0.3
-    weircenter_head(i) = [];
-    Qin(i)             = [];
-    H(:,i)             = [];
-    HZ(:,i)            = [];
-    h0(i)              = [];
-    v0(i)              = [];
-  endif
-  i+=1;
-endwhile
+## Functions
+hweir    = @(Q, p) (Q / (2 /3 * p(1) * sqrt (2*9.81) * B)).^(p(2));
+hweir_ca = @(Q, p) (Q / (2 /3 * p * sqrt (2*9.81) * B)).^(2/3);
+iswater  = @(z,h,tol) abs(z-h)>tol;
+water    = @(z,h,tol=5e-3)ifelse(iswater(z,h,tol), h, NA);
+
+
+#i = 1;
+### Remove unusable experiments
+#while i <= size (H)(2)
+#  if weircenter_head(i) < 0.3
+#    weircenter_head(i) = [];
+#    Qin(i)             = [];
+#    H(:,i)             = [];
+#    HZ(:,i)            = [];
+#    h0(i)              = [];
+#    v0(i)              = [];
+#  endif
+#  i+=1;
+#endwhile
 
 ## Input data
 Qin   = abs (Qin);
