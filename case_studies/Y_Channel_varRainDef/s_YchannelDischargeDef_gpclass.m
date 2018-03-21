@@ -18,10 +18,10 @@
 
 #clear all
 
-#pkg load gpml
-addpath ('../../mfiles/functions');
-addpath ('~/Resources/gpml-matlab-v4.1-2017-10-19');
-startup
+pkg load gpml
+#addpath ('../../mfiles/functions');
+#addpath ('~/Resources/gpml-matlab-v4.1-2017-10-19');
+#startup
 
 ## Load data
 #
@@ -134,14 +134,15 @@ lp = gp (hyp, args{:}, x_class, y_class, [ri_eval(:) ss_eval(:)], ones(nri*nss, 
 red = t_Qtrain < 420;
 green = t_Qtrain >= 420;
 figure (1)
+contourf(ri_eval, ss_eval, reshape (exp (lp), size (ri_eval)), [0.49 0.5 0.51]);
+hold on;
 plot (ri_train(green), ss_train(green), 'go', 'markerfacecolor', 'g',...
       ri_train(red), ss_train(red), 'ro', 'markerfacecolor', 'r');
-hold on;
 plot (rain_intensities_svm(t_Qclass>=420), soil_saturations_svm(t_Qclass>=420), '^g', 'markerfacecolor', 'g')
 plot (rain_intensities_svm(t_Qclass<420), soil_saturations_svm(t_Qclass<420), '^r', 'markerfacecolor', 'r')
-contourf(ri_eval, ss_eval, reshape (exp (lp), size (ri_eval)), [0.49 0.5 0.51]);
-colorbar
 hold off
+#colorbar
 xlabel ('I [mm/h]')
 ylabel ('\theta_i [-]')
+print ('classifier.png', '-r300')
 
