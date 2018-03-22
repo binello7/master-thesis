@@ -117,13 +117,13 @@ The number of cells in x, and in y direction were defined according to the grid 
 %...............................................................................
 \seb{better to keep a separated section, including methods and results like done here, or split it up under "material and methods" and "results and discussion"?}
 
-\paragraph{Introduction} Accuracy of simulation results, as well as simulation runtime, are dependent on the grid resolution chosen.
+Accuracy of simulation results, as well as simulation runtime, are dependent on the grid resolution chosen. \seb{turn the sentence around in order to highlight the point of the paragraph: grid resolution.}
 In order to find an appropriate grid resolution, a grid convergence study was performed.
 Successive refinements were tested in order to find out from which grid resolution the solution stabilizes, becoming independent from the resolution used.
 A criterion has to be established, in order to decide when the solution has converged to a satisfactory result.
 If the Grid Convergence Index (GCI) is used, then a GCI lower than \SI{5}{\percent} for the last refinement is usually taken as a criterion \autocite{ali_grid_2009}.
 
-\paragraph{Set-up} For the mesh study \num{7} simulations were run by varying the grid resolution ($Nx$, $Ny$) only. \seb{those are mentioned in the "list of symbols". Does this help understand what was varied?}
+For the mesh study \num{7} simulations were run by varying the grid resolution ($Nx$, $Ny$) only. \seb{those are mentioned in the "list of symbols". Does this help understand what was varied?}
 Topography and parameters used are those mentioned in the two preceding sections.
 Squared cells were used and the inflow discharge was set to the highest discharge value of the experiment, namely \SI{10}{\cubic\meter\per\second}.
 This discharge is the one generating the highest flow velocities.
@@ -152,7 +152,7 @@ Tab.~\ref{tab:mesh_study} summarizes the simulations main characteristics.
   \end{tabular}
 \end{table} \seb{put runtime here? Or somehow separate it, or do not put it at all?}
 
-\paragraph{Results} Fig.~\ref{fig:water_profiles} shows the free surface profiles of the \num{7} simulations at steady-state conditions along the channel axis.
+Fig.~\ref{fig:water_profiles} shows the free surface profiles of the \num{7} simulations at steady-state conditions along the channel axis.
 It can be noticed that for $Ny =$ \numlist{20;40;80} the water depth is visibly higher than for further refinements, and its shape quite varying.
 This means that the solution has not converged yet.
 Results for $Ny =$ \numlist{400;800;1000} are very close, since the lines are almost overlapping.
@@ -238,7 +238,7 @@ The root mean squared error (RMSE) of every combination was computed and the ave
 
 
 %-------------------------------------------------------------------------------
-\subsection{Results and discussion}
+\subsection{Results}
 %-------------------------------------------------------------------------------
 % * importance of prior knowledge -> even if few points we can obtain good
 %   models. Not the case without (lin. interp, spline interp.)
@@ -345,7 +345,7 @@ Some "interpolation methods" \seb{is it correct "interpolation methods"? how cou
 These can perform very well when a big training dataset is available, but fail if not enough data is available.
 When obtaining new observations is computationally very costly, like it is the case with most simulations, "interpolation methods" allowing the encoding of prior knowledge can turn out to be very useful.
 Gaussian processes (GP) represent a good example.
-When the physical laws governing a process are known, i.e. its partial differential equations, it can be tried to encode them in the GP used.
+When the physical laws governing a process are known, i.e. its partial differential equations \seb{linear partial differential eq (to put them in the covariance function, there is a mapping)} the non-linear ones can be added in the mean function, it can be tried to encode them in the GP used.
 If the information embedded is correct, the result will be very similar to the one observed with the weir equation case study: it does not matter how many points are available to perform the fitting, the results will still be good.
 If the right model for the process is found, no more observation are needed.
 These are simply given by the evaluation of the model itself.
@@ -354,13 +354,14 @@ Moreover the technique just explained can give further insight and can help us l
 If the GP chosen performs good, then the functional relationships encoded in it are somehow closely linked with the process itself.
 New relationships and dependencies between predictors used and responses observed can be established and we can therefore shed new light on the mechanistic of the process.
 
-
-
-%finish with take home message
-
-
-
 \seb{should I add a plot of the residues, to see if the weir equation is the "actual model" generating the points?}
+
+%-------------------------------------------------------------------------------
+\subsection{Discussion}
+%-------------------------------------------------------------------------------
+%* finish with take home message
+
+
 
 %-------------------------------------------------------------------------------
 %An \textit{early flood warning tool} in an essential component of an \textit{early flood warning system}.
@@ -403,13 +404,15 @@ New relationships and dependencies between predictors used and responses observe
 %===============================================================================
 
 With this case study it was decided to address a complex hydrological problem by means of emulation.
-The problem we want to solve is estimating the time needed for a channel conveying water from a catchment to reach a certain threshold discharge ($Q_!$) at its outlet as a function of rain intensity and initial soil saturation.
+The problem we want to solve is estimating the time needed for a channel conveying water from a catchment to reach a certain threshold discharge ($Q_!$) at a specific point along the channel when subject to different rains and when a different initial state of the soil is found.
+With the term "rain event" we are going to consider both the actual rain and the initial conditions of the soil.
+Two events characterized by the same rain but different initial conditions  of the soil represent two different rain events. The parameters chosen to characterize a rain event are \emph{rain intensity} and \emph{initial soil saturation}.
 
 For the experiment a synthetic catchment topography was used, which at first glance can make the case study look very abstract.
 In reality the emulator is just exploiting the catchment specific behavior, which is of course different from one catchment to another, but the methodology applied here could be applied to whatever catchment.
 The emulator developed here, with the appropriate adjustments, could be exploited as an \emph{early flood warning tool}.
 
-As for the previous example, the simulations were run with the open source software \textit{FullSWOF\_2D-v.1.07.00} \autocite{delestre_fullswof:_2014} \seb{put the citation every time that it is mentioned?}, while the input files necessary for the simulations were prepared with \textit{GNU Octave 4.2.1} \autocite{octave_community_gnu_2018} \seb{how to cite this?} with the aid of the package \textit{fswof2d}.
+As for the previous example, the simulations were run with the open source software \citetalias{delestre_fullswof:_2017}, while the input files necessary for the simulations were prepared with \citetalias{octave_community_gnu_2018} with the aid of the package \textit{fswof2d} developed.
 
 
 %-------------------------------------------------------------------------------
@@ -537,52 +540,145 @@ $Q_!$ was set to \SI{10}{\percent} \seb{why this value? should I give any explan
 The time at which this value is exceeded for the first time was extracted from every hydrograph and forms the dataset for the \emph{regression emulator}.
 Another dataset for the \emph{classification emulator} was created by assigning the value \num{-1} to rain events not reaching the threshold and \num{1} to all of the others.
 
+%...............................................................................
+\subsubsection{Building-up the classifier}
+%...............................................................................
+In order to ease the task of computing the time-to-threshold we decided to build a classifier.
+The classifier should distinguish whether a rain event is going to reach the threshold discharge or not.
+Only the events classified as "reaching the threshold" are given to the emulator to compute when this will happen.
+To train the classifier we used the $\num{-1}/\num{1}$ dataset which we extracted in the previous step.
+We tested different classifier before finding a satisfying one.
+To visually inspect the performance of each different classifier, we plotted the dataset \seb{put reference to plot in the results} in an initial soil saturation vs. rain intensity plot.
+Rain events reaching the threshold are marked with red dots, while rain events not reaching it with green dots.
+We built the classifier using GP---this with the help of the package \citetalias{rasmussen_gaussian_2010} for \citetalias{octave_community_gnu_2018}.
+The package offers a set of mean functions, of covariance functions and likelihood functions as well as prior distribution, inference methods and utility functions that can be used to apply GP.
+In addition to the given mean and covariance functions, new functions can be created by composition of others.
+New functions can be defined as the sum, the product, the power, etc. of standard ones.
+To specify a GP a mean and a covariance function are needed.
+The likelihood function defines the probability of the observations given the GP \autocite{rasmussen_gaussian_2010}.
+All of these three may have hyperparameters, whose value need to be determined.
+Initial values have to be attributed to all of the hyperparameters needed, then the real value must be found by optimization with the function \emph{minimize} of the same package.
+The data seemed to be linearly separable, therefore we used the "meanLinear"\seb{should I use inverted commas, italics or what?} mean function.
+We combined this with different covariance functions and trained the models with the "minimize" function, by using a "likLogistic" likelihood function and the Expectation Propagation (EP) as inference method.
+The use of the "meanLinear" mean function with a "covConst" covariance functions gave good results: the dataset could be linearly separated (cf. Fig~\ref{fig:classifier_trn} in the Appendix). \seb{put this in the appendix or in the results??}
+Infinite different curves could define the frontier between events reaching and not reaching the threshold.
+After we guessed this first border we added new data points in its proximity by running new simulations.
+With these we followed the same procedure explained above to extract their $-1/1$ output.
+We added these new observations to the classifier's training dataset and plotted them as "triangles", in order to distinguish them from the previous ones.
+The new data points suggested that the boundary is actually not linear; it has a curvy shape instead.
+We therefore chose a curvy mean function and combined it with various covariance functions.
+After training many models the following set of mean, covariance and likelihood functions combined with the use of EP inference method showed the best results:\\
 
-\subsubsection{Building-up the classification emulator}
+\inputminted[
+  fontsize=\footnotesize,
+  firstline=10,
+  lastline=17,
+  numbersep=2pt,
+  gobble=0,
+  frame=none,
+  bgcolor=light-gray,
+  framesep=10mm
+]{octave}{code.m}\\
+
+\noindent We trained the model more times since one point could still not be correctly separated and the negative log marginal likelihood could still be further minimized.
+We continued until the negative log marginal likelihood could not be further minimized.
+The classifier which resulted from this process is the one we took as our final classifier. \seb{could this separate all points correctly??}
 
 
-\subsubsection{Building-up the regression emulator}
+%...............................................................................
+\subsubsection{Building-up the emulator}
+%...............................................................................
+The procedure we used to build the time-to-threshold emulator is very similar to the one used for the classifier.
+We plotted the \num{50}-points dataset as red dots in a 3D graph, where the x and y axis are given by the rain intensity $I$ and the initial soil saturation $\theta_i$ respectively.
+The z-axis shows the response of every rain event, namely the time needed for the rain event to reach the given threshold, which we previously extracted.
+We created a $(I, \theta_i)$ grid where to evaluate the emulator:\\
+
+\inputminted[
+  fontsize=\footnotesize,
+  firstline=22,
+  lastline=29,
+  numbersep=2pt,
+  gobble=0,
+  frame=none,
+  bgcolor=light-gray,
+  framesep=10mm
+]{octave}{code.m}\\
+
+\noindent Then we performed a GP regression on the training dataset using the \citetalias{rasmussen_gaussian_2010} package.
+As for the classifier, we tested different combinations of mean, covariance and likelihood functions with arbitrary initial hyperparameters values.
+As an inference method we used the "infExact" one.
+We minimized the negative log marginal likelihood with the "minimize" function, obtained the optimized values for the parameters and evaluated the obtained model on the $(I, \theta_i)$ grid which we previously created.
+Since it was sometimes difficult to establish which GP was performing better we created a new dataset, the \emph{test dataset}.
+We produced the test dataset the same way we generated the training one, but using different $(I, \theta_i)$ values.
+The values of $I$ and $\theta_i$ used can be produced with the code found in Sec.~\ref{sec:test_dataset} of the Appendix.
+The test dataset has \num{36} points given by all possible combinations of these values.
+We then added the test dataset to the plot and used it to evaluate the performance of the models far from the observations used for the training.
+With these points guiding us we established that the model producing the best results was:\\
+
+\inputminted[
+  fontsize=\footnotesize,
+  firstline=46,
+  lastline=53,
+  numbersep=2pt,
+  gobble=0,
+  frame=none,
+  bgcolor=light-gray,
+  framesep=10mm
+]{octave}{code.m}\\
+
+\noindent Finally, we originated a \nth{3} dataset, the \emph{validation dataset}.
+This is constituted by \num{6} points sparse in the predictor space.
+The values of the $(I, \theta_i)$ pairs composing this dataset can be found in Tab.~\ref{tab:validation_dataset}.
+These observation constitute an unbiased dataset, since it was never shown to the model.
+We evaluated the performance of our model on this dataset by computing the MAE and the RMSE of our predictions.
 
 
 %-------------------------------------------------------------------------------
-\subsection{Results and discussion}
+\subsection{Results}
 %-------------------------------------------------------------------------------
+%...............................................................................
+\subsubsection{The classifier}
+%...............................................................................
+% * Classifier:
+%   * show final values of hyperparameters
 
-\begin{itemize}
-\itemsep0em
-  \item emulator should never underestimate danger (what type of error is this? we want to avoid it absolutely)
-  \item try to perform GP interpolation. If it does not work, explain why polynomial interpolation (no time)
-  \item use emulator with uncertainty in the $I$ and $\theta_i$. Perform uncertainty quantification
-\end{itemize}
+Fig.~\ref{fig:classifier} displays the results of the classification task.
+Data points shown in green correspond to rain events which did not exceed the threshold, while data points shown in red are those which did.
+"Dots" show the initial dataset (training dataset), whereas "triangles" indicate the dataset which was added in a second time.
+According to the classifier every $(I, \theta_i)$ pair chosen in the yellow region will cause the exceeding of $Q_!$.
+The classifier could correctly classify all but one points given.
+The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yellow region although its color is green.
 
 
-\subsubsection{Classification emulator}
+%...............................................................................
+\subsubsection{The emulator}
+%...............................................................................
+% Emulator:
+%   * show final values of hyperparameters
+%   * show MAE, RMSE tables
+%   * use emulator with uncertainty in the parameters. Perform UQ
 
-Results for the classification emulator
-\begin{itemize}
-  \item show classification with 3 different $Q_!$
-  \item perform testing 
-\end{itemize}
+The time-to-threshold emulator is shown in Fig.~\ref{fig:emulator}.
+The predictors, namely rain intensity and initial soil saturation, are
 
-\begin{figure}[htpb]
+
+\begin{figure}[h]
   \centering
-  \includegraphics[width=0.75\textwidth]{Figures/classification.png}
+  \includegraphics[width=0.7\textwidth]{Figures/classifier.png}
   \caption{Binary classification emulator: events reaching $Q_!$ (red) and events not reaching $Q_!$ (green) for $Q_! = XX.X$.}
-  \label{fig:classification_Q1}
+  \label{fig:classifier}
 \end{figure}
 
 
-\subsubsection{Regression emulator}
-
-\begin{figure}[htpb]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/emulator.png}
   \caption{Time-to-threshold emulator: training (red), test (blue) and validation (green) datasets and the emulator producing the intrapolation response.}
-  \label{fig:regression_emulator}
+  \label{fig:emulator}
 \end{figure}
 
 
-\begin{table}[htpb]
+\begin{table}[h]
   \centering
   \caption{Emulator performance on \emph{test} and \emph{validation} data}
   \label{table label}
@@ -595,4 +691,16 @@ Results for the classification emulator
     \bottomrule
   \end{tabular}
 \end{table}
+
+
+
+%-------------------------------------------------------------------------------
+\subsection{Discussion}
+%-------------------------------------------------------------------------------
+% * emulator should never underestimate danger (what type of error is this?
+%   we want to avoid it absolutely)
+% * discuss point missclassified
+% * discuss influence of time resolution
+
+
 
