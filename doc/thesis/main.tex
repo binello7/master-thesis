@@ -41,7 +41,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 \usepackage{mathpazo} % Use the Palatino font by default
-\usepackage[backend=biber,style=authoryear,natbib=true]{biblatex} % or backend=bibtex
+\usepackage[backend=biber,style=authoryear,backref=true,natbib=true]{biblatex} % or backend=bibtex
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 \addbibresource{Bibliography.bib} % The filename of the bibliography
 
@@ -99,12 +99,32 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{adjustbox} % to scale tables to \textwidth
 
+\usepackage{hyperref}
+
 %-------------------------------------------------------------------------------
 %  NEW COMMANDS AND DEFINITIONS
 %-------------------------------------------------------------------------------
 \newcommandx{\seb}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
 \newcommandx{\jpi}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\jor}[2][1=]{\todo[linecolor=green,backgroundcolor=green!25,bordercolor=green,#1]{#2}}
+
+
+\makeatletter
+\DeclareCiteCommand{\citetalias}
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\@citealias{\thefield{entrykey}}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\DeclareCiteCommand{\citepalias}[\mkbibparens]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\@citealias{\thefield{entrykey}}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\makeatother
+
 
 %\renewcommand{\appendix}{
 %  \setcounter{chapter}{0}%
@@ -113,6 +133,11 @@ headsepline, % Uncomment to get a line under the header
 %  \gdef\thechapter{\@Alph\c@chapter}}
 
 \definecolor{light-gray}{gray}{0.95}
+
+\defcitealias{octave_community_gnu_2018}{GNU Octave}
+\defcitealias{delestre_fullswof:_2017}{FullSWOF\_2D-v.1.07.00}
+\defcitealias{inkscape_community_inkscape_2018}{Inkscape}
+\defcitealias{rasmussen_gaussian_2010}{gpml}
 
 
 %-------------------------------------------------------------------------------
@@ -246,13 +271,14 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 
+\textbf{EP}   & \textbf{E}xpectation \textbf{P}ropagation\\
 \textbf{FV}   & \textbf{F}inite \textbf{V}olume\\
 \textbf{FVM}  & \textbf{F}inite \textbf{V}olume \textbf{M}ethod\\
 \textbf{GCI}  & \textbf{G}rid \textbf{C}onvergence \textbf{I}ndex\\
 \textbf{GC}   & \textbf{G}aussian \textbf{P}rocess\\
 \textbf{IQR}  & \textbf{I}nter\textbf{Q}uartile \textbf{R}ange\\
 \textbf{ML}   & \textbf{M}achine \textbf{L}earning\\
-\textbf{MSE}  & \textbf{M}ean \textbf{S}quared \textbf{E}rror\\
+\textbf{MAE}  & \textbf{M}aximum \textbf{A}bsolute \textbf{E}rror\\
 \textbf{RMSE} & \textbf{R}oot \textbf{M}ean \textbf{S}quared \textbf{E}rror\\
 
 \end{abbreviations}
