@@ -45,9 +45,12 @@ load ('parameters.dat');
 # evaluation points
 ri_min = min (rain_intensities);
 ri_max = max (rain_intensities);
+ss_min = min (soil_saturations);
+ss_max = max (soil_saturations);
 nri = 80;
 nss = 80;
-[ri_emu ss_emu] = meshgrid ([linspace(ri_min, ri_max, nri)].', [linspace(0, 1, nss)].');
+[ri_emu ss_emu] = meshgrid ([linspace(ri_min, ri_max, nri)].', ...
+                            [linspace(ss_min, ss_max, nss)].');
 
 ## Create full vectors
 #
@@ -91,14 +94,14 @@ mn= [1;1;1];
 #covfunc = {@covMaternard,1};
 #cv = rand (3,1);
 covfunc = @covSEard;
-cv = rand (3,1);
+cv = [1;1;1;];
 
 
 
 
 # likelihood function
 likfunc = @likGauss;
-lk = [-2.5];
+lk = [1];
 
 
 
@@ -127,11 +130,13 @@ xemu = [ri_emu(:) ss_emu(:)];
 args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
 
 tic
-hyp = minimize (hyp, @gp, -1e3, args{:});
+hyp = minimize (hyp, @gp, -2e3, args{:});
 toc
 tic
 t_Qemu = gp (hyp, args{:}, xemu);
 toc
+
+save ('hyp_reg.dat', 'hyp');
 
 t_Qemu = reshape (t_Qemu, size (ri_emu));
 
@@ -162,15 +167,17 @@ view (124, 32)
 tic
 t_Qemu_test = gp (hyp, args{:}, [ri_test(tftst) ss_test(tftst)]);
 toc
-mae_test = mae (t_Qemu_test, t_Qtest(tftst))
+mae_test      = MaxAE (t_Qemu_test, t_Qtest(tftst))
+mae_test_perc = MaxAPE (t_Qemu_test, t_Qtest(tftst))
 rmse_test = rmse (t_Qemu_test, t_Qtest(tftst))
 
 # validation
 tic
 t_Qemu_val = gp (hyp, args{:}, [ri_val ss_val]);
 toc
-mae_val = mae (t_Qemu_val, t_Qval)
-rmse_val = rmse (t_Qemu_val, t_Qval)
+mae_val      = MaxAE (t_Qemu_val, t_Qval)
+mae_val_perc = MaxAPE (t_Qemu_val, t_Qval)
+rmse_val     = rmse (t_Qemu_val, t_Qval)
 
 tic
 t_Qemu_1val = gp (hyp, args{:}, [30 0.1])
