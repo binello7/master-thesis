@@ -18,10 +18,10 @@
 
 
 ## -*- texinfo -*-
-## @defun {@var{err} =} mae (@var{y_sim}, @var{y_obs})
-## Computes maximum absolute error (MAE)
+## @defun {@var{err} =} MaxAE (@var{y_sim}, @var{y_obs})
+## Computes the maximum absolute error (MaxAE)
 ## @end defun
 
-function m = mae (y_sim, y_obs)
-  m = max (abs (y_sim - y_obs));
+function err = MaxAE (y_sim, y_obs)
+  err = max (abs (y_sim(:) - y_obs(:)));
 endfunction
