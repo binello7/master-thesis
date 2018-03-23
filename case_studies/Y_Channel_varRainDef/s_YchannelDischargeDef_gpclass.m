@@ -36,7 +36,7 @@ load ('t2thold_test.dat');
 load ('t2thold_class.dat');
 load ('parameters.dat');
 
-
+soil_saturations_svm = 1 - soil_saturations_svm;
 
 ## Functions
 
@@ -74,37 +74,42 @@ y_class(y_class>=420) = -1;
 
 ## Use the package gpml
 # Mean function
-meanfunc = [];
-mn = [];
+#meanfunc = [];
+#mn = [];
 #meanfunc = @meanConst;
 #mn = 0;
-#meanfunc = @meanLinear;
+#-------------------------------------------------------------------------------
+#meanfunc = @meanLinear; #used for the linear separation!
 #mn = [1;1];
+#-------------------------------------------------------------------------------
 #meanfunc = {@meanPoly,2};
-#mn = [1;1;1;1]
+#mn = [1;1;1;1];
 #meanfunc = {@meanPoly,3};
 #mn = [1;1;1;1;1;1];
 #meanfunc = {@meanSum, {@meanConst, {@meanPoly,2}}};
-#hyp.mean = [1;1;1;1;1];
+#mn = [1;1;1;1;1];
 #meanfunc = {@meanSum, {@meanConst, {@meanLinear}}};
 #hyp.mean = [1;1;1];
-#meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
-#mn= [1;1;1];
+meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
+mn= [1;1;1];
 #meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanProd,{@meanLinear,@meanLinear}}}};
 #mn = [1;1;1;1;1;1;1];
 
 # Covariance function
 covfunc = @covSEard;
 cv = [1;1;1];
-#covfunc = {@covMaternard, 1}; #1.64e01
+#covfunc = {@covMaternard, 1};
 #cv = log ([1;1;1]);
 #covfunc = @covNoise;
-#cv = 0;
+#cv = 1;
 #covfunc = {@covPoly,'ard',3};
-#cv = [1;0;0];
+#cv = [1;1;1;1];
 #covfunc = @covZero;
 #cv = [];
-
+#-------------------------------------------------------------------------------
+#covfunc = @covConst; #used for the linear separation!
+#cv = [1];
+#-------------------------------------------------------------------------------
 
 # Likelihood function
 likfunc = @likLogistic;
@@ -114,6 +119,7 @@ lk = [];
 #hyp.mean = mn;
 #hyp.cov  = cv;
 #hyp.lik  = lk;
+load ('hyp_class.dat');
 
 ## Prior
 #prior.mean=cell(1,7);
@@ -128,7 +134,10 @@ args = {infe, meanfunc, covfunc, likfunc};
 
 
 hyp = minimize (hyp, @gp, -1e3, args{:}, x_class, y_class);
-lp = gp (hyp, args{:}, x_class, y_class, [ri_eval(:) ss_eval(:)], ones(nri*nss, 1));
+lp = gp (hyp, args{:}, x_class, y_class, [ri_eval(:) ss_eval(:)], ...
+         ones(nri*nss, 1));
+
+save ('hyp_class.dat', 'hyp');
 
 ## Generate the plot
 red = t_Qtrain < 420;
