@@ -1,6 +1,6 @@
 \chapter{Introduction}
 \label{chp:introduction}
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 % Define some commands to keep the formatting separated from the content 
 \newcommand{\keyword}[1]{\textbf{#1}}
@@ -9,17 +9,37 @@
 \newcommand{\file}[1]{\texttt{\bfseries#1}}
 \newcommand{\option}[1]{\texttt{\itshape#1}}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+% Introduction
+% * 1-2 pages long
 
 
 
-Flooding and inundation have dramatically increased in the last years due to climate change.
-The frequency, as well as the magnitude of extreme rain events, leading to major inundations, have grown, making our capability to predict occurrence and effects more unreliable.
-To limit risks and damage, novel control, mitigation and warning measures are needed.
-Design and implementation of these need preliminary study of the situation based on data and information.
-Unfortunately, these are often not available, or not in the amount required for carrying out preliminary studies.
+%Really needed? 
 
-Nowadays simulation offers a valid and very powerful tool for dealing with this problem.
+%Probably go directly to emulation:
+
+%need for prediction => accurate/detailed simulators => computationally expensive => emulator for prediction in (near) real-time.
+
+%Explain emulation (general) => emulation in hydrology (very/briefly).
+%=> what is not known/which problem does this thesis solve?
+
+%=> can be focused on flood prediction, 2D models, open source (Fullswof-emulator) => understanding of mechanistic /phenomenological emulators in hydrology/flood prediction, ...
+
+%=> choose the problem where YOU can say the most. 
+
+
+
+Flooding and inundation might become more frequent and severe in many regions of Europe due to climate change.
+Studies show, that although a global tendency to drier summers, increase in extreme rain events, able to trigger severe flooding, is very likely in many areas of Europe \autocite{christensen_severe_2002}.
+In mountainous regions like the Alps, the ratio of liquid to solid precipitations are certainly going to change, altering the nature and processes of floods.
+The direct consequence is an anticipated seasonal shift in precipitation, causing precipitations increase in winter. 
+This seasonal shift in precipitation, accompanied by the earlier snowmelt, is likely to alter runoff behaviour and flood generation.
+In particular, a seasonal change in the distribution of floods is expected \autocite{koplin_seasonality_2014}.
+These changes are likely to make our capability to predict occurrence and effects of flooding more unreliable.
+
+To limit risks and damage, being able to correctly predict flooding is of crucial importance.
+With the everyday growing data availability and computational power, and the development of more sophisticated and accurate simulators, simulation offers a valid and very powerful tool for making hydrological predictions.
 Hydrological numerical models of catchments can be built, where depending on the degree of detail required different processes are implemented: infiltration, evaporation, erosion, etc.
 Depending on the degree of detail chosen more or less accurate models can be achieved.
 These models are mainly based on topographical data of the catchment in question, which are then refined by assigning friction coefficients values, infiltration capacity values, hydraulic conductivity values, porosity values to the different zones of the catchment.
@@ -40,10 +60,10 @@ For uncertainty analysis for example, up to some thousands of simulations can be
 
 \seb{Rearrange and somehow integrate the two previous sections in order to produce a global introduction. Introduce the following section "Emulation", a brief introduction about emulation}
 
-% ---------------------------------------------------------------------------------------------------
-% ===================================================================================================
+% ------------------------------------------------------------------------------
+% ================================================================================
 \section{Definition of goals}
-% ===================================================================================================
+% ================================================================================
 
 Focus on emulation subject.
 
