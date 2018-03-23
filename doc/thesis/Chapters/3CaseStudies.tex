@@ -340,7 +340,7 @@ If a functional relationship $f:h_w \mapsto C$ had been established, then a weir
 \end{figure}
 
 
-From this example the importance of the equilibrium \emph{prior knowledge} -- \emph{data availability} can be seen.
+From this example the importance of the trade-off \emph{prior knowledge} -- \emph{data availability} can be seen.
 Some "interpolation methods" \seb{is it correct "interpolation methods"? how could I call them otherwise?}, e.g. \emph{neural networks} in machine learning (ML), are very data-greedy.
 These can perform very well when a big training dataset is available, but fail if not enough data is available.
 When obtaining new observations is computationally very costly, like it is the case with most simulations, "interpolation methods" allowing the encoding of prior knowledge can turn out to be very useful.
@@ -704,10 +704,12 @@ These results are summarized in Tab.~\ref{tab:emulator_performance}
 %-------------------------------------------------------------------------------
 \subsection{Discussion}
 %-------------------------------------------------------------------------------
-% * emulator should never underestimate danger -> we want to avoid it absolutely)
+% * emulator should never underestimate danger -> we want to avoid it
+%   absolutely)
 % * discuss point misclassified
 % * discuss influence of time resolution
 % * why is test error bigger?
+% * if a real system is built -> UQ very important!!
 
 If an early flood warning system based on emulation had to be installed, one would want absolutely to avoid underestimating the danger.
 This means, the time to thresholds predicted by the emulator are allowed to be shorter than the real ones, but not longer.
@@ -716,8 +718,31 @@ Information about the rain event are passed to the classifier (forecasted rain i
 The classifier would accomplish the first part of the task: assessing if the rain event will reach the given threshold or not.
 Under Sec.~\ref{sec:classifier} we saw that the classifier proposed for this catchment and the chosen $Q_!$ fails to classify one point.
 In this case the classifiers assigns "reaching threshold" to a point which is actually not reaching it.
-In such a scenario as the one imagined this error would be quite serious but not dangerous: temporary flood control measures would be prepared, the population would be warned but at the end no flooding would occur.
+In such a scenario, as the one imagined, this error would be quite serious but not dangerous: temporary flood control measures would be prepared, the population would be warned but at the end no flooding would occur.
 This would cost money but nobody would be armed.
+The misclassified point is a training point.
+This means that a better classifier should be found, by further varying the GP used for the classification.
+Once a classifier correctly separating all training points is found, its performance should be evaluated.
+For this a new dataset, with points close to the determined frontier should be created.
+The new dataset should then be classified with the trained classifier and its results should be compared with the actual ones.
+The performance would be given by the ration "correctly classified" over "total data points".
+If this outcome is satisfactory, then we can keep the classifier obtained.
+If not we would add the new dataset to the training dataset, retrain the classifier and retest it on a further new dataset that has to be produced.
+This procedure should be repeated until satisfactory results are reached.
+It is very important to train a very good classifier.
+From this depends if the authorities in charge would take actions or if nothing at all is done.
+Consequences, if based on the classifier no action is taken, but the reaching of the threshold does happen, could be dramatical.\\
+
+The emulator, representing the second step of the early flood warning system, even if to a minor extent, should also never underestimate the risk.
+The danger linked with underestimating how fast $Q_!$ is reached is somehow a bit smaller, measures are being taken when unexpectedly the flood arrives, but still to consider.
+
+
+
+
+
+
+
+
 
 
 
