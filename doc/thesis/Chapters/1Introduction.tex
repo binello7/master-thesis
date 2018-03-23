@@ -8,13 +8,15 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\file}[1]{\texttt{\bfseries#1}}
 \newcommand{\option}[1]{\texttt{\itshape#1}}
-
 %-------------------------------------------------------------------------------
 % Introduction
 % * 1-2 pages long
+% * 
 
 
 
+
+%-------------------------------------------------------------------------------
 %Really needed? 
 
 %Probably go directly to emulation:
@@ -26,8 +28,25 @@
 
 %=> can be focused on flood prediction, 2D models, open source (Fullswof-emulator) => understanding of mechanistic /phenomenological emulators in hydrology/flood prediction, ...
 
-%=> choose the problem where YOU can say the most. 
+%=> choose the problem where YOU can say the most.
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%can also be done manually.
 
+%In an Emulation context, Likelihood-based parameter estimation is probably the thing to advocate. Not just an (arbitrary) objective function, but a mathematical description of "the data generating process", i.e. a stochastic model, which encodes information on the mathematical abstraction of the physical processes (rainfall-runoff) and the observation process(es), e.g. rainfall, land cover, soil moisture, flow.
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%Pappenberger /Beven 2006
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%detailed (and presumably accurate) simulators, such as 2D runoff models, 
+%-------------------------------------------------------------------------------
+%predictions, i.e. thousands of runs for quantitative estimates of prediction uncertainty.
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%Introduce the following section "Emulation", a brief introduction about emulation
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 
 Flooding and inundation might become more frequent and severe in many regions of Europe due to climate change.
@@ -40,7 +59,25 @@ These changes are likely to make our capability to predict occurrence and effect
 
 To limit risks and damage, being able to correctly predict flooding is of crucial importance.
 With the everyday growing data availability and computational power, and the development of more sophisticated and accurate simulators, simulation offers a valid and very powerful tool for making hydrological predictions.
-Hydrological numerical models of catchments can be built, where depending on the degree of detail required different processes are implemented: infiltration, evaporation, erosion, etc.
+Numerical models of entire catchments can be built, where depending on accuracy required and the time scale used different processes such as infiltration, evapotranspiration, interception surface runoff and erosion can be implemented.
+However, for these very complex tools there is a price to pay: their computational cost is very high.
+The duration of a single simulation can vary from some minutes up to days or even weeks.
+
+\emph{Emulation}, the construction of simpler approximation models mimicking the behaviour of complex simulator, is one way to deal with the problem.
+{Emulators}, also referred as "surrogate models", are ad hoc data-driven approximation models that are much cheaper to evaluate.
+These, when properly constructed, can accurately reproduce the behaviour of the simulator based on which they were built \autocite{gorissen_surrogate_2010}.
+
+
+
+curate models can be achieved. These models are mainly based on topographical
+data of the catchment in question, which are then refined by assigning friction coef-
+ficients values, infiltration capacity values, hydraulic conductivity values, porosity
+values to the different zones of the catchment. Such models need to be calibrated.
+
+
+
+
+
 Depending on the degree of detail chosen more or less accurate models can be achieved.
 These models are mainly based on topographical data of the catchment in question, which are then refined by assigning friction coefficients values, infiltration capacity values, hydraulic conductivity values, porosity values to the different zones of the catchment.
 Such models need to be calibrated.
@@ -54,11 +91,8 @@ Once the model is calibrated several more runs are necessary in order to generat
 The number of runs depends on the kind of study one would like to carry out.
 For uncertainty analysis for example, up to some thousands of simulations can be run, in order to study the influence that the variation of a parameter of the model (or its uncertain determination) has on the output.\\
 
-\ldots\\
 
 
-
-\seb{Rearrange and somehow integrate the two previous sections in order to produce a global introduction. Introduce the following section "Emulation", a brief introduction about emulation}
 
 % ------------------------------------------------------------------------------
 % ================================================================================
