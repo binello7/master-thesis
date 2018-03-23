@@ -4,6 +4,10 @@
 
 \seb{change appendix name or way it is displayed. I want to have just 1 appendix}
 
+
+%===============================================================================
+\section{Case study 1}
+%===============================================================================
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{Figures/channel.png}
@@ -36,69 +40,113 @@
 \end{table}
 
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/boxplot_models.png}
   \caption{Box plot summarizing the performance of the three models by using $[\numrange{4}{13}]$ \# of points. The red line represent the median RMSE. The box is given by the \nth{1} and \nth{3} quartile. Whiskers are drawn at $1.5 \times IQR$. Points between $1.5 \times IQR$ and $3 \times IQR$ are marked with 'o', while '+' indicates points beyond this range \autocite{eaton_gnu_2016}.}
   \label{fig:boxplot_models}
 \end{figure}
 
+%===============================================================================
+\section{Case study 2}
+%===============================================================================
+%-------------------------------------------------------------------------------
+\subsection{Test dataset}\label{sec:test_dataset}
+%-------------------------------------------------------------------------------
+\inputminted[
+  fontsize=\footnotesize,
+  firstline=50,
+  lastline=67,
+  numbersep=2pt,
+  gobble=0,
+  frame=none,
+  bgcolor=light-gray,
+  framesep=10mm
+]{octave}{code.m}
 
+%-------------------------------------------------------------------------------
+\subsection{Validation dataset}
+%-------------------------------------------------------------------------------
 \begin{table}[H]
   \centering
-  \caption{Emulator training dataset}
-  \label{tab:training_dataset}
-  \begin{tabular}{lccc}
-    \toprule
-     & \textbf{1} & \textbf{2} & \textbf{3}\\
-    \midrule
-    $\bm{I}$ \textbf{[\si{\milli\meter\per\hour}]} & val & val & val \\
-    $\bm{\theta_i}$ \textbf{[--]} & val & val & val \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-
-\begin{table}[H]
-  \centering
-  \caption{Emulator test dataset}
-  \label{tab:test_dataset}
-  \begin{tabular}{lccc}
-    \toprule
-     & \textbf{1} & \textbf{2} & \textbf{3}\\
-    \midrule
-    $\bm{I}$ \textbf{[\si{\milli\meter\per\hour}]} & val & val & val \\
-    $\bm{\theta_i}$ \textbf{[--]} & val & val & val \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-
-\begin{table}[H]
-  \centering
-  \caption{Emulator validation dataset}
+  \caption{Dataset used for the validation of the emulator.}
   \label{tab:validation_dataset}
-  \begin{tabular}{lccc}
+  \begin{tabular}{ccccccc}
     \toprule
-     & \textbf{1} & \textbf{2} & \textbf{3}\\
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} \\
     \midrule
-    $\bm{I}$ \textbf{[\si{\milli\meter\per\hour}]} & val & val & val \\
-    $\bm{\theta_i}$ \textbf{[--]} & val & val & val \\
+    $\bm{I}$ {\scriptsize[\si{\milli\meter\per\hour}]} & 15  & 20  & 22  & 25  & 25  & 35\\
+    $\bm{\theta_i}$                                    & 0.9 & 0.2 & 0.5 & 0.8 & 0.4 & 0.8\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+%-------------------------------------------------------------------------------
+\subsection{Classification additional dataset}
+%-------------------------------------------------------------------------------
+\begin{table}[H]
+  \centering
+  \caption{Dataset used for the second, more accurate classification.}
+  \label{tab:classification_dataset}
+  \begin{tabular}{ccccccccc}
+    \toprule
+    $\bm{I}$ {\scriptsize[\si{\milli\meter\per\hour}]} & 11.2  & 12.0  & 13.5  & 14.7  & 15.4  & 15.8 & 16.3 & 17.0\\
+    $\bm{\theta_i}$                                    & 0.95  & 0.80  & 0.60  & 0.45  & 0.35  & 0.3  & 0.20 & 0.05\\
     \bottomrule
   \end{tabular}
 \end{table}
 
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/classifier_trn.png}
+  \caption{Linear separation of the training dataset with use of the "meanLinear" and "covConst" functions of the \citetalias{rasmussen_gaussian_2010} package.}
+  \label{fig:classifier_trn}
+\end{figure}
+
+%-------------------------------------------------------------------------------
+\subsection{Values of classifier's hyperparameters}\label{sec:classifier_hyperparameters}
+%-------------------------------------------------------------------------------
+\inputminted[
+  fontsize=\footnotesize,
+  firstline=115,
+  lastline=132,
+  numbersep=2pt,
+  gobble=0,
+  frame=none,
+  bgcolor=light-gray,
+  framesep=10mm
+]{octave}{code.m}
+
+
+%-------------------------------------------------------------------------------
+\subsection{Values of emulator's hyperparameters}\label{sec:emulator_hyperparameters}
+%-------------------------------------------------------------------------------
+\inputminted[
+  fontsize=\footnotesize,
+  firstline=91,
+  lastline=108,
+  numbersep=2pt,
+  gobble=0,
+  frame=none,
+  bgcolor=light-gray,
+  framesep=10mm
+]{octave}{code.m}
+
+
+%-------------------------------------------------------------------------------
+\subsection{Detailed validation performance}
+%-------------------------------------------------------------------------------
 \begin{table}[H]
   \centering
-  \caption{Emulator performance on every validation point}
+  \caption{Emulator performance on every validation point.}
   \label{tab:validation_performance}
-  \begin{tabular}{lccc}
+  \begin{tabular}{lcccccc}
     \toprule
-     & \textbf{1} & \textbf{2} & \textbf{3}\\
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
     \midrule
-    \textbf{simulated} $\bm{t_!}$ & val & val & val \\
-    \textbf{emulated} $\bm{t_!}$ & val & val & val \\
+    \textbf{simulated} $\bm{t_!}\,[\si{\minute}]$ & 91.5 & 192.5 & 101.5 & 32.5 & 32.5 & 11.5\\
+    \textbf{emulated}  $\bm{t_!}\,[\si{\minute}]$ & 83.8 & 214.3 & 89.8  & 28.5 & 29.0 & 10.1\\
     \bottomrule
   \end{tabular}
 \end{table}
