@@ -86,7 +86,7 @@ The simulation was done with no rain and no infiltration.
 This way, water just enters the system through the top boundary and leaves it through the bottom one.
 For this a \emph{Neumann} boundary condition was chosen at the bottom, while an \emph{imposed discharge} boundary condition was set at the inflow boundary.
 This boundary condition needs two values to be specified: the magnitude of the inflow and an imposed water height, which is used under supercritical flow conditions.
-The \num{25} inflow discharges used were obtained with the following \emph{Octave/MATLAB} code.\\
+The \num{25} inflow discharges used were obtained with the following \citetalias{octave_community_gnu_2018} code.\\
 
 \inputminted[
   fontsize=\footnotesize,
@@ -256,7 +256,7 @@ These points represent the dataset which was used to fit the weir equation and t
 \end{figure}
 
 The fit of the different models to the dataset is displayed in Fig.~\ref{fig:fitting_results}.
-It can immediately be observed that the linear interpolation fails to capture the initial trend shown by the weir equation and the cubic spline interpolation.
+It can be observed that the linear interpolation fails to capture the initial trend shown by the weir equation and the cubic spline interpolation.
 This is due to two main reasons.
 The first one is that the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
 Moreover, in this region the weir equation presents its maximum curvature.
@@ -499,7 +499,7 @@ The same procedure was repeated with every one of the \num{50} experiments.
 
 Fig.~\ref{fig:hydrographs3d} shows the extracted hydrographs.
 Here many interesting features can be observed.
-First of all it can be seen that experiments run with the two lowest rain intensities and low initial soil saturation generated no discharge.
+It can be seen that experiments run with the two lowest rain intensities and low initial soil saturation generated no discharge.
 In the second place, simulations run with $\theta_i = \num{1}$ always reached their peak discharge, and this happens quite quickly.
 Some of these show a second smaller increase after the first quick rising limb.
 This gets higher the higher the rain intensity.
@@ -571,8 +571,8 @@ After training many models the following set of mean, covariance and likelihood 
 
 \inputminted[
   fontsize=\footnotesize,
-  firstline=10,
-  lastline=17,
+  firstline=14,
+  lastline=22,
   numbersep=2pt,
   gobble=0,
   frame=none,
@@ -595,8 +595,8 @@ We created a $(I, \theta_i)$ grid where to evaluate the emulator:\\
 
 \inputminted[
   fontsize=\footnotesize,
-  firstline=22,
-  lastline=29,
+  firstline=30,
+  lastline=42,
   numbersep=2pt,
   gobble=0,
   frame=none,
@@ -617,8 +617,8 @@ With these points guiding us we established that the model producing the best re
 
 \inputminted[
   fontsize=\footnotesize,
-  firstline=46,
-  lastline=53,
+  firstline=76,
+  lastline=84,
   numbersep=2pt,
   gobble=0,
   frame=none,
@@ -630,24 +630,33 @@ With these points guiding us we established that the model producing the best re
 This is constituted by \num{6} points sparse in the predictor space.
 The values of the $(I, \theta_i)$ pairs composing this dataset can be found in Tab.~\ref{tab:validation_dataset}.
 These observation constitute an unbiased dataset, since it was never shown to the model.
-We evaluated the performance of our model on this dataset by computing the MAE and the RMSE of our predictions.
+We evaluated the performance of our model on both test and validation dataset by computing the MAE and the RMSE.
 
 
 %-------------------------------------------------------------------------------
 \subsection{Results}
 %-------------------------------------------------------------------------------
 %...............................................................................
-\subsubsection{The classifier}
+\subsubsection{The classifier}\label{sec:classifier}
 %...............................................................................
 % * Classifier:
 %   * show final values of hyperparameters
 
 Fig.~\ref{fig:classifier} displays the results of the classification task.
-Data points shown in green correspond to rain events which did not exceed the threshold, while data points shown in red are those which did.
-"Dots" show the initial dataset (training dataset), whereas "triangles" indicate the dataset which was added in a second time.
+Green data points correspond to rain events which did not exceed the threshold, while the red ones to those which did.
+Circles show the initial dataset (training dataset), whereas "triangles" indicate the dataset which was added in a second time.
 According to the classifier every $(I, \theta_i)$ pair chosen in the yellow region will cause the exceeding of $Q_!$.
 The classifier could correctly classify all but one points given.
 The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yellow region although its color is green.
+The hyperparameters values determined by minimization of the negative log marginal likelihood can be found under Sec.~\ref{sec:classifier_hyperparameters} of the Appendix.
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Figures/classifier.png}
+  \caption{Classifier: the circles represent the first training dataset, while the triangles the second one. In red all events exceeding the threshold, in green all those which did not. Events in the yellow region are the ones classified as "exceeding the threshold", for which the time-to-threshold has to be estimated.}
+  \label{fig:classifier}
+\end{figure}
 
 
 %...............................................................................
@@ -659,35 +668,33 @@ The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yello
 %   * use emulator with uncertainty in the parameters. Perform UQ
 
 The time-to-threshold emulator is shown in Fig.~\ref{fig:emulator}.
-The predictors, namely rain intensity and initial soil saturation, are
+The x and y axis indicate the value of the predictors---rain intensity and soil saturations---while the corresponding response is given on the z-axis.
+The circles represent the datasets used for training (red), testing (blue) and validating (green).
+The emulator is given by the black mesh.
+It is the result of the evaluation of the optimized GP at the \num{6400} evaluation points.
+The values of the hyperparameter characterizing this GP emulator can be found under Sec.~\ref{sec:emulator_hyperparameters} in the Appendix.
 
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.7\textwidth]{Figures/classifier.png}
-  \caption{Binary classification emulator: events reaching $Q_!$ (red) and events not reaching $Q_!$ (green) for $Q_! = XX.X$.}
-  \label{fig:classifier}
-\end{figure}
-
+The performance of the emulator was assessed by computing MAE and RMSE of the validation and test datasets.
+These results are summarized in Tab.~\ref{tab:emulator_performance}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/emulator.png}
-  \caption{Time-to-threshold emulator: training (red), test (blue) and validation (green) datasets and the emulator producing the intrapolation response.}
+  \caption{Time-to-threshold emulator: training (red), test (blue) and validation (green) datasets and the emulator (mesh) predicting the time-to-threshold ($t_!$) in regions where there are no observations.}
   \label{fig:emulator}
 \end{figure}
 
 
 \begin{table}[h]
   \centering
-  \caption{Emulator performance on \emph{test} and \emph{validation} data}
-  \label{table label}
+  \caption{Emulator performance on \emph{test} and \emph{validation} datasets.}
+  \label{tab:emulator_performance}
   \begin{tabular}{lcc}
     \toprule
-     & \textbf{MAE [\si{\minute}, \si{\percent}]} & \textbf{RMSE [\si{\minute}, \si{\percent}]} \\
+     & \textbf{MAE [\si{\minute}, \si{\percent}]} & \textbf{RMSE [\si{\minute}]} \\
     \midrule
-    \textbf{test} & val & val \\
-    \textbf{validation} & val & val \\
+    \textbf{test}       & 51.6, 33.6 & 16.1 \\
+    \textbf{validation} & 21.8, 11.3 & 10.8 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -697,10 +704,20 @@ The predictors, namely rain intensity and initial soil saturation, are
 %-------------------------------------------------------------------------------
 \subsection{Discussion}
 %-------------------------------------------------------------------------------
-% * emulator should never underestimate danger (what type of error is this?
-%   we want to avoid it absolutely)
-% * discuss point missclassified
+% * emulator should never underestimate danger -> we want to avoid it absolutely)
+% * discuss point misclassified
 % * discuss influence of time resolution
+% * why is test error bigger?
+
+If an early flood warning system based on emulation had to be installed, one would want absolutely to avoid underestimating the danger.
+This means, the time to thresholds predicted by the emulator are allowed to be shorter than the real ones, but not longer.
+This flood warning system would be the sum of the classifier and the emulator.
+Information about the rain event are passed to the classifier (forecasted rain intensity and estimated soil saturation of the catchment).
+The classifier would accomplish the first part of the task: assessing if the rain event will reach the given threshold or not.
+Under Sec.~\ref{sec:classifier} we saw that the classifier proposed for this catchment and the chosen $Q_!$ fails to classify one point.
+In this case the classifiers assigns "reaching threshold" to a point which is actually not reaching it.
+In such a scenario as the one imagined this error would be quite serious but not dangerous: temporary flood control measures would be prepared, the population would be warned but at the end no flooding would occur.
+This would cost money but nobody would be armed.
 
 
 
