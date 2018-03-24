@@ -74,8 +74,8 @@ y_class(y_class>=420) = -1;
 
 ## Use the package gpml
 # Mean function
-#meanfunc = [];
-#mn = [];
+meanfunc = [];
+mn = [];
 #meanfunc = @meanConst;
 #mn = 0;
 #-------------------------------------------------------------------------------
@@ -90,8 +90,8 @@ y_class(y_class>=420) = -1;
 #mn = [1;1;1;1;1];
 #meanfunc = {@meanSum, {@meanConst, {@meanLinear}}};
 #hyp.mean = [1;1;1];
-meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
-mn= [1;1;1];
+#meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
+#mn= [1;1;1];
 #meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanProd,{@meanLinear,@meanLinear}}}};
 #mn = [1;1;1;1;1;1;1];
 
@@ -119,7 +119,7 @@ lk = [];
 #hyp.mean = mn;
 #hyp.cov  = cv;
 #hyp.lik  = lk;
-load ('hyp_class.dat');
+#load ('hyp_class.dat');
 
 ## Prior
 #prior.mean=cell(1,7);
@@ -137,7 +137,7 @@ hyp = minimize (hyp, @gp, -1e3, args{:}, x_class, y_class);
 lp = gp (hyp, args{:}, x_class, y_class, [ri_eval(:) ss_eval(:)], ...
          ones(nri*nss, 1));
 
-save ('hyp_class.dat', 'hyp');
+#save ('hyp_class.dat', 'hyp');
 
 ## Generate the plot
 red = t_Qtrain < 420;
