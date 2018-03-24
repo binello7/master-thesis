@@ -69,17 +69,19 @@ ss_val = soil_saturations_val;
 
 
 ## Add random noise
-ri_test    = ri_test + 0.01*randn (size(ri_test));
-#ri_train    = ri_train + 0.01*randn (size(ri_train));
+#ri_test   = ri_test + 0.01*randn (size(ri_test));
+#ri_train  = ri_train + 0.01*randn (size(ri_train));
 
 
 ## Mean function
-meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
-mn= [1;1;1];
+#-------------------------------------------------------------------------------
+#meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
+#mn= [1;1;1]; # mean function used previously
+#-------------------------------------------------------------------------------
 #meanfunc = {@meanConst};
 #mn = 0;
-#meanfunc = [];
-#mn = [];
+meanfunc = [];
+mn = [];
 #meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanPoly,2}}};
 #mn = rand (7,1);
 
@@ -91,10 +93,10 @@ mn= [1;1;1];
 #cv = 1;
 #covfunc = {@covPPard,3};
 #cv = [4 2.6 8];
-#covfunc = {@covMaternard,1};
-#cv = rand (3,1);
-covfunc = @covSEard;
-cv = [1;1;1;];
+covfunc = {@covMaternard,1};
+cv = [1;1;1];
+#covfunc = @covSEard;
+#cv = [1;1;1;];
 
 
 
@@ -123,15 +125,19 @@ tf = t_Qtrain < 420;
 tftst = t_Qtest < 420;
 
 
-xtrn = [ri_train(tf) ss_train(tf)];#ri_test(tftst)(:) ss_test(tftst)(:)];
-ytrn = [t_Qtrain(tf)];#t_Qtest(tftst)];
+xtrn = [ri_train(tf) ss_train(tf);ri_test(tftst)(:) ss_test(tftst)(:)];
+ytrn = [t_Qtrain(tf);t_Qtest(tftst)];
 xemu = [ri_emu(:) ss_emu(:)];
 
 args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
 
+# minimize the negative log marginal likelihood
 tic
 hyp = minimize (hyp, @gp, -2e3, args{:});
 toc
+
+
+#load ('hyp_reg.dat');
 tic
 t_Qemu = gp (hyp, args{:}, xemu);
 toc
@@ -160,7 +166,7 @@ ylabel ('\theta_i [-]')
 zlabel ('t_! [min]')
 grid off;
 view (124, 32)
-
+print ('emulator.png', '-r300');
 
 ## Performing test and validation
 # test
@@ -182,5 +188,18 @@ rmse_val     = rmse (t_Qemu_val, t_Qval)
 tic
 t_Qemu_1val = gp (hyp, args{:}, [30 0.1])
 toc
+
+
+# Propagation of uncertainty
+c = 100;
+r = length (soil_saturations_val);
+sigma = 0.02;
+iss_uncert = normrnd (repmat (soil_saturations_val, 1, c), ...
+                      sigma*repmat (soil_saturations_val, 1, c));
+
+for i = 1:c
+  t_Quncert(:,i) = gp (hyp, args{:}, [ri_val iss_uncert(:,i)]);
+endfor
+
 
 
