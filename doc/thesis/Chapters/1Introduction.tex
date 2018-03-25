@@ -9,45 +9,15 @@
 \newcommand{\file}[1]{\texttt{\bfseries#1}}
 \newcommand{\option}[1]{\texttt{\itshape#1}}
 %-------------------------------------------------------------------------------
-% Introduction
+% INTRODUCTION
 % * 1-2 pages long
-% * 
-
-
-
-
-%-------------------------------------------------------------------------------
-%Really needed? 
-
-%Probably go directly to emulation:
-
-%need for prediction => accurate/detailed simulators => computationally expensive => emulator for prediction in (near) real-time.
-
-%Explain emulation (general) => emulation in hydrology (very/briefly).
-%=> what is not known/which problem does this thesis solve?
-
-%=> can be focused on flood prediction, 2D models, open source (Fullswof-emulator) => understanding of mechanistic /phenomenological emulators in hydrology/flood prediction, ...
-
-%=> choose the problem where YOU can say the most.
-%-------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------
-%can also be done manually.
-
-%In an Emulation context, Likelihood-based parameter estimation is probably the thing to advocate. Not just an (arbitrary) objective function, but a mathematical description of "the data generating process", i.e. a stochastic model, which encodes information on the mathematical abstraction of the physical processes (rainfall-runoff) and the observation process(es), e.g. rainfall, land cover, soil moisture, flow.
-%-------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------
-%Pappenberger /Beven 2006
-%-------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------
-%detailed (and presumably accurate) simulators, such as 2D runoff models, 
-%-------------------------------------------------------------------------------
-%predictions, i.e. thousands of runs for quantitative estimates of prediction uncertainty.
-%-------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------
-%Introduce the following section "Emulation", a brief introduction about emulation
-%-------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------
-
+% * define the goals of this thesis
+% * state the questions which should be answered withing this thesis
+% * try to close the loop in the conclusions chapter (cf. Thesis example Jörg)
+% * explain emulation in hydrology? emulation of SWE? what can be done?
+% * mention reproducibility, open softwares
+% * mention license and repositories
+% * mention fswof2d Octave package
 
 Flooding and inundation might become more frequent and severe in many regions of Europe due to climate change.
 Studies show, that although a global tendency to drier summers, increase in extreme rain events, able to trigger severe flooding, is very likely in many areas of Europe \autocite{christensen_severe_2002}.
@@ -59,69 +29,63 @@ These changes are likely to make our capability to predict occurrence and effect
 
 To limit risks and damage, being able to correctly predict flooding is of crucial importance.
 With the everyday growing data availability and computational power, and the development of more sophisticated and accurate simulators, simulation offers a valid and very powerful tool for making hydrological predictions.
-Numerical models of entire catchments can be built, where depending on accuracy required and the time scale used different processes such as infiltration, evapotranspiration, interception surface runoff and erosion can be implemented.
+Numerical models of entire catchments can be built, where depending on accuracy required and the time scale used, different hydrological processes such as infiltration, evapotranspiration, interception surface runoff and erosion can be implemented.
 However, for these very complex tools there is a price to pay: their computational cost is very high.
 The duration of a single simulation can vary from some minutes up to days or even weeks.
 
-\emph{Emulation}, the construction of simpler approximation models mimicking the behaviour of complex simulator, is one way to deal with the problem.
+\emph{Emulation}, the construction of simpler approximation models mimicking the behaviour of detailed simulator, is one way to deal with the problem.
 {Emulators}, also referred as "surrogate models", are ad hoc data-driven approximation models that are much cheaper to evaluate.
-These, when properly constructed, can accurately reproduce the behaviour of the simulator based on which they were built \autocite{gorissen_surrogate_2010}.
+These, when properly constructed, can accurately reproduce the behaviour of the simulator from which they were built \autocite{gorissen_surrogate_2010}.
+
+Applications of emulation in the field of hydrology can be found (e.g. \citet{machac_emulation_2016}), but the practice does not seem to be very diffused yet.
+Due to the growing role of simulation for hydrological predictions, and the high computational burden linked with them, the field is particularly suitable for the exploitation of emulation's potential.
+One possible application would be in real time prediction.
+Real time prediction using accurate simulators is hindered by their computational time.
+Here emulators could represent the turning point: for the emulation of simulators solving the Shallow Water Equation (SWE), speedups in the order of $1\cdot 10^4$ can be expected \autocite{carbajal_appraisal_2016}.
+Results of simulations lasting days could be obtained in a few seconds, allowing for utilization in real time application.
+One of such could be the development of an emulator-based \emph{early flood warning system}: a flood alarm system based on numerical flood predictions generated with the emulation of a detailed simulator.
+
+Other possible tasks in hydrology, which could be promisingly addressed with emulation are uncertainty quantification, sensitivity analysis and model calibration.
+For all of these several hundreds of model runs are necessary, which requires a big amount of time, and would therefore be considerably eased by emulation.\\
+
+This thesis focuses on the emulation of the Shallow Water Equation, with an emphasis on its application for flood prediction.
+In the first part part the tools needed to perform emulation in hydrology are briefly presented and discussed.
+These are then applied to two case studies: a first one were a purely \emph{mechanistic emulator} is built, and a second one were a methodology to build an early flood warning system based on emulation is proposed.
+With the mechanistic emulator, testing of the the chosen simulator is done, some experience with emulation is acquired, and not least some general understandings of differences between popular machine learning (ML) techniques used in emulation are inferred.
+In the second case study the focus is moved to the prediction of flooding.
+An emulator predicting the \emph{time-to-threshold}\footnote{Time lapse from a specific instant after which a given threshold is exceeded.} for the discharge in a channel draining the water from a catchment is built.
+For this an abstract synthetic catchment is used.
+Furthermore, the methodology applied is not catchment-specific.
+Due to the generalization and abstraction of the methodology, its testing in real specific case studies should be easily implementable.
+
+At the end, the principal findings and discoveries of the thesis are summarized and discussed.
+From these some conclusions are drawn and suggestion for future work are made.\\
+
+The whole thesis was pursued using \emph{open softwares} and is licensed under the \textcolor{red}{bla bla} \seb{which license??} license.
+The simulations from which the datasets used to build the emulators were extracted, were run with \citetalias{delestre_fullswof:_2017}.
+All data manipulation and plotting was performed with \citetalias{octave_community_gnu_2018}.
+To ease the interaction with the simulator the \citetalias{octave_community_gnu_2018} package \emph{fswof2d} was developed.
+This is available online and distributed under license GPLv3+.
+The URLs where this, as well as the rest of the thesis' material can be downloaded, can be found in Sec.~\ref{sec:additional_material} of the Appendix.
+
+
+%===============================================================================
+\section{Goals of this thesis}
+%===============================================================================
+% * define some goals
+% * goals can be broken down to objectives/subgoals if needed
+% * from these, try to derive research questions. These should be as specific
+%   as possible, to then write a concise answer
 
 
 
-curate models can be achieved. These models are mainly based on topographical
-data of the catchment in question, which are then refined by assigning friction coef-
-ficients values, infiltration capacity values, hydraulic conductivity values, porosity
-values to the different zones of the catchment. Such models need to be calibrated.
 
 
 
 
 
-Depending on the degree of detail chosen more or less accurate models can be achieved.
-These models are mainly based on topographical data of the catchment in question, which are then refined by assigning friction coefficients values, infiltration capacity values, hydraulic conductivity values, porosity values to the different zones of the catchment.
-Such models need to be calibrated.
-This means that by using optimization algorithms the parameters of the model are varied within certain ranges in order to reproduce at best a recorded output (e.g. river outlet hydrograph) generated from "known" initial conditions (e.g. initial soil saturation) and inputs (e.g. the recorded hyetograph).
-Once the model is calibrated it can be used to generate new data, from which new information about the given system can be learned and from which other conditions and new situations can be tested.
-
-The main drawback of simulation lays in its very high computational burden.
-For calibration alone several runs of the model are required.
-Every simulation can last from some minutes up to several hours, depending on the complexity of the model, the type of computer where the simulations are run, the duration of the event simulated, the resolution used for the model, etc.
-Once the model is calibrated several more runs are necessary in order to generate the desired dataset.
-The number of runs depends on the kind of study one would like to carry out.
-For uncertainty analysis for example, up to some thousands of simulations can be run, in order to study the influence that the variation of a parameter of the model (or its uncertain determination) has on the output.\\
 
 
-
-
-% ------------------------------------------------------------------------------
-% ================================================================================
-\section{Definition of goals}
-% ================================================================================
-
-Focus on emulation subject.
-
-\begin{itemize}
-\itemsep0em
-  \item explain what is emulation
-  \item use both terms \textit{surrogate model} and \textit{emulator}
-  \item mention \textit{EmuMore} project
-  \item give emulation examples
-\end{itemize}
-
-
-% ==============================================================================
-\section{Emulation}
-% ==============================================================================
-
-\begin{itemize}
-\itemsep0em
-  \item define the goals of this thesis
-  \item state the questions which should be answered withing this thesis. Try to close the loop in the conclusions chapter (cf. Thesis example Jörg)
-  \item what readers should expect from the thesis
-  \item mention reproducibility, open softwares
-  \item include a scheme with the \emph{emulation workflow}
-\end{itemize}
 
 
 
