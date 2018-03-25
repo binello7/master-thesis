@@ -21,47 +21,30 @@
 % * Global flood risk under climate change (Hirabayashi et al., 2003)
 % * Alfieri et al., 2015 (increase frequency)
 
-Flooding and inundation might become more frequent and severe in many regions of Europe due to climate change.
-Studies show, that although a global tendency to drier summers, increase in extreme rain events, able to trigger severe flooding, is very likely in many areas of Europe \autocite{christensen_severe_2002}.
-In mountainous regions like the Alps, the ratio of liquid to solid precipitations are certainly going to change, altering the nature and processes of floods.
-The direct consequence is an anticipated seasonal shift in precipitation, causing precipitations increase in winter. 
-This seasonal shift in precipitation, accompanied by the earlier snowmelt, is likely to alter runoff behaviour and flood generation.
-In particular, a seasonal change in the distribution of floods is expected \autocite{koplin_seasonality_2014}.
-These changes are likely to make our capability to predict occurrence and effects of flooding more unreliable.
+Floods are one of the major socio-economic risk for the population. According to the European Environmental Agency (EEA),floods together with wind storms are the natural hazards which cause the highest economic loss  
+in Europe \autocite{european_environment_agency_flood_2013}.
+In the next decades, climate change is expected to increase flood risk at global scale \autocite{milly_increasing_2002}(Hirabayashi 2008, 2013). In Europe, the magnitude and direction of trends is projected to vary between northern and southern regions (Danker et al. 2009; Alfieri et al. 2015; Thober et al. 2018). Still, several studies reported important expected changes in the structure of European precipitation, with particular intensification of short-duration extreme rainfall (Christinsten et al., 2004, Zolina et al., 2010, Westra et al., 2014) which are likely to increase the danger of extreme flash floods. 
+Parallely, increasing warming temperature are modifying snow dynamics in mountainous regions, altering the nature and processes of floods (Koplin et al., 2014; Berghjus et al., 2012; Hall et al., 2014). 
+Recent studies illustrated ongoing changes in hydrological regimes at continental-scale\autocite{bloschl_increasing_2017}, \autocite{stahl_filling_2012}.
+These hydro-climatic shifts might dampen our capability to predict correctly the occurrence and risk of future flooding on infrastructures designed on past hydrological regimes (Milly et al., 2002).
+Detection of these vulnerable infrastructures and implementation of timely alert could potentially reduce the damage and fatalities associated to extreme flood events.
+ 
+In recent decades, with the growing computational power and the development of sophisticated and accurate numerical (physical) models, simulations became a powerful tool to perform hydrological predictions. 
+The degree of accuracy of these numerical models depends often on the complexity of the hydrological processes representation and the spatio-temporal resolution of the simulations. Unfortunately, for very complex and accurate simulations there is a price to pay: the computational cost is very elevated; a single simulation can take from  minutes up to day and even weeks. As a consequence, the creation of early flood alert warning system is hindered by the computational burden of simulations. 
 
-To limit risks and damage, being able to correctly predict flooding is of crucial importance.
-With the everyday growing data availability and computational power, and the development of more sophisticated and accurate simulators, simulation offers a valid and very powerful tool for making hydrological predictions.
-Numerical models of entire catchments can be built, where depending on accuracy required and the time scale used, different hydrological processes such as infiltration, evapotranspiration, interception surface runoff and erosion can be implemented.
-However, for these very complex tools there is a price to pay: their computational cost is very high.
-The duration of a single simulation can vary from some minutes up to days or even weeks.
+\emph{Emulation} of these numerical models provides, however, a solution to reduce the computing time to few seconds, which allows generation of near real-time predictions.
+Emulators, also referred as "surrogate models", are ad hoc data-driven models that 
+mimick the behaviour of a detailed numerical simulator. When properly constructed, they can reduce the computational cost of simulations by several order of magnitude at the expense of a slight decrease in accuracy. \autocite{gorissen_surrogate_2010}\autocite{carbajal_appraisal_2016}.
 
-\emph{Emulation}, the construction of simpler approximation models mimicking the behaviour of detailed simulator, is one way to deal with the problem.
-{Emulators}, also referred as "surrogate models", are ad hoc data-driven approximation models that are much cheaper to evaluate.
-These, when properly constructed, can accurately reproduce the behaviour of the simulator from which they were built \autocite{gorissen_surrogate_2010}.
-
-Applications of emulation in the field of hydrology can be found (e.g. \citet{machac_emulation_2016}), but the practice does not seem to be very diffused yet.
-Due to the growing role of simulation for hydrological predictions, and the high computational burden linked with them, the field is particularly suitable for the exploitation of emulation's potential.
-One possible application would be in real time prediction.
-Real time prediction using accurate simulators is hindered by their computational time.
-Here emulators could represent the turning point: for the emulation of simulators solving the Shallow Water Equation (SWE), speedups in the order of $1\cdot 10^4$ can be expected \autocite{carbajal_appraisal_2016}.
-Results of simulations lasting days could be obtained in a few seconds, allowing for utilization in real time application.
-One of such could be the development of an emulator-based \emph{early flood warning system}: a flood alarm system based on numerical flood predictions generated with the emulation of a detailed simulator.
-
-Other possible tasks in hydrology, which could be promisingly addressed with emulation are uncertainty quantification, sensitivity analysis and model calibration.
-For all of these several hundreds of model runs are necessary, which requires a big amount of time, and would therefore be considerably eased by emulation.\\
-
-This thesis focuses on the emulation of the Shallow Water Equation, with an emphasis on its application for flood prediction.
-In the first part part the tools needed to perform emulation in hydrology are briefly presented and discussed.
-These are then applied to two case studies: a first one were a purely \emph{mechanistic emulator} is built, and a second one were a methodology to build an early flood warning system based on emulation is proposed.
-With the mechanistic emulator, testing of the the chosen simulator is done, some experience with emulation is acquired, and not least some general understandings of differences between popular machine learning (ML) techniques used in emulation are inferred.
-In the second case study the focus is moved to the prediction of flooding.
-An emulator predicting the \emph{time-to-threshold}\footnote{Time lapse from a specific instant after which a given threshold is exceeded.} for the discharge in a channel draining the water from a catchment is built.
-For this an abstract synthetic catchment is used.
-Furthermore, the methodology applied is not catchment-specific.
-Due to the generalization and abstraction of the methodology, its testing in real specific case studies should be easily implementable.
-
-At the end, the principal findings and discoveries of the thesis are summarized and discussed.
-From these some conclusions are drawn and suggestion for future work are made.\\
+In this thesis, we present two case studies which shows the potential of emulation applied to a numerical simulator solving the Shallow Water Equation (SWE). 
+Chapter 2 provides an introduction to the concept of emulation (2.1) and a description of the regression techniques (2.2) and the numerical simulator solving SWE(2.3) used in the case studies presented in Chapter 3.
+The first case study (3.1) illustrates the construction of a \emph{mechanistic emulator} to estimate the water depth above a weir and the potential of emulation in substituting classical physical experiments with numericals simulations.  
+Case study 2 (3.2) presents an emulation-based workflow which would allow to create early flood warning systems. 
+Due to the generalization and abstraction of the proposed methodology, its testing in real specific case studies should be easily implementable.
+ 
+% An emulator predicting the \emph{time-to-threshold}\footnote{Time lapse from a specific instant after which a given threshold is exceeded.} for the discharge in a channel draining the water from a catchment is built.
+% At the end, the principal findings and discoveries of the thesis are summarized and discussed.
+% From these some conclusions are drawn and suggestion for future work are made.\\
 
 The whole thesis was pursued using \emph{open softwares} and is licensed under the \textcolor{red}{bla bla} \seb{which license??} license.
 The simulations from which the datasets used to build the emulators were extracted, were run with \citetalias{delestre_fullswof:_2017}.
