@@ -21,42 +21,43 @@
 % * Global flood risk under climate change (Hirabayashi et al., 2003)
 % * Alfieri et al., 2015 (increase frequency)
 
-Floods are one of the major socio-economic risk for the population. According to the European Environmental Agency (EEA),floods together with wind storms are the natural hazards which cause the highest economic loss  
+Floods are one of the major socio-economic risk for the population. According to the European Environmental Agency (EEA), floods together with wind storms, are the natural hazards which cause the highest economic loss  
 in Europe \autocite{european_environment_agency_flood_2013}.
-In the next decades, climate change is expected to increase flood risk at global scale \autocite{milly_increasing_2002}(Hirabayashi 2008, 2013). In Europe, the magnitude and direction of trends is projected to vary between northern and southern regions (Danker et al. 2009; Alfieri et al. 2015; Thober et al. 2018). Still, several studies reported important expected changes in the structure of European precipitation, with particular intensification of short-duration extreme rainfall (Christinsten et al., 2004, Zolina et al., 2010, Westra et al., 2014) which are likely to increase the danger of extreme flash floods. 
-Parallely, increasing warming temperature are modifying snow dynamics in mountainous regions, altering the nature and processes of floods (Koplin et al., 2014; Berghjus et al., 2012; Hall et al., 2014). 
-Recent studies illustrated ongoing changes in hydrological regimes at continental-scale\autocite{bloschl_increasing_2017}, \autocite{stahl_filling_2012}.
-These hydro-climatic shifts might dampen our capability to predict correctly the occurrence and risk of future flooding on infrastructures designed on past hydrological regimes (Milly et al., 2002).
-Detection of these vulnerable infrastructures and implementation of timely alert could potentially reduce the damage and fatalities associated to extreme flood events.
+In the next decades, climate change is expected to increase flood risk at global scale \autocite{milly_increasing_2002,hirabayashi_global_2008,hirabayashi_global_2013}. In Europe, the magnitude and direction of trends is projected to vary between northern and southern regions \autocite{dankers_flood_2009,alfieri_global_2015, thober_multi-model_2018}. Still, several studies reported important expected changes in the structure of European precipitation, with particular intensification of short-duration extreme rainfall \autocite{christensen_intensification_2004,zolina_changing_2010,westra_global_2013} which are likely to increase the danger of extreme flash floods. 
+Parallely, increasing warming temperature are modifying snow dynamics in mountainous regions, altering the nature and processes of floods \autocite{koplin_seasonality_2014,hall_understanding_2014}. 
+Recent studies illustrated ongoing changes in hydrological regimes at continental-scale \autocite{bloschl_changing_2017}.
+These hydro-climatic shifts might dampen our capability to predict correctly the occurrence and risk of future flooding on infrastructures designed on past hydrological regimes \autocite{milly_increasing_2002}.
+Detection of these vulnerable infrastructures and implementation of timely alert could potentially reduce the damage and fatalities associated to extreme flood events.\\
  
-In recent decades, with the growing computational power and the development of sophisticated and accurate numerical (physical) models, simulations became a powerful tool to perform hydrological predictions. 
-The degree of accuracy of these numerical models depends often on the complexity of the hydrological processes representation and the spatio-temporal resolution of the simulations. Unfortunately, for very complex and accurate simulations there is a price to pay: the computational cost is very elevated; a single simulation can take from  minutes up to day and even weeks. As a consequence, the creation of early flood alert warning system is hindered by the computational burden of simulations. 
+In recent decades, with the growing computational power and the development of sophisticated and accurate numerical models, simulations has become a powerful tool to make hydrological predictions. 
+The degree of accuracy of these numerical models depends often on the complexity of the hydrological processes representation and the spatio-temporal resolution of the simulations. Unfortunately, for very complex and accurate simulations there is a price to pay: the computational cost is very elevated; a single simulation can take from  minutes up to day and even weeks. As a consequence, the creation of simulation-based early flood alert warning system is hindered by the computational burden of simulations. 
 
 \emph{Emulation} of these numerical models provides, however, a solution to reduce the computing time to few seconds, which allows generation of near real-time predictions.
 Emulators, also referred as "surrogate models", are ad hoc data-driven models that 
-mimick the behaviour of a detailed numerical simulator. When properly constructed, they can reduce the computational cost of simulations by several order of magnitude at the expense of a slight decrease in accuracy. \autocite{gorissen_surrogate_2010}\autocite{carbajal_appraisal_2016}.
+mimick the behaviour of a detailed numerical simulator. When properly constructed, they can reduce the computational cost of simulations by several order of magnitude at the expense of a slight decrease in accuracy \autocite{carbajal_appraisal_2016}.\\
 
-In this thesis, we present two case studies which shows the potential of emulation applied to a numerical simulator solving the Shallow Water Equation (SWE). 
-Chapter 2 provides an introduction to the concept of emulation (2.1) and a description of the regression techniques (2.2) and the numerical simulator solving SWE(2.3) used in the case studies presented in Chapter 3.
-The first case study (3.1) illustrates the construction of a \emph{mechanistic emulator} to estimate the water depth above a weir and the potential of emulation in substituting classical physical experiments with numericals simulations.  
-Case study 2 (3.2) presents an emulation-based workflow which would allow to create early flood warning systems. 
-Due to the generalization and abstraction of the proposed methodology, its testing in real specific case studies should be easily implementable.
- 
+In this thesis, we present two case studies which show the potential of emulation based on a numerical simulator solving the Shallow Water Equation (SWE). 
+\textcolor{red}{Chapter 2} provides an introduction to the concept of emulation (2.1), a description of some regression techniques (2.2) and presents the numerical simulator used solving the SWE (2.3) used in the case studies presented in Chapter~\ref{chp:case_studies}.\seb{make hyperreferences!!}
+The first case study (\ref{sec:mechanistic_emulator}) illustrates the construction of a \emph{mechanistic emulator} to estimate the water depth above a weir and the potential of emulation in substituting classical physical experiments with numericals ones.
+Case study 2 (\ref{sec:hydrological_emulator}) presents a possible workflow to develop an emulator-based early flood warning system. 
+Due to the generalization and abstraction of the proposed methodology, its testing in real specific case studies should be easily implementable.\\
+
 % An emulator predicting the \emph{time-to-threshold}\footnote{Time lapse from a specific instant after which a given threshold is exceeded.} for the discharge in a channel draining the water from a catchment is built.
 % At the end, the principal findings and discoveries of the thesis are summarized and discussed.
-% From these some conclusions are drawn and suggestion for future work are made.\\
+% From these some conclusions are drawn and suggestion for future work are made.
+
 
 The whole thesis was pursued using \emph{open softwares} and is licensed under the \textcolor{red}{bla bla} \seb{which license??} license.
-The simulations from which the datasets used to build the emulators were extracted, were run with \citetalias{delestre_fullswof:_2017}.
+The simulations from which the datasets used to build the emulators were extracted, were run with \citetalias{delestre_fullswof:_2017} (v.1.07.00).
 All data manipulation and plotting was performed with \citetalias{octave_community_gnu_2018}.
 To ease the interaction with the simulator the \citetalias{octave_community_gnu_2018} package \emph{fswof2d} was developed.
 This is available online and distributed under license GPLv3+.
 The URLs where this, as well as the rest of the thesis' material can be downloaded, can be found in Sec.~\ref{sec:additional_material} of the Appendix.
 
 
-%===============================================================================
-\section{Goals of this thesis}
-%===============================================================================
+%%===============================================================================
+%\section{Goals of this thesis}
+%%===============================================================================
 % * define some goals
 % * goals can be broken down to objectives/subgoals if needed
 % * from these, try to derive research questions. These should be as specific
