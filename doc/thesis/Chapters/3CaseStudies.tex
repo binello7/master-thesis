@@ -363,37 +363,6 @@ New relationships and dependencies between predictors used and responses observe
 
 
 
-%-------------------------------------------------------------------------------
-%An \textit{early flood warning tool} in an essential component of an \textit{early flood warning system}.
-%An early flood warning system has to be understood as an integrated system of tools and plans to detect and respond to flood emergencies \autocite{icimod_early_2018}.
-%This can be managed by the community themselves and if designed, implemented and operated correctly can make the difference between tragedy and survival.
-
-%Such systems have already been installed in various endangered regions in the world.
-%After the major flooding of July 2014, the city of Altstätten in the canton of St. Gallen made the decision to install one.
-%The system installed uses cameras, sensors and level meters to gather data and information about the current situation \autocite{st._galler_tageblatt_altstatten_2017}.
-%When the value of certain parameters exceed the given threshold, a dangerous situation is recognized and the alarm signal is sent.
-
-%Three years after the installation of the system an alarm rings in the middle of the night.
-%Firemen go immediately into action in order to install temporary measures to fight against the water.
-%A couple of hours later the torrent overflows at several points and the city gets flooded.
-%Damages are less severe than last time, especially thanks to the temporary measures installed, but possibly they could have been reduced even more.
-
-%Crucial in order to limit the damages is the intervention time before the actual flooding occurs.
-%The earlier the dangerous situation can be detected the more time is available to the population and authorities to get ready and set up different types of temporary mitigation measures.
-%Systems based on sensors monitoring the evolution of the current situation in the upper part of the catchment are quite reliable but do not allow for long anticipation time.
-
-%Numerical simulations can be run with meteorological forecast data and approximate soil saturation conditions in order to obtain early predictions of the event outcome.
-%However, the big advantage of predicting with that much anticipation is partially lost due to the duration of such simulations.
-%Accurate meteorological forecasts are available only few hours before the event.
-%If the model require several hours to run, which is often the case to obtain accurate predictions for catchments of this extent, then the advantage of being able to run it in advance is canceled.
-
-%A possible solution to this problem is the development of an \emph{early flood warning tool} based on an \emph{ad hoc surrogate model} exploiting the catchment specific behavior.
-%This early flood warning tool should be able to recognize if a rain event will generate a channel discharge leading to flooding and if yes within how much time.
-%For this scope two different emulators are used.
-%The first emulator classifies a rain event based on the forecasted \emph{average rain intensity} and \emph{current soil saturation} into two groups: rain events generating discharge exceeding a chosen threshold ($Q_!$) and rain events not generating discharge exceeding the threshold.
-%For events exceeding the threshold a second emulator is developed.
-%This predicts the time the rain event will need to produce the threshold discharge $Q_!$ at the outlet of the catchment.
-%-------------------------------------------------------------------------------
 
 
 \newpage
@@ -630,7 +599,7 @@ With these points guiding us we established that the model producing the best re
 This is constituted by \num{6} points sparse in the predictor space.
 The values of the $(I, \theta_i)$ pairs composing this dataset can be found in Tab.~\ref{tab:validation_dataset}.
 These observation constitute an unbiased dataset, since it was never shown to the model.
-We evaluated the performance of our model on both test and validation dataset by computing the MAE and the RMSE.
+We evaluated the performance of our model on both test and validation dataset by computing the MAE and the RMSE.\seb{EXPLAIN THAT at the end test dataset was also used for interpolating!!!}
 
 
 %-------------------------------------------------------------------------------
@@ -693,13 +662,15 @@ These results are summarized in Tab.~\ref{tab:emulator_performance}
     \toprule
      & \textbf{MAE [\si{\minute}, \si{\percent}]} & \textbf{RMSE [\si{\minute}]} \\
     \midrule
-    \textbf{test}       & 51.6, 33.6 & 16.1 \\
-    \textbf{validation} & 21.8, 11.3 & 10.8 \\
+    \textbf{test}       & $8.0\cdot 10^{-5},\,5.2\cdot 10^{-5}$ & $2.3\cdot 10^{-5}$\\
+    \textbf{validation} & $6.0,\,5.9$ & $4.0$\\
     \bottomrule
   \end{tabular}
 \end{table}
 
-
+The emulator's speedup factor was also computed.
+The evaluation of the emulator at one point lasts in average \SI{0.012}{\s}, whereas running a simulation takes approximately \SI{30}{\minute}.
+This represents a \emph{speedup} of \textbf{\num{150000}} $\bm{\times}$.
 
 %-------------------------------------------------------------------------------
 \subsection{Discussion}
@@ -708,7 +679,7 @@ These results are summarized in Tab.~\ref{tab:emulator_performance}
 %   absolutely)
 % * discuss point misclassified
 % * discuss influence of time resolution
-% * why is test error bigger?
+% * discuss emulator's speedup
 % * if a real system is built -> UQ very important!!
 
 If an early flood warning system based on emulation had to be installed, one would want absolutely to avoid underestimating the danger.
@@ -729,12 +700,51 @@ The performance would be given by the ration "correctly classified" over "total 
 If this outcome is satisfactory, then we can keep the classifier obtained.
 If not we would add the new dataset to the training dataset, retrain the classifier and retest it on a further new dataset that has to be produced.
 This procedure should be repeated until satisfactory results are reached.
+Unfortunately, this could not be done to a further extent due to lack of time.
 It is very important to train a very good classifier.
 From this depends if the authorities in charge would take actions or if nothing at all is done.
-Consequences, if based on the classifier no action is taken, but the reaching of the threshold does happen, could be dramatical.\\
+Dramatical consequences could happen, if based on the classifier no action is taken but the threshold is reached.\\
 
 The emulator, representing the second step of the early flood warning system, even if to a minor extent, should also never underestimate the risk.
-The danger linked with underestimating how fast $Q_!$ is reached is somehow a bit smaller, measures are being taken when unexpectedly the flood arrives, but still to consider.
+The danger linked with underestimating how fast $Q_!$ is reached is somehow a bit smaller: measures are being taken when unexpectedly the flood arrives---but still to consider.
+The MAE obtained on the validation datasets is \SI{6.0}{\minute}, \SI{5.9}{\percent} respectively.
+In this case, it was predicted that an event reaching the threshold after \SI{101.5}{\minute} would have reached it after \SI{95.5}{\minute} and that another one reaching it after \SI{192.5}{\minute} would have reached it after \SI{198.0}{\minute} (cf. Tab.~\ref{tab:validation_performance} in the Appendix).
+Those are the validation data points where the error was maximum.
+In the second case we are underestimating the error, but this by a fairly small amount of time.
+The absolute RMSE, \SI{4.0}{\minute} is quite close to the MAE, the MAE being just \SI{2}{\minute} higher than the RMSE.
+This seem to indicate that the distribution of the error is quite narrow and that the model typically produces prediction errors of about $\approx \SI{5}{\minute}$.
+This should however be tested on a bigger validation sample.
+Errors on the test dataset are to consider inexistent.
+This is because in the last step, when creating the emulator, the test dataset was added to the training dataset, and a new fit was done.
+Therefore, also the test dataset is interpolated by the emulator.
+
+Moreover, the time resolution used for the simulation was \SI{1}{\minute}. Therefore, validation errors which magnitude is smaller than this value cannot be considered as errors, since already from the simulations the time-to-threshold is already uncertain at the minute scale.
+The time resolution can have played a role in the shape of the emulator's surface.
+The mesh shows regions where the surface is less smooth, in particular in proximity of some test data points, where small peaks can be observed.
+These are due to the interpolation done by the emulator.
+In order to interpolate the points the surface grows more than what could seem "natural".
+We need to remember that the location of these points on the $t_!$ has an uncertainty of \SI{1}{\minute}, due to the resolution chosen.
+This means that each point could actually be shifted up or down by \SI{1}{\minute}, which could produce these "unnatural" peaks observed.
+
+Although the global performance seems to be good, particular attention have to be paid.
+These prediction errors are found when no uncertainty on the parameters is considered.
+When using the emulator in a real case, as an early flood warning system, the parameters values passed to the emulator, forecasted rain intensity and initial soil saturation in particular, can be very uncertain.
+For this an uncertainty quantification should be carried out, in order to know which influence would have the estimated input uncertainty on the output.
+This is made particularly difficult by the fact that the initial soil saturation is a spatially distributed parameter.
+Its uncertainty may vary from one zone of the catchment to the other; not only 
+the catchment average initial soil saturation should be taken into account, but also its distribution.\\
+
+The problem mentioned above is not typical of emulation, but rather of all kind of predictions depending on some inputs: if the inputs are uncertain, whatever model or simulator, even an exact one, will generate uncertain output.
+The uncertainty in the output will depend on how much the response varies by varying the parameters.
+Emulation however offers a big advantage respect to any simulator: its \emph{speedup}.
+The speedup given by emulation allow us to obtain \textbf{\num{150000}} predictions in the time we could run a simulation.
+This has a huge power.
+With this we could for example perform real time uncertainty estimation: given a forecasted rain event and knowing the current uncertainty in the intensity of the rain and in the soil conditions, not only we could predict the time-to-threshold, but also we could give the accuracy of this prediction.
+This additional information is very valuable, since it can tell how much earlier or later than expected the threshold could be exceeded.
+Since emulator's predictions can be obtained so rapidly, these could even be adapted to the evolution of the situation.
+As the rain event develops the inputs uncertainty decreases.
+The response of the emulator can then be evaluated again with the new, corrected inputs and thus increase the certainty of the outcome.
+
 
 
 
