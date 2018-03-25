@@ -1,6 +1,7 @@
 # Thesis - Notes
 
 ## To check before hand-in:
+# VERY IMPORTANT
 * _MAKE SPELL CHECK!!_
 * make titles active!!
 * check all "Fig."
@@ -13,6 +14,11 @@
 * check for "GNU Octave"
 * check use of "," and ";"
 * change all / in units to [] (tables and plots)
+* Separate results and discussion in CS1
+* check "bla bla license"
+* check missing references!!
+
+# Less important
 * review first sentence of paragraphs to highlight the whole paragraph
 * either use numerical experiment or explain in intro what we mean with
   experiment
