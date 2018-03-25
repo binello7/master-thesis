@@ -120,21 +120,57 @@ Whether to use a mechanistic or a purely data driven emulator is often quite sub
 
 
 % ------------------------------------------------------------------------------
-\section{Regression and interpolation methods}
+\section{Regression and interpolation}
 % ------------------------------------------------------------------------------
-% * explain the terminology: interpolation, INTRAPOLATION, extrapolation
-% * put it as subsection only if there is 2.2.2, otherwise just 2.2
-% * explain the work done on regression and interpolation
-% * explain their relation with emulation
-% * cite James et al., 2013 -> learning from data or predict outputs
+
+% * cite James et al., 2013 -> learning from data or predict outputs ->
+%   GP -> can regress instead of interpolate, in order to establish easier
+%   functional relationship
 
 Key step when building an emulator is establishing the inputs-output relationship, namely solve the regression/interpolation problem.
-For this many different methods exist; which one to choose may depend on the dimensions of the inputs space, the availability of data, the previous knowledge about the considered system, and weather we want to make predictions or learning functional relationships from our data.
+For this many different methods exist; which one to choose may depend on the dimensions of the inputs space, the availability of data, the previous knowledge about the considered system, and weather we want to make predictions or learning functional relationships from our data.\\
 
 Usually, when learning functional relationships from physical experimental data, we are trying to solve a regression problem.
 The observation we are using are subject to errors assumed to be independent and Gaussian distributed due to the stochasticity of the problem.
 Since the observation does not represent necessarily the true value, we then perform a regression, e.g. using the least squares (LS) method, minimizing the sum of squared residuals.
-In this thesis, 
+In this thesis, all of the experiments\footnote{Within the thesis, every reference to "experiment", if not differently stated, has to be read as "numerical experiment".} conducted are numerical experiments, namely simulations.
+These are not subject to stochasticity.
+Every simulation run with the same parameters produces the same output.
+Since our emulator tries to reproduce the simulators behaviour, the observations should be rather interpolated than regressed.\\
+
+Within this thesis four different types of regression/interpolation techniques, implemented within \citetalias{octave_community_gnu_2018} were used.
+
+\begin{itemize}
+\itemsep0em
+  \item 1D-linear interpolation (\mintinline{octave}{interp1 (X, Y, XI, "linear")})
+  \item 1D-cubic spline interpolation (\mintinline{octave}{interp1 (X, Y, XI, "spline")})
+  \item 1D-linear regression (\mintinline{octave}{polyfit (X, Y, 1)})
+  \item Gaussian Processes interpolation (package \citetalias{rasmussen_gaussian_2010})
+\end{itemize}
+
+From these, the GP interpolation is the most flexible and sophisticated one.
+We can think of a GP as defining a distribution over functions.
+A GP is fully specified by its \emph{mean} ($m(\bm{x})$) and \emph{covariance} function ($k(\bm{x},\bm{x}')$) \autocite{rasmussen_gaussian_2006}, which both may depend from hyperparameters.
+The GP $f(\bm{x})$, with mean $m(\bm{x})$ and covariance $k(\bm{x},\bm{x}')$ is therefore a class of functions and is commonly written as:
+
+\begin{equation}
+  f(\bm{x}) \backsim \mathcal{GP}\left(m(\bm{x}), k(\bm{x},\bm{x}')\right)
+\end{equation}
+
+\noindent The hyperparameters define properties of this class of functions, like its smoothness for example.
+When performing GP regression, we tune these hyperparameters in order to maximize the \emph{marginal likelihood} $p(\bm{y}\vert \bm{X})$, the probability of observing the output $\bm{y}$ given the inputs $\bm{X}$.
+By tuning the hyperparameters we \seb{insert image Rasmussen p.20???} discriminate some classes of functions in favor of others, remaining at the end just with the "most probable class", with its mean (prediction) and its variance (confidence about the prediction).\seb{is this correct???}
+If we require a smoothness which is higher than that of our data for example, the GP will not be able to interpolate the points anymore.
+The result of the GP will therefore be the regression of the points.
+
+By choosing specific mean and covariance functions, and setting constraints on the hyperparameters, GP allow us to encode prior knowledge in our model.
+
+
+  
+%mention GP can include priors
+% we can enforce regression instead of interpolation
+
+
 
 
 
