@@ -74,12 +74,12 @@ soil_saturations_test = [linspace(ss1, ss2, nss)].'; #[-]
 # emulator
 # gaussian process
 # emulator's mean, covariance and likelyhood functions:
-meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
-covfunc  = @covSEard;
+meanfunc = [];
+covfunc = {@covMaternard,1};
 likfunc  = @likGauss;
 
 # emulator's hyperparameters arbitrary initial values:
-mn = [1;1;1];
+mn = [];
 cv = [1;1;1;];
 lk = [1];
 
@@ -93,19 +93,19 @@ hyp_emu =
 
   scalar structure containing the fields:
 
-    mean =
-
-       46.6198
-       -1.2804
-       -9.3105
-
+    mean = [](0x0)
     cov =
 
-       1.39468
-       0.26833
-       6.01698
+       4.8476
+       2.2328
+       5.3609
 
-    lik =  0.87122
+    lik = -3.3989
+
+
+
+
+
 
 
 
