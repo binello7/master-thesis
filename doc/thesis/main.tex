@@ -75,6 +75,8 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{amsmath}
 
+\usepackage{amssymb}
+
 \usepackage{morefloats} % to allow LaTeX to place more than 18 floats
 
 \usepackage{float} % to enable the use of "H" position for floats
@@ -159,19 +161,19 @@ headsepline, % Uncomment to get a line under the header
 %  THESIS INFORMATION
 %-------------------------------------------------------------------------------
 
-\thesistitle{Thesis Title} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
-\supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
-\examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
-\degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
-\author{John \textsc{Smith}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\thesistitle{A prelude to emulation for\\ \emph{flood prediction}} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\supervisor{Dr. Juan Pablo \textsc{Carbajal}\\ Dr. Jörg \textsc{Rieckermann}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\examiner{Prof. Dr. Peter Molnar} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
+\degree{MSc. ETH Environmental Engineering} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
+\author{Sebastiano \textsc{Rusca}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
-\subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
+\subject{Environmental Engineering} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
-\university{\href{http://www.university.com}{University Name}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{\href{http://department.university.com}{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\group{\href{http://researchgroup.university.com}{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
-\faculty{\href{http://faculty.university.com}{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
+\university{\href{https://www.ethz.ch/en.html}{ETH Zürich}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\department{\href{https://www.baug.ethz.ch/en/}{ETH Zürich - Dept. of Civil, Environmental and Geomatic Engineering}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\group{\href{http://www.hyd.ifu.ethz.ch/}{Chair of Hydrology and Water Resources Management}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\faculty{\href{https://www.baug.ethz.ch/en/studies/environmental-engineering.html}{Institute of Environmental Engineering}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
 \AtBeginDocument{
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
@@ -190,11 +192,17 @@ headsepline, % Uncomment to get a line under the header
 %-------------------------------------------------------------------------------
 
 \begin{titlepage}
-\begin{center}
 
-\vspace*{.06\textheight}
-{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
-\textsc{\Large Doctoral Thesis}\\[0.5cm] % Thesis type
+
+%\vspace*{.06\textheight}
+\includegraphics[width=0.3\textwidth]{Figures/eth.png}
+\hfill
+\includegraphics[width=0.3\textwidth]{Figures/eawag.png}
+%{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
+\vspace{1.5cm}
+\begin{center}
+\textsc{\Large Master Thesis}\\[0.5cm] % Thesis type
+\vspace{1cm}
 
 \HRule \\[0.4cm] % Horizontal line
 {\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
@@ -203,22 +211,23 @@ headsepline, % Uncomment to get a line under the header
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushleft} \large
 \emph{Author:}\\
-\href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+\authorname % Author name - remove the \href bracket to remove the link
 \end{flushleft}
 \end{minipage}
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright} \large
 \emph{Supervisor:} \\
-\href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\supname % Supervisor name - remove the \href bracket to remove the link  
 \end{flushright}
 \end{minipage}\\[3cm]
- 
+
+\emph{Examiner:}\\
+\examname
 \vfill
 
-\large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
-\textit{in the}\\[0.4cm]
-\groupname\\\deptname\\[2cm] % Research group name and department name
- 
+
+\deptname\\\groupname\\[2cm] % Research group name and department name
+
 \vfill
 
 {\large \today}\\[4cm] % Date
@@ -233,7 +242,7 @@ headsepline, % Uncomment to get a line under the header
 %  DECLARATION PAGE
 %-------------------------------------------------------------------------------
 
-\includepdf[pages=-]{declaration-originality.pdf}
+\includepdf[pages=-]{declaration-originality_SRs.pdf}
 
 %-------------------------------------------------------------------------------
 %  ABSTRACT PAGE
@@ -272,14 +281,19 @@ Brief description of the thesis. Capture readers' interest. Mention/summarize ev
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 
 \textbf{EP}   & \textbf{E}xpectation \textbf{P}ropagation\\
+\textbf{FEM}  & \textbf{F}inite \textbf{E}lement \textbf{M}ethod\\
 \textbf{FV}   & \textbf{F}inite \textbf{V}olume\\
 \textbf{FVM}  & \textbf{F}inite \textbf{V}olume \textbf{M}ethod\\
 \textbf{GCI}  & \textbf{G}rid \textbf{C}onvergence \textbf{I}ndex\\
 \textbf{GC}   & \textbf{G}aussian \textbf{P}rocess\\
+\textbf{HPC}  & \textbf{H}igh \textbf{P}erformance \textbf{C}omputing\\
 \textbf{IQR}  & \textbf{I}nter\textbf{Q}uartile \textbf{R}ange\\
+\textbf{LS}   & \textbf{L}east\textbf{S}quares\\
 \textbf{ML}   & \textbf{M}achine \textbf{L}earning\\
 \textbf{MAE}  & \textbf{M}aximum \textbf{A}bsolute \textbf{E}rror\\
 \textbf{RMSE} & \textbf{R}oot \textbf{M}ean \textbf{S}quared \textbf{E}rror\\
+\textbf{SWE}  & \textbf{S}hallow \textbf{W}ater \textbf{E}quation\\
+\textbf{UQ}   & \textbf{U}ncertainty \textbf{Q}uantification\\
 
 \end{abbreviations}
 
