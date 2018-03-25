@@ -10,21 +10,91 @@
 % * simulation is used to explore
 % * experiment: we mean here numerical experiment -> say it!
 
+% ==============================================================================
+\section{Hydrodynamical simulator}
+% ==============================================================================
+% * transfer functions
+% * PDEs
+% * https://en.wikipedia.org/wiki/Routing_(hydrology)
+% * go for hydrodynamic simulation => more detailed, more complex, slower
+% * (Hydrological models could even be considered "emulators" of the more
+%   detailed PDE-simulators)
 
+% ------------------------------------------------------------------------------
+\subsection{FullSWOF\_2D-v1.07.00}
+% ------------------------------------------------------------------------------
+% * show the results of a simulation (cross-reference with channel simulation)
+% * 
 
-In this chapter we give an introduction about emulation.
-We explain what it is, how it works, and what it needs.
-We then propose a workflow to follow in order to implement it.
+The numerical simulator which has been emulated in the two case studies presented in Chapter 3 is \citetalias{delestre_fullswof:_2017}. FullSWOF (Full Shallow Water equations for Overland Flow) is an \emph{open source} software solving the Shallow Water equations (SWE) over regular uniform grid using finite volumes method (FVM) %and numerical methods especially chosen for hydrodynamic purposes 
+\autocite{the_fullswof_team_fullswof_2018}. \\
+ 
+Water can enter the simulation domain through the boundaries (\emph{imposed discharge}) or with the rain.
+Input discharge is fixed in space and time. Rainfall is applied uniformly to the simulation domain, but it is allowed to vary in time. If the option rain is activated, a \emph{rainfall file} with the rain hyetograph (the rainfall intensity as a function of time) has to be provided.   
 
-We then present the tools and the methods required and briefly describe them
-The tools used for the scope of this thesis are then presented and described.
+SAY SOMETHING ABOUT INFILTRATION METHOD, ET NOT IMPLEMENTED, HOW WATER CAN EXIT .. 
 
+In order to run simulations, FullSWOF needs at least the following inputs:
+ % numeri al posto di paragraph
+\paragraph{Topography file} A text file specifying the topography of the gridded simulation domain. This is done specifying the coordinates (x and y) of each grid cell and the respective elevation (z) with an x-y-z format 
 
+\paragraph{Simulation parameters file} A text file defining the values of the simulation parameters. This can be generated with the function \textit{params2file} of the fswof2d package (see Appendix A.1.
+Simulation parameters include:
 
-%Unlike high performance computing (HPC), emulation is one way of reducing computational time with no big investments.
+\begin{itemize}
+\itemsep0em
+  \item Number of cells (x and y directions)
+  \item Simulation duration
+  \item Number of intermediate states saved
+  \item Domain length
+  \item Domain width
+  \item Boundary conditions specifications
+  \item Various settings for the numerical schemes
+  \item Different physical parameters (friction coefficient, initial soil saturation, soil thickness, soil hydraulic conductivity, maximal infiltration). These parameters are spatially distributed. A unique value for the whole domain can be used or a value for every cell can be defined by giving to the simulator a text file specifying all of the values.\\
+\end{itemize}
 
+\paragraph{Initial conditions file} A text file defining the initial conditions of the simulation. It specifies the \emph{water depth}, the \emph{flow velocity in x} and the \emph{flow velocity in y} for all cells of the domain. \\ % All of these can also be set to \num{0}.\\
 
+FullSWOF simulations generate five different \emph{output files}.
+% numeri al posto di paragraph 
+\paragraph{Initial simulation state file} reports the initial state (at $t = \SI{0}{\s}$) of the simulation. 
+This corresponds to the initial conditions file.
+\paragraph{Final simulation state file} reports the state of the simulation (at $t = t_{max}$).
+\paragraph{Simulation states file} stores the whole evolution of the simulation: it begins with the initial conditions and ends with the final state.How many intermediate results to saved is set by the user in the parameters file.
+\paragraph{Water budget/balance file} records how much water has been lost through the boundaries, how much has infiltrated and how much is present in the simulation domain.
+\paragraph{Parameters file copy}. Useful to know which parameters were set to generate a given output.
 
+In order to generate these files, interaction functions were developed with the open source tool \textit{Octave 4.2.1} \autocite{octave_community_gnu_2018}. The interaction functions were grouped into the Octave package \textit{fswof2d} available at \url{https://bitbucket.org/binello7/fswof2d}. For more information, refers to  Appendix A.1
+
+% ------------------------------------------------------------------------------
+% FULLSWOF2D PACKAGE
+% * list the functions developed
+% * high-level infos what functions do
+%   - input
+%   - output
+%   - methods/operations
+% * or move to appendix if no time
+% * put just summary in main body:
+%   "fswof2d has 18 functions with 20 methods to convert data, pre-processes
+%    grids for efficient construction of simulation domain, interface Octave
+%    engine (see Appendix X for details.)"
+
+PUT IN APPENDIX A.1 
+The package includes the following functions, all of which are distributed under \textit {GPLv3} license \autocite{smith_quick_2014}.
+ 
+\begin{itemize}
+\itemsep0em
+  \item center2node.m
+  \item csec\_channel2lvlsym.m
+  \item dataconvert.m
+  \item extrude\_csec.m
+  \item huv2file.m
+  \item matplotlib\_cm.m
+  \item node2center.m
+  \item params2file.m
+  \item read\_params.m
+  \item topo2file.m
+\end{itemize}
 
 % ==============================================================================
 \section{Emulation}
@@ -56,35 +126,23 @@ The tools used for the scope of this thesis are then presented and described.
 % * speedup gain at the expenses of information/accuracy
 % * emulators scarify unneeded accuracy in favor of speed (Carbajal, 2017)
 
+%Unlike high performance computing (HPC), emulation is one way of reducing computational time with no big investments.
 
+In the recent decades, the increasing computational capabilities of computer processors has enlarged the applications of numerical simulators and opened the possibility to an increase of the simulation resolution and accuracy. In many engineering fields, the level of detail of these simulators has grown to the point of substituting the realization/execution of physical experiments. 
+Despite the numerous advantages provided by these numerical simulators, the elevated computing time of this simulations remains an important drawback, especially for development of real-time applications or testing/optimization of different simulation conditions/designs.  
+ 
+A possible solution to this problem is provided by emulators, approximation models which try to reproduce the behaviour of the detailed simulator but with minor computational costs. Construction of appropriate emulators allow to achieve huge speedups at the expenses of unneeded simulation details and accuracy \autocite{carbajal_appraisal_2016}.
 
+Emulators are task-specific. They are built to answer a specific question. If the research question changes, a new, ad-hoc emulator must be built.
 
+Let us make an example from the hydrodynamics field, where the research target is to know the water depth at a specific point in a river channel knowing the (input) hydrograph at inlet of the channel. 
+Several numerical simulations could be performed based on different input hydrographs, saving the respective simulated water depth time series at the location of interest. Then, an emulator could be built to learn the relationship between the hydrograph and the observed water-depth time series. This would allow to obtain an estimate of the water depth time-series based on a specific input hydrograph without running a numerical simulation. 
+If a new task would request the prediction of the flow velocity time-series at the same location and a specific channel depth, the previously constructed emulator would not be able to provide an answer because trained only with the pair of water depth and input hydrograph observations. If this new task has to be accomplished many times, it could make sense to build a new emulator in order to reduce the overall computational time.
 
+The above example shows that emulators can also be space-specific (e.g. water depth time-series at a specific point) or time specific (e.g. water depth profile along a channel at specific instant).
 
-
-\seb{I really don't know how to begin this section...}
-The big advantages offered in terms of costs, the increasing performance of computers and the growing variety of task that can be tackled with, has lead to spreading of simulation to diverse sectors of science and engineering \autocite{gorissen_surrogate_2010}.
-Simulators have become more accurate, their level of detail has grown, allowing in some cases for the replacement of classical physical experiments.
-However, the widespread exploitation of simulation has increased the awareness of its main drawback: the considerable computational cost of these high fidelity simulators.
-A possible solution to the problem is the use of emulators, approximation models reproducing the behaviour of the detailed simulator.
-With the construction of emulators, huge speedups can be achieved; these at the expenses of unneeded detail and accuracy \autocite{carbajal_appraisal_2016}.
-
-Details are sacrificed with the construction of emulators. Emulators are task-specific, they are built to answer a specific question: if the question changes, a new, ad hoc emulator have to be built.
-Let us make an example from the hydrodynamics field.
-We can imagine extracting time-series of water depth at a specific point in a river channel from hydrodynamical simulations.
-The simulation inputs are different hydrographs, the outputs are the time-series generated by the hydrographs.
-An emulator can be built for this task, predicting the pattern of the water depth time-series as a function of the input hydrograph given.
-Now, if the focus changes, and we are suddenly interested in the pattern of the flow velocity time-series at that point, we can simply extract it from the simulations.
-The emulator however, has no knowledge of the flow velocity.
-It was built and trained with water depth data and it cannot in any way make flow velocity predictions.
-If the task has to be accomplished many times, it could make sense to build a new emulator for this.
-
-Not only information about other variables, not directly linked with the one studied are lost by building an emulator.
-Emulators can be space-specific (e.g. water depth time-series at a specific point) or time specific (e.g. water depth profile along a channel at specific instant).
-When obtaining these information from a detailed hydrodynamical simulator, the simulator goes through a series of \emph{internal states} that we do not really need for our application.
-A Finite Element Method (FEM) simulator for example, has to solve the SWE over the whole grid, although the output we are interested in is just the water depth at the chosen point.
-Here the internal states are represented by the solution of the SWE at every grid cell, whereas our output, the information we are interested in, is the water depth at the chosen location.
-The structure of such simulators is said "fan-out/fan-in" \autocite{carbajal_emumore_2017}. A schematic representation of this structure can be observed in Fig.~\ref{fig:simulation}.
+When running hydrodynamical simulation, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in" \autocite{carbajal_emumore_2017}.
+Figure .~\ref{fig:simulation}. ... schematize this peculiarity of numerical simulation; FullSWOF has has to solve the SWE over the whole simulation grid, although the output we are interested in might be just the water depth at the chosen point (water depth simulated in a given cell)
 
 \begin{figure}[h]
   \centering
@@ -174,125 +232,7 @@ By choosing specific mean and covariance functions, and setting constraints on t
 
 
 
-% ==============================================================================
-\section{Simulation in hydrodynamics}
-% ==============================================================================
-% * transfer functions
-% * PDEs
-% * https://en.wikipedia.org/wiki/Routing_(hydrology)
-% * go for hydrodynamic simulation => more detailed, more complex, slower
-% * (Hydrological models could even be considered "emulators" of the more
-%   detailed PDE-simulators)
 
-
-
-% ------------------------------------------------------------------------------
-\subsection{FullSWOF\_2D-v1.07.00}
-% ------------------------------------------------------------------------------
-% * show the results of a simulation (cross-reference with channel simulation)
-% * 
-
-
-The simulator chosen to produce the datasets for the later emulation task is \citetalias{delestre_fullswof:_2017}. FullSWOF (Full Shallow Water equations for Overland Flow) is an \emph{open source} software solving the Shallow Water equations using finite volumes and methods especially chosen for hydrodynamic purposes \autocite{the_fullswof_team_fullswof_2018}.\\
-
-In order to run simulations the software needs at least the following inputs:
-
-\begin{itemize}
-\itemsep0em
-  \item a \emph{parameters file}
-  \item a \emph{topography file}
-  \item an \emph{initial conditions file}
-\end{itemize}
-
-\paragraph{Parameters file} A text file defining the values set for all of the simulation parameters. This can be generated with the function \textit{params2file} of the fswof2d package, where to every parameter a default value is already given and only parameter values different from the default ones have to be modified. Simulation parameters include:
-
-\begin{itemize}
-\itemsep0em
-  \item Number of cells (x and y directions)
-  \item Simulation duration
-  \item Number of intermediate states saved
-  \item Domain length
-  \item Domain width
-  \item Boundary conditions specifications
-  \item Various settings for the numerical schemes
-  \item Different physical parameters (friction coefficient, initial soil saturation, soil thickness, soil hydraulic conductivity, maximal infiltration)
-\end{itemize}
-
-The physical parameters are spatially distributed. A unique value for the whole domain can be used or a value for every cell can be defined by giving to the simulator a text file specifying all of the values.\\
-
-Output is written to five different \emph{output files}.
-To one file only the initial state (at $t = \SI{0}{\s}$) of the simulation is written.
-This corresponds to the initial conditions file.
-To a second file the final state of the simulation is saved (at $t = t_{max}$).
-A third file stores the whole evolution of the simulation: it begins with the initial conditions and ends with the final state.
-In between the intermediate results are stored.
-How many intermediate results to saved is set by the user in the parameters file.
-The fourth file stores the information relative to the water budget.
-How much water was lost through the boundaries, how much infiltrated and how much is present over the topography.
-The fifth is just a copy of the parameters file.
-It is useful to know which parameters were set to generate the given output.
-
-\paragraph{Topography file} FullSWOF\_2D solves the Shallow Water equation over a regular uniform grid. The computational domain is therefore a rectangle and the cells composing it are rectangles too, all with the same size. The topography file is a text file specifying the x,y,z coordinates of the center of every cell.
-
-\paragraph{Initial conditions file} A text file defining the initial conditions of the simulation. It specifies the \emph{water depth}, the \emph{flow velocity in x} and the \emph{flow velocity in y} for all cells of the domain. All of these can also be set to \num{0}.\\
-
-Water can enter the domain through the boundaries (\emph{imposed discharge}) or with the rain. If the option rain is chosen, a \emph{rain file} has to be provided. This defines the hyetograph of the rain event, the rain intensity as a function of time. The rain is uniformly applied to the domain.
-
-
-% ------------------------------------------------------------------------------
-\subsection{Development of \textit{FullSWOF\_2D} interaction tools}
-\label{sec:fswof_interaction_tools}
-% ------------------------------------------------------------------------------
-% FULLSWOF2D PACKAGE
-% * list the functions developed
-% * high-level infos what functions do
-%   - input
-%   - output
-%   - methods/operations
-% * or move to appendix if no time
-% * put just summary in main body:
-%   "fswof2d has 18 functions with 20 methods to convert data, pre-processes
-%    grids for efficient construction of simulation domain, interface Octave
-%    engine (see Appendix X for details.)"
-
-
-
-As already mentioned in section \seb{mention which section} \textit{FullSWOF\_2D-v1.07.00} was chosen as \emph{overland flow simulator} in order to generate the required datasets.
-\textit{FullSWOF\_2D} needs at least three input files in order to run simulations:
-
-\begin{itemize}
-\itemsep0em
-  \item \textit{topography}: a text file specifying the topography of the domain
-  \item \textit{parameters}: a text file specifying the values set for the simulation parameters
-  \item \textit{huv\_init}: a text file defining the initial conditions of the problem (initial water height and initial water velocity at every point of the grid)
-\end{itemize}
-
-In order to generate these files, interaction functions were developed with the open source tool \textit{Octave 4.2.1} \autocite{octave_community_gnu_2018}.
-The interaction functions were grouped into the Octave package \textit{fswof2d} available at \url{https://bitbucket.org/binello7/fswof2d}.\\
-
-The package includes the following functions, all of which are distributed under \textit {GPLv3} license \autocite{smith_quick_2014}.
-
-\begin{itemize}
-\itemsep0em
-  \item center2node.m
-  \item csec\_channel2lvlsym.m
-  \item dataconvert.m
-  \item extrude\_csec.m
-  \item huv2file.m
-  \item matplotlib\_cm.m
-  \item node2center.m
-  \item params2file.m
-  \item read\_params.m
-  \item topo2file.m
-\end{itemize}
-
-
-
-\textit{FullSWOF\_2D} uses a regular uniform grid in order to solve the \emph{shallow water equation} with the finite volume method (FVM).
-The equations are solved at the center of every cell.
-After creating the vector defining the grid nodes, one can use the \textit{center2node} function to compute the centers of the grid cells.
-This is particularly useful because the $(x,y)$ coordinates saved to the \textit{topography} file have to be the coordinates of the cell centers.
-A short usage example would be:
 
 
 
