@@ -74,8 +74,8 @@ y_class(y_class>=420) = -1;
 
 ## Use the package gpml
 # Mean function
-meanfunc = [];
-mn = [];
+#meanfunc = [];
+#mn = [];
 #meanfunc = @meanConst;
 #mn = 0;
 #-------------------------------------------------------------------------------
@@ -90,8 +90,8 @@ mn = [];
 #mn = [1;1;1;1;1];
 #meanfunc = {@meanSum, {@meanConst, {@meanLinear}}};
 #hyp.mean = [1;1;1];
-#meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
-#mn= [1;1;1];
+meanfunc = {@meanPow,2,{@meanSum,{@meanConst,@meanLinear}}};
+mn= [1;1;1];
 #meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanProd,{@meanLinear,@meanLinear}}}};
 #mn = [1;1;1;1;1;1;1];
 
