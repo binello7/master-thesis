@@ -9,99 +9,16 @@
 %   in detail
 % * simulation is used to explore
 % * experiment: we mean here numerical experiment -> say it!
+% * as intro state clearly what I present here (Jorg)
+
+
+
+
 
 % ==============================================================================
-\section{Hydrodynamical simulator}
-% ==============================================================================
-% * transfer functions
-% * PDEs
-% * https://en.wikipedia.org/wiki/Routing_(hydrology)
-% * go for hydrodynamic simulation => more detailed, more complex, slower
-% * (Hydrological models could even be considered "emulators" of the more
-%   detailed PDE-simulators)
-
-% ------------------------------------------------------------------------------
-\subsection{FullSWOF\_2D-v1.07.00}
-% ------------------------------------------------------------------------------
-% * show the results of a simulation (cross-reference with channel simulation)
-% * 
-
-The numerical simulator which has been emulated in the two case studies presented in Chapter 3 is \citetalias{delestre_fullswof:_2017}. FullSWOF (Full Shallow Water equations for Overland Flow) is an \emph{open source} software solving the Shallow Water equations (SWE) over regular uniform grid using finite volumes method (FVM) %and numerical methods especially chosen for hydrodynamic purposes 
-\autocite{the_fullswof_team_fullswof_2018}. \\
- 
-Water can enter the simulation domain through the boundaries (\emph{imposed discharge}) or with the rain.
-Input discharge is fixed in space and time. Rainfall is applied uniformly to the simulation domain, but it is allowed to vary in time. If the option rain is activated, a \emph{rainfall file} with the rain hyetograph (the rainfall intensity as a function of time) has to be provided.   
-
-SAY SOMETHING ABOUT INFILTRATION METHOD, ET NOT IMPLEMENTED, HOW WATER CAN EXIT .. 
-
-In order to run simulations, FullSWOF needs at least the following inputs:
- % numeri al posto di paragraph
-\paragraph{Topography file} A text file specifying the topography of the gridded simulation domain. This is done specifying the coordinates (x and y) of each grid cell and the respective elevation (z) with an x-y-z format 
-
-\paragraph{Simulation parameters file} A text file defining the values of the simulation parameters. This can be generated with the function \textit{params2file} of the fswof2d package (see Appendix A.1.
-Simulation parameters include:
-
-\begin{itemize}
-\itemsep0em
-  \item Number of cells (x and y directions)
-  \item Simulation duration
-  \item Number of intermediate states saved
-  \item Domain length
-  \item Domain width
-  \item Boundary conditions specifications
-  \item Various settings for the numerical schemes
-  \item Different physical parameters (friction coefficient, initial soil saturation, soil thickness, soil hydraulic conductivity, maximal infiltration). These parameters are spatially distributed. A unique value for the whole domain can be used or a value for every cell can be defined by giving to the simulator a text file specifying all of the values.\\
-\end{itemize}
-
-\paragraph{Initial conditions file} A text file defining the initial conditions of the simulation. It specifies the \emph{water depth}, the \emph{flow velocity in x} and the \emph{flow velocity in y} for all cells of the domain. \\ % All of these can also be set to \num{0}.\\
-
-FullSWOF simulations generate five different \emph{output files}.
-% numeri al posto di paragraph 
-\paragraph{Initial simulation state file} reports the initial state (at $t = \SI{0}{\s}$) of the simulation. 
-This corresponds to the initial conditions file.
-\paragraph{Final simulation state file} reports the state of the simulation (at $t = t_{max}$).
-\paragraph{Simulation states file} stores the whole evolution of the simulation: it begins with the initial conditions and ends with the final state.How many intermediate results to saved is set by the user in the parameters file.
-\paragraph{Water budget/balance file} records how much water has been lost through the boundaries, how much has infiltrated and how much is present in the simulation domain.
-\paragraph{Parameters file copy}. Useful to know which parameters were set to generate a given output.
-
-In order to generate these files, interaction functions were developed with the open source tool \textit{Octave 4.2.1} \autocite{octave_community_gnu_2018}. The interaction functions were grouped into the Octave package \textit{fswof2d} available at \url{https://bitbucket.org/binello7/fswof2d}. For more information, refers to  Appendix A.1
-
-% ------------------------------------------------------------------------------
-% FULLSWOF2D PACKAGE
-% * list the functions developed
-% * high-level infos what functions do
-%   - input
-%   - output
-%   - methods/operations
-% * or move to appendix if no time
-% * put just summary in main body:
-%   "fswof2d has 18 functions with 20 methods to convert data, pre-processes
-%    grids for efficient construction of simulation domain, interface Octave
-%    engine (see Appendix X for details.)"
-
-PUT IN APPENDIX A.1 
-The package includes the following functions, all of which are distributed under \textit {GPLv3} license \autocite{smith_quick_2014}.
- 
-\begin{itemize}
-\itemsep0em
-  \item center2node.m
-  \item csec\_channel2lvlsym.m
-  \item dataconvert.m
-  \item extrude\_csec.m
-  \item huv2file.m
-  \item matplotlib\_cm.m
-  \item node2center.m
-  \item params2file.m
-  \item read\_params.m
-  \item topo2file.m
-\end{itemize}
-
-% ==============================================================================
-\section{Emulation}
+\section{Emulation}\label{sec:emulation}
 % ==============================================================================
 %-------------------------------------------------------------------------------
-%If you do not cleanly separate into Methods and Material, you have to say at one point what you present where. This can either be done after research questions (the structure of the thesis is as follows: first, ... second). or here. To guide the reader.
-
 %After Emulation description: 
 
 %In the following, I will first describe introduce mechanistic emulators/compare the concept of mechanistic /phenomenological emulators with a didactical case study. Second, use emulators in a practically relevant task: time-to-threshold, i.e. time until sounding flood alarm. 
@@ -167,7 +84,7 @@ Fig.~\ref{fig:emulation} depicts this relationship bridging the internal states.
 The data needed for learning this relationship are inputs-output sets.
 These are obtained by sampling the input space within the range needed with an appropriate technique, depending on the amount of input variables our problem has.
 With every inputs-set a simulation is run and the desired output is extracted, generating this way our dataset.
-The relationship has then to be learned with an appropriate technique: building an emulator is a regression problem, even more, it is an interpolation problem \autocite{carbajal_emumore_2017} which can be addressed with modern ML methods.\\
+The relationship has then to be learned with an appropriate technique: building an emulator is a regression problem, even more, it is an interpolation problem \autocite{carbajal_emumore_2017} which can be addressed with modern machine learning (ML) methods.\\
 
 Emulators can mainly be divided into two groups: \emph{mechanistic} emulators and purely \emph{data-driven} emulators.
 The first ones are built with methods able to encode prior knowledge of the system, introducing conditions guiding and constraining the interpolation problem.
@@ -177,8 +94,9 @@ Whether to use a mechanistic or a purely data driven emulator is often quite sub
 \seb{ideal would be to introduce a workflow for implementing emulation}
 
 
+
 % ------------------------------------------------------------------------------
-\section{Regression and interpolation}
+\section{Regression and interpolation}\label{sec:regression_interpolation}
 % ------------------------------------------------------------------------------
 
 % * cite James et al., 2013 -> learning from data or predict outputs ->
@@ -231,8 +149,114 @@ By choosing specific mean and covariance functions, and setting constraints on t
 
 
 
+The package offers a set of mean functions, of covariance functions and likelihood functions as well as prior distribution, inference methods and utility functions that can be used to apply GP.
+In addition to the given mean and covariance functions, new functions can be created by composition of others.
+New functions can be defined as the sum, the product, the power, etc. of standard ones.
+To specify a GP a mean and a covariance function are needed.
+The likelihood function defines the probability of the observations given the GP \autocite{rasmussen_gaussian_2010}.
+All of these three may have hyperparameters, whose value need to be determined.
+Initial values have to be attributed to all of the hyperparameters needed, then the real value must be found by optimization with the function \emph{minimize} of the same package.\seb{mention this /integrate in text!!}
 
 
+
+
+
+
+
+
+
+% ==============================================================================
+\section{Hydrodynamical simulator}\label{sec:simulator}
+% ==============================================================================
+% * transfer functions
+% * PDEs
+% * https://en.wikipedia.org/wiki/Routing_(hydrology)
+% * go for hydrodynamic simulation => more detailed, more complex, slower
+% * (Hydrological models could even be considered "emulators" of the more
+%   detailed PDE-simulators)
+
+% ------------------------------------------------------------------------------
+\subsection{FullSWOF\_2D-v1.07.00}
+% ------------------------------------------------------------------------------
+% * show the results of a simulation (cross-reference with channel simulation)
+% * 
+
+
+
+
+
+\seb{mention FullSWOF solves Finite Volumes!!}
+
+The numerical simulator which has been emulated in the two case studies presented in Chapter 3 is \citetalias{delestre_fullswof:_2017}. FullSWOF (Full Shallow Water equations for Overland Flow) is an \emph{open source} software solving the Shallow Water equations (SWE) over regular uniform grid using finite volumes method (FVM) %and numerical methods especially chosen for hydrodynamic purposes 
+\autocite{the_fullswof_team_fullswof_2018}. \\
+ 
+Water can enter the simulation domain through the boundaries (\emph{imposed discharge}) or with the rain.
+Input discharge is fixed in space and time. Rainfall is applied uniformly to the simulation domain, but it is allowed to vary in time. If the option rain is activated, a \emph{rainfall file} with the rain hyetograph (the rainfall intensity as a function of time) has to be provided.   
+
+SAY SOMETHING ABOUT INFILTRATION METHOD, ET NOT IMPLEMENTED, HOW WATER CAN EXIT .. 
+
+In order to run simulations, FullSWOF needs at least the following inputs:
+ % numeri al posto di paragraph
+\paragraph{Topography file} A text file specifying the topography of the gridded simulation domain. This is done specifying the coordinates (x and y) of each grid cell and the respective elevation (z) with an x-y-z format 
+
+\paragraph{Simulation parameters file} A text file defining the values of the simulation parameters. This can be generated with the function \textit{params2file} of the fswof2d package (see Appendix A.1.
+Simulation parameters include:
+
+\begin{itemize}
+\itemsep0em
+  \item Number of cells (x and y directions)
+  \item Simulation duration
+  \item Number of intermediate states saved
+  \item Domain length
+  \item Domain width
+  \item Boundary conditions specifications
+  \item Various settings for the numerical schemes
+  \item Different physical parameters (friction coefficient, initial soil saturation, soil thickness, soil hydraulic conductivity, maximal infiltration). These parameters are spatially distributed. A unique value for the whole domain can be used or a value for every cell can be defined by giving to the simulator a text file specifying all of the values.\\
+\end{itemize}
+
+\paragraph{Initial conditions file} A text file defining the initial conditions of the simulation. It specifies the \emph{water depth}, the \emph{flow velocity in x} and the \emph{flow velocity in y} for all cells of the domain. \\ % All of these can also be set to \num{0}.\\
+
+FullSWOF simulations generate five different \emph{output files}.
+% numeri al posto di paragraph 
+\paragraph{Initial simulation state file} reports the initial state (at $t = \SI{0}{\s}$) of the simulation. 
+This corresponds to the initial conditions file.
+\paragraph{Final simulation state file} reports the state of the simulation (at $t = t_{max}$).
+\paragraph{Simulation states file} stores the whole evolution of the simulation: it begins with the initial conditions and ends with the final state.How many intermediate results to saved is set by the user in the parameters file.
+\paragraph{Water budget/balance file} records how much water has been lost through the boundaries, how much has infiltrated and how much is present in the simulation domain.
+\paragraph{Parameters file copy}. Useful to know which parameters were set to generate a given output.
+
+\seb{mention somewhere that fswof2d package was used in both case studies}
+In order to generate these files, interaction functions were developed with the open source tool \textit{Octave 4.2.1} \autocite{octave_community_gnu_2018}. The interaction functions were grouped into the Octave package \textit{fswof2d} available at \url{https://bitbucket.org/binello7/fswof2d}. For more information, refers to  Appendix A.1
+
+% ------------------------------------------------------------------------------
+% FULLSWOF2D PACKAGE
+% * list the functions developed
+% * high-level infos what functions do
+%   - input
+%   - output
+%   - methods/operations
+% * or move to appendix if no time
+% * put just summary in main body:
+%   "fswof2d has 18 functions with 20 methods to convert data, pre-processes
+%    grids for efficient construction of simulation domain, interface Octave
+%    engine (see Appendix X for details.)"
+
+PUT IN APPENDIX A.1 
+The package includes the following functions, all of which are distributed under \textit {GPLv3} license \autocite{smith_quick_2014}.
+ 
+\begin{itemize}
+\itemsep0em
+  \item center2node.m
+  \item csec\_channel2lvlsym.m
+  \item dataconvert.m
+  \item extrude\_csec.m
+  \item huv2file.m
+  \item matplotlib\_cm.m
+  \item node2center.m
+  \item params2file.m
+  \item read\_params.m
+  \item topo2file.m
+\end{itemize}
 
 
 
