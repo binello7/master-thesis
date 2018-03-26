@@ -44,8 +44,8 @@ endfor
 figure (1)
 plot (dy, middleweir_head+weir_height, '-o');
 #title ('Convergence at center of weir')
-xlabel ('dy / m');
-ylabel ('h / m')
+xlabel ('dy [m]');
+ylabel ('h [m]')
 axis tight
 print ('convergence_center.png', '-r300');
 
@@ -53,8 +53,8 @@ print ('convergence_center.png', '-r300');
 figure (2)
 semilogy (dy(2:end), perc_diff_middleweir_h, 'r-o');
 #title ('% variation at center of weir')
-xlabel ('dy / m');
-ylabel ('\Delta h / %')
+xlabel ('dy [m]');
+ylabel ('\Delta h [%]')
 axis tight
 print ('diff_center.png', '-r300');
 
@@ -101,8 +101,8 @@ endfor
 legend ('channel profile', leg{:}, 'location', 'northeast');
 annotation ('textarrow', [0.3 0.35], [0.7 0.7], 'string', ' flow direction', ...
             'color', 'b', 'headlength', 6, 'headwidth', 6)
-xlabel ('y / m');
-ylabel ('h / m');
+xlabel ('y [m]');
+ylabel ('h [m]');
 axis tight
 print ('water_profiles.png', '-r300')
 
