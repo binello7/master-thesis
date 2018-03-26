@@ -9,16 +9,13 @@
 %   in detail
 % * simulation is used to explore
 % * experiment: we mean here numerical experiment -> say it!
-% * as intro state clearly what I present here (Jorg)
-
-
-
-
 
 % ==============================================================================
-\section{Emulation}\label{sec:emulation}
+\section{Emulation}
 % ==============================================================================
 %-------------------------------------------------------------------------------
+%If you do not cleanly separate into Methods and Material, you have to say at one point what you present where. This can either be done after research questions (the structure of the thesis is as follows: first, ... second). or here. To guide the reader.
+
 %After Emulation description: 
 
 %In the following, I will first describe introduce mechanistic emulators/compare the concept of mechanistic /phenomenological emulators with a didactical case study. Second, use emulators in a practically relevant task: time-to-threshold, i.e. time until sounding flood alarm. 
@@ -58,8 +55,7 @@ If a new task would request the prediction of the flow velocity time-series at t
 
 The above example shows that emulators can also be space-specific (e.g. water depth time-series at a specific point) or time specific (e.g. water depth profile along a channel at specific instant).
 
-When running hydrodynamical simulation, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in" \autocite{carbajal_emumore_2017}.
-Figure .~\ref{fig:simulation}. ... schematize this peculiarity of numerical simulation; FullSWOF has has to solve the SWE over the whole simulation grid, although the output we are interested in might be just the water depth at the chosen point (water depth simulated in a given cell)
+When running hydrodynamical simulation, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in". \autocite{carbajal_emumore_2017}. Figure .~\ref{fig:simulation} schematizes this peculiarity: SWE must be solved over the whole simulation grid, although the output we are interested in might be just the water depth simulated at a chosen grid cell.
 
 \begin{figure}[h]
   \centering
@@ -68,11 +64,7 @@ Figure .~\ref{fig:simulation}. ... schematize this peculiarity of numerical simu
   \label{fig:simulation}
 \end{figure}
 
-In contrast with simulators, emulators bridge the internal states: it goes from inputs to desired output directly, without passing through the internal states.
-The emulator establishes a direct functional relationship between inputs and output.
-It \emph{learns} this relationship from corresponding inputs-output sets.
-Once the relationship is learned, and the model is validated, our emulator is ready to be exploited: it can now produce output predictions for new input values.
-Fig.~\ref{fig:emulation} depicts this relationship bridging the internal states.
+In contrast with the numerical simulator, an emulator bridge the internal states: it goes from the inputs to desired output, without computing all the internal states.  Fig.~\ref{fig:emulation} depicts this relationship bridging the internal states.
 
 \begin{figure}[h]
   \centering
@@ -81,92 +73,55 @@ Fig.~\ref{fig:emulation} depicts this relationship bridging the internal states.
   \label{fig:emulation}
 \end{figure}
 
-The data needed for learning this relationship are inputs-output sets.
-These are obtained by sampling the input space within the range needed with an appropriate technique, depending on the amount of input variables our problem has.
-With every inputs-set a simulation is run and the desired output is extracted, generating this way our dataset.
-The relationship has then to be learned with an appropriate technique: building an emulator is a regression problem, even more, it is an interpolation problem \autocite{carbajal_emumore_2017} which can be addressed with modern machine learning (ML) methods.\\
-
+The direct functional relationship between the simulated inputs and output sets is established using some regression techniques (see 2.2).
 Emulators can mainly be divided into two groups: \emph{mechanistic} emulators and purely \emph{data-driven} emulators.
-The first ones are built with methods able to encode prior knowledge of the system, introducing conditions guiding and constraining the interpolation problem.
-The second ones, exploit techniques that blindly uncover relationships within the data, with no knowledge about the process generating them.
-Whether to use a mechanistic or a purely data driven emulator is often quite subjective; studies try however to give guidelines helping with this choice \autocite{carbajal_appraisal_2016}.
+Mechanistic emulators are constructed by encoding prior knowledge of the system and by constraining the regression problem. The case study 1 (see 3.1) illustrate this type of emulators, by using a partial theoretically equation (known as weir equation) to estimate the water depth over a weir with specified design.
 
-\seb{ideal would be to introduce a workflow for implementing emulation}
-
-
+On the other side, data-driven emulators try to uncover the relationships within the inputs-output sets by exploiting the potential of machine learning (ML) algorithms. In this case, any knowledge about the process generating the inputs-output sets is incorporated in the emulator. The case study 2 (see 3.2) use this type of emulation. 
 
 % ------------------------------------------------------------------------------
-\section{Regression and interpolation}\label{sec:regression_interpolation}
+\section{Regression and interpolation}
 % ------------------------------------------------------------------------------
 
 % * cite James et al., 2013 -> learning from data or predict outputs ->
 %   GP -> can regress instead of interpolate, in order to establish easier
 %   functional relationship
+A key step when building an emulator is establishing the functional relationship between the simulated inputs-output sets. This statistical exercise correspond to solve an interpolation or regression problem.
+If the simulated inputs-output sets are considered exact, an interpolation is preferred: this means that the functional relationship must pass through all data points. In this thesis, simulations performed within case studies 1 and 2 are considered exacts: every simulation run with the same inputs produces the same output.
+As a consequence, all emulators presented in case studies 1 and 2 interpolates the simulated inputs-output sets.
+In case studies 1, since an equation derived by previous physical experimentation is also available (the weir equation), simulated inputs-output sets have been fitted using linear regression. 
 
-Key step when building an emulator is establishing the inputs-output relationship, namely solve the regression/interpolation problem.
-For this many different methods exist; which one to choose may depend on the dimensions of the inputs space, the availability of data, the previous knowledge about the considered system, and weather we want to make predictions or learning functional relationships from our data.\\
+In the case, not shown in this thesis, that a simulator do not provide accurate solutions or that the inputs-output sets are not uniques because of some numerical simulator's internal stochasticity, a regression algorithm should be adopted.
 
-Usually, when learning functional relationships from physical experimental data, we are trying to solve a regression problem.
-The observation we are using are subject to errors assumed to be independent and Gaussian distributed due to the stochasticity of the problem.
-Since the observation does not represent necessarily the true value, we then perform a regression, e.g. using the least squares (LS) method, minimizing the sum of squared residuals.
-In this thesis, all of the experiments\footnote{Within the thesis, every reference to "experiment", if not differently stated, has to be read as "numerical experiment".} conducted are numerical experiments, namely simulations.
-These are not subject to stochasticity.
-Every simulation run with the same parameters produces the same output.
-Since our emulator tries to reproduce the simulators behaviour, the observations should be rather interpolated than regressed.\\
-
-Within this thesis four different types of regression/interpolation techniques, implemented within \citetalias{octave_community_gnu_2018} were used.
+A large variety of methods exist to solve interpolation or regression problems. The choice may depend on the number of inputs (dimensions of the inputs space), on the amount of observations available to establish the relationship or on previous knowledge about the considered system.\\
+ 
+% In this thesis, all of the experiments\footnote{Within the thesis, every reference to "experiment", if not differently stated, has to be read as "numerical experiment".} conducted are numerical experiments, namely simulations.
+ 
+Within this thesis three different types of interpolation techniques, implemented within \citetalias{octave_community_gnu_2018}, were used.
 
 \begin{itemize}
 \itemsep0em
   \item 1D-linear interpolation (\mintinline{octave}{interp1 (X, Y, XI, "linear")})
   \item 1D-cubic spline interpolation (\mintinline{octave}{interp1 (X, Y, XI, "spline")})
-  \item 1D-linear regression (\mintinline{octave}{polyfit (X, Y, 1)})
-  \item Gaussian Processes interpolation (package \citetalias{rasmussen_gaussian_2010})
+  \item Gaussian Processes (GP) interpolation (package \citetalias{rasmussen_gaussian_2010})
 \end{itemize}
 
-From these, the GP interpolation is the most flexible and sophisticated one.
-We can think of a GP as defining a distribution over functions.
-A GP is fully specified by its \emph{mean} ($m(\bm{x})$) and \emph{covariance} function ($k(\bm{x},\bm{x}')$) \autocite{rasmussen_gaussian_2006}, which both may depend from hyperparameters.
-The GP $f(\bm{x})$, with mean $m(\bm{x})$ and covariance $k(\bm{x},\bm{x}')$ is therefore a class of functions and is commonly written as:
+ 
+Of the three techniques, GP interpolation is the most flexible.   
+A GP is fully specified by its \emph{mean} ($m(\bm{x})$) and \emph{covariance} function ($k(\bm{x},\bm{x}')$) \autocite{rasmussen_gaussian_2006} and is commonly written as:
 
 \begin{equation}
   f(\bm{x}) \backsim \mathcal{GP}\left(m(\bm{x}), k(\bm{x},\bm{x}')\right)
 \end{equation}
 
-\noindent The hyperparameters define properties of this class of functions, like its smoothness for example.
-When performing GP regression, we tune these hyperparameters in order to maximize the \emph{marginal likelihood} $p(\bm{y}\vert \bm{X})$, the probability of observing the output $\bm{y}$ given the inputs $\bm{X}$.
-By tuning the hyperparameters we \seb{insert image Rasmussen p.20???} discriminate some classes of functions in favor of others, remaining at the end just with the "most probable class", with its mean (prediction) and its variance (confidence about the prediction).\seb{is this correct???}
-If we require a smoothness which is higher than that of our data for example, the GP will not be able to interpolate the points anymore.
-The result of the GP will therefore be the regression of the points.
+Both the GP $f(\bm{x})$, with mean $m(\bm{x})$ and covariance $k(\bm{x},\bm{x}')$ may depend on a set of hyperparameters. These hyperparameters define properties of the interpolation surface between the data points, like its smoothness for example. By choosing specific mean and covariance functions, or setting constraints on the hyperparameters, GP allow to encode some prior knowledge in the interpolation.
 
-By choosing specific mean and covariance functions, and setting constraints on the hyperparameters, GP allow us to encode prior knowledge in our model.
+Package \citetalias{rasmussen_gaussian_2010} offers a large set of mean, covariance and likelihood functions as well as various prior distribution and inference methods. Ad-hoc mean and covariance functions can be generated by composition  (i.e. sum or product) of the provided base functions. 
 
-
-  
-%mention GP can include priors
-% we can enforce regression instead of interpolation
-
-
-
-
-The package offers a set of mean functions, of covariance functions and likelihood functions as well as prior distribution, inference methods and utility functions that can be used to apply GP.
-In addition to the given mean and covariance functions, new functions can be created by composition of others.
-New functions can be defined as the sum, the product, the power, etc. of standard ones.
-To specify a GP a mean and a covariance function are needed.
-The likelihood function defines the probability of the observations given the GP \autocite{rasmussen_gaussian_2010}.
-All of these three may have hyperparameters, whose value need to be determined.
-Initial values have to be attributed to all of the hyperparameters needed, then the real value must be found by optimization with the function \emph{minimize} of the same package.\seb{mention this /integrate in text!!}
-
-
-
-
-
-
-
-
-
+Tuning of mean and covariance function hyperparameters can be done by maximizing the \emph{marginal likelihood} $p(\bm{y}\vert \bm{X})$ (the probability of observing the output $\bm{y}$ given the inputs $\bm{X}$) using the function \emph{minimize}  
+ 
 % ==============================================================================
-\section{Hydrodynamical simulator}\label{sec:simulator}
+\section{Hydrodynamical simulator}
 % ==============================================================================
 % * transfer functions
 % * PDEs
@@ -180,12 +135,6 @@ Initial values have to be attributed to all of the hyperparameters needed, then 
 % ------------------------------------------------------------------------------
 % * show the results of a simulation (cross-reference with channel simulation)
 % * 
-
-
-
-
-
-\seb{mention FullSWOF solves Finite Volumes!!}
 
 The numerical simulator which has been emulated in the two case studies presented in Chapter 3 is \citetalias{delestre_fullswof:_2017}. FullSWOF (Full Shallow Water equations for Overland Flow) is an \emph{open source} software solving the Shallow Water equations (SWE) over regular uniform grid using finite volumes method (FVM) %and numerical methods especially chosen for hydrodynamic purposes 
 \autocite{the_fullswof_team_fullswof_2018}. \\
@@ -225,7 +174,6 @@ This corresponds to the initial conditions file.
 \paragraph{Water budget/balance file} records how much water has been lost through the boundaries, how much has infiltrated and how much is present in the simulation domain.
 \paragraph{Parameters file copy}. Useful to know which parameters were set to generate a given output.
 
-\seb{mention somewhere that fswof2d package was used in both case studies}
 In order to generate these files, interaction functions were developed with the open source tool \textit{Octave 4.2.1} \autocite{octave_community_gnu_2018}. The interaction functions were grouped into the Octave package \textit{fswof2d} available at \url{https://bitbucket.org/binello7/fswof2d}. For more information, refers to  Appendix A.1
 
 % ------------------------------------------------------------------------------
@@ -257,6 +205,8 @@ The package includes the following functions, all of which are distributed under
   \item read\_params.m
   \item topo2file.m
 \end{itemize}
+
+
 
 
 
