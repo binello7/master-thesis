@@ -113,11 +113,14 @@
 \end{table}
 
 
+%-------------------------------------------------------------------------------
+\subsection{"Rough" classifier}
+%-------------------------------------------------------------------------------
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/classifier_trn.png}
-  \caption{Linear separation of the training dataset with use of the "meanLinear" and "covConst" functions of the \citetalias{rasmussen_gaussian_2010} package.}
-  \label{fig:classifier_trn}
+  \caption{Linear separation of the training dataset with use of the "meanLinear" and "covConst" functions of the \citetalias{rasmussen_gaussian_2010} package. The linear classification works well on this dataset, but the shape of the boundary could be very different if more observations were present. An additional dataset with observations close to this boundary was created in order to refine the shape of the boundary.}
+  \label{fig:classifier_rough}
 \end{figure}
 
 %-------------------------------------------------------------------------------
