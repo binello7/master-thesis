@@ -190,8 +190,8 @@ legend ('training dataset', 'lin. interp.', 'cub. spl. interp.', ...
              'location', 'northwest');
 set (gco, 'fontsize', 12)
 axis tight;
-xlabel ('Q / m^3/s', 'fontsize', fontsize2);
-ylabel ('h_w / m', 'fontsize', fontsize2)
+xlabel ('Q [m^3/s]', 'fontsize', fontsize2);
+ylabel ('h_w [m]', 'fontsize', fontsize2)
 set (gca, 'fontsize', fontsize1)
 print ('fitting_results.png', '-r300')
 
@@ -205,9 +205,9 @@ axis tight
 legend ('lin. interp.', 'cub. spl. interp.', 'weir equation', ...
              'location', 'northeast');
 set (gco, 'fontsize', 12)
-xlabel ('# of points', 'fontsize', fontsize2)
+xlabel ('# of observations', 'fontsize', fontsize2)
 #xlabel ('left-out points', 'fontsize', fontsize2)
-ylabel ('RMSE / m', 'fontsize', fontsize2)
+ylabel ('RMSE [m]', 'fontsize', fontsize2)
 
 #xtickn = 1:length (mean_rmse);
 #xtickl = num2cell (xtickn);
@@ -232,8 +232,8 @@ endfor
 #set(gca, 'yscale', 'log');
 axis tight;
 legend ('cub. spl. interp.', 'weir equation', 'location', 'northeast');
-xlabel ('# of points', 'fontsize', fontsize2);
-ylabel ('RMSE / m', 'fontsize', fontsize2);
+xlabel ('# of observations', 'fontsize', fontsize2);
+ylabel ('RMSE [m]', 'fontsize', fontsize2);
 print ('fitting_std.png', '-r300')
 
 
@@ -244,7 +244,7 @@ bp = boxplot (mean_rmse);
 axis ([0.5 3.5]);
 set (gca, 'xtick', [1 2 3], 'xticklabel', ... 
     {'lin. interp.', 'cub. spl. interp.', 'weir equation'});
-ylabel ('RMSE / m')
+ylabel ('RMSE [m]')
 print ('boxplot_models.png', '-r300');
 
 
