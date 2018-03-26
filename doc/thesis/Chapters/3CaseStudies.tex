@@ -5,6 +5,7 @@
 \noindent{\LARGE\textbf{Case study 1}}
 %===============================================================================
 \section{A mechanistic emulator: fitting the \emph{weir equation}}
+\label{sec:mechanistic_emulator}
 %===============================================================================
 
 %:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -19,41 +20,38 @@
 
 As a first case study to apply the acquired knowledge, it was decided to build an utterly mechanistic emulator.
 The main goal of this case study is to try to fit the \emph{weir equation} to simulated data instead of to experimental data.
-Here we basically rediscover the way science has always been done: by observing, measuring and trying to find mathematical relationships.
-The biggest difference is the fact that the experimental set-up is completely computer built.\\
+Here we essentially rediscover the way science has always been done: by observing, measuring and trying to discover mathematical relationships.
+The most significant difference is the fact that the experimental set-up is completely computer built.\\
 
 The \emph{weir equation} is a partially theoretical equation that provides an estimate of the discharge $Q$ over a weir as a function of the water depth above the weir itself ($h_w$).
-The equation can be derived from the Bernoulli equation under certain assumptions \autocite{bos_discharge_1989} and can be found under many different forms.
+The equation can be derived from the Bernoulli equation under certain assumptions \autocite{bos_discharge_1989} and can be found in many different forms.
 The form used here is the one proposed by \emph{Francis} \autocite{walcott_weir_1907}:
 
 \begin{equation}\label{eq:weir_eq}
   Q = \textcolor{red}{C} \cdot L \cdot h_w^{\textcolor{red}{a}}\, , \quad \mbox{usu. } \textcolor{red}{a = 3/2}
 \end{equation}
 
-\noindent Where the empirical coefficient $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution. $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
+\noindent Where the empirical coefficient $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution, $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
 
-In addition to the parametric model (weir equation) two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the simulated data points.\\
+In addition to the parametric model (\textit{weir equation}) two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the simulated data points.\\
 
 
 %-------------------------------------------------------------------------------
 \subsection{Brief experiment description}\label{sec:cs1_brief_description}
 %-------------------------------------------------------------------------------
 
-\seb{explain the experiment very generally. Put the section title or leave it with no section title with the upper part?}
- 
-For this experiment simulations were run in a flat rectangular channel.
+For this experiment, simulations were run in a flat rectangular channel.
 A weir with a trapezoidal cross section is located at the channel half-length.
 As initial condition the upstream side of the weir was filled with water up to the weir crest.
 At the domain top boundary a constant inflow discharge was set, while at the bottom boundary water could freely outflow.
-As the simulation runs, the inflow water flows down the channel, overflows the weir and leaves the domain through the lower boundary.
+As the simulation runs, the inflow water flows down the channel, overflows the weir and leaves the domain through the lower boundary (see Fig.~\ref{fig:channel}).
 After some time the simulation reaches the \emph{steady-state} conditions: inflow, discharge over the weir and outflow have the same magnitude and the water height above the weir has stabilized.
-At this point the value $h_w$ was extracted and was coupled with the discharge value $Q$ generating it.
+At this point the value $h_w$ was extracted and was paired with the discharge value $Q$ generating it.
 \num{25} experiments were conducted with $Q$ linearly spaced in the range \SIrange{0.1}{10}{\cubic\meter\per\second}.
-All simulated pairs $(Q, h_w)$ constitute an observational \emph{predictor-response} set to which the weir equation was fitted.
- \seb{give e.g. in Appendix the discharge values used? Probably not, I gave the code with linspace to generate the different discharges}\\
+All simulated pairs $(Q, h_w)$ constitute an observational \emph{predictor-response} set to which the weir equation was fitted.\\
 
 In order to ensure the convergence of the simulator solution, and therefore the quality of the experimental results, a \emph{grid convergence study} was performed prior to the experiment.
-For this, the simulation with the highest discharge was repeated with successive grid refinements
+For this, the simulation with the highest discharge was repeated with successive grid refinements.
 The value of the variable of interest, water height, was then compared between the different simulations to find at which grid resolution the solution stabilizes.
 
 
@@ -63,12 +61,11 @@ The value of the variable of interest, water height, was then compared between t
 %...............................................................................
 \subsubsection{Generating the topography}
 %...............................................................................
-The topography used for running the simulations was generated in \textit{Octave} \seb{write "Octave", "FullSWOF", ... in italics?} and represents a flat channel of \SI{40}{\meter} length with a weir placed at its midpoint, at \SI{20}{\meter} distance from the top boundary.
+The topography used for running the simulations was generated in \citetalias{octave_community_gnu_2018} and represents a flat channel of \SI{40}{\meter} length with a weir placed at its midpoint, at \SI{20}{\meter} distance from the top boundary.
 The channel cross section is a rectangle of \SI{4}{\meter} width and the weir has a trapezoidal shape.
 Fig.~\ref{fig:weir_scheme} shows the geometry of the channel.
 The weir has a crest width of \SI{2}{\meter} and therefore belongs to the \emph{broad-crested} class. The $C$ coefficient for broad-crested weirs with vertical walls and \SI{2}{\meter} crest width varies between \num{1.36} and \num{1.53}, depending on the water height $h_w$ \autocite{brown_urban_2009}.
 We therefore expect a value close to this for our experiment.
-A 3D overview of the channel can be found in Fig.~\ref{fig:channel} in the Appendix. \seb{add a 3D plot of the channel?}
 
 \begin{figure}[h]
   \centering
@@ -80,7 +77,7 @@ A 3D overview of the channel can be found in Fig.~\ref{fig:channel} in the Appen
 %...............................................................................
 \subsubsection{Setting-up the simulations}
 %...............................................................................
-After generating the topography to be used for the experiment the simulation parameters were defined and saved to the parameters file.
+After generating the topography to be used for the experiment the simulation parameters were defined.
 
 The simulation was done with no rain and no infiltration.
 This way, water just enters the system through the top boundary and leaves it through the bottom one.
@@ -99,7 +96,7 @@ The \num{25} inflow discharges used were obtained with the following \citetalias
   framesep=10mm
 ]{octave}{code.m}\\
 
-\noindent Where the minus sign indicates that water steadily \emph{enters the domain}.
+\noindent Where by definition within \citetalias{delestre_fullswof:_2017} the minus sign indicates that water steadily \emph{enters the domain}.
 The imposed height was set to \SI{3}{\m}, corresponding to the weir height.
 
 The channel topography presents no banks.
@@ -112,34 +109,30 @@ Since infiltration was not active for the simulations, all of the parameters rel
 
 The number of cells in x, and in y direction were defined according to the grid convergence study explained here below.
 
+
 %...............................................................................
 \subsubsection{Conducting the grid convergence study}
 %...............................................................................
-\seb{better to keep a separated section, including methods and results like done here, or split it up under "material and methods" and "results and discussion"?}
-
-Accuracy of simulation results, as well as simulation runtime, are dependent on the grid resolution chosen. \seb{turn the sentence around in order to highlight the point of the paragraph: grid resolution.}
-In order to find an appropriate grid resolution, a grid convergence study was performed.
-Successive refinements were tested in order to find out from which grid resolution the solution stabilizes, becoming independent from the resolution used.
-A criterion has to be established, in order to decide when the solution has converged to a satisfactory result.
+The chosen grid resolution influences accuracy of simulation results as well as simulation runtime.
+In order to find the appropriate grid resolution, a grid convergence study was performed.
+Successive refinements were tested in order to find out at which resolution the solution converges.
+A criterion has to be established, in order to decide when the solution has satisfactorily converged.
 If the Grid Convergence Index (GCI) is used, then a GCI lower than \SI{5}{\percent} for the last refinement is usually taken as a criterion \autocite{ali_grid_2009}.
 
-For the mesh study \num{7} simulations were run by varying the grid resolution ($Nx$, $Ny$) only. \seb{those are mentioned in the "list of symbols". Does this help understand what was varied?}
+For the mesh study \num{7} simulations were run by varying the grid resolution ($Nx$, $Ny$) only.
 Topography and parameters used are those mentioned in the two preceding sections.
 Squared cells were used and the inflow discharge was set to the highest discharge value of the experiment, namely \SI{10}{\cubic\meter\per\second}.
 This discharge is the one generating the highest flow velocities.
 If convergence under these conditions is reached, then convergence for lower discharges is also assured.
-Tab.~\ref{tab:mesh_study} summarizes the simulations main characteristics.
+Tab.~\ref{tab:mesh_study} summarizes the simulations' main characteristics.
 
-\seb{how to indicate units in the table?}
 \begin{table}[h]
   \centering
   \caption{Summary of simulations runtime, grid resolution and other related parameters for the mesh convergence study.}
   \label{tab:mesh_study}
   \begin{tabular}{crrcccccr}
     \toprule
-%    \rowfont{\bfseries}
-    \multirow{2}{*}{\#} & \multicolumn{1}{c}{Nx} & \multicolumn{1}{c}{Ny} & \multicolumn{1}{c}{Lx} & \multicolumn{1}{c}{Ly} & \multicolumn{1}{c}{dx} & \multicolumn{1}{c}{dy} & \multicolumn{1}{c}{Q} & \multicolumn{1}{c}{runtime} \\
-       & \multicolumn{1}{c}{$/1$} & \multicolumn{1}{c}{$/1$} & \multicolumn{1}{c}{$/\si{\meter}$} & \multicolumn{1}{c}{$/\si{\m}$} & \multicolumn{1}{c}{$/\si{\m}$} & \multicolumn{1}{c}{$/\si{\m}$} & \multicolumn{1}{c}{$/\si{\cubic\m\per\s}$} & \multicolumn{1}{c}{$/\si{\minute}$} \\ 
+    \# & \multicolumn{1}{c}{Nx} & \multicolumn{1}{c}{Ny} & \multicolumn{1}{c}{Lx $[\si{\m}]$} & \multicolumn{1}{c}{Ly $[\si{\m}]$} & \multicolumn{1}{c}{dx $[\si{\m}]$} & \multicolumn{1}{c}{dy $[\si{\m}]$} & \multicolumn{1}{c}{Q $[\si{\cubic\m\per\s}]$} & \multicolumn{1}{c}{runtime $[\si{\s}]$} \\
     \midrule
     1  & 2             & 20            & 4               & 40          & 2.00        & 2.00        & 10                      & 0.00 \\
     2  & 4             & 40            & 4               & 40          & 1.00        & 1.00        & 10                      & 0.07 \\
@@ -147,23 +140,22 @@ Tab.~\ref{tab:mesh_study} summarizes the simulations main characteristics.
     4  & 20            & 200           & 4               & 40          & 0.20        & 0.20        & 10                      & 9.00 \\
     5  & 40            & 400           & 4               & 40          & 0.10        & 0.10        & 10                      & 69.60 \\
     6  & 80            & 800           & 4               & 40          & 0.05        & 0.05        & 10                      & 537.72 \\
-    7  & 100           & 1000         & 4               & 40          & 0.04        & 0.04        & 10                      & 1048.40 \\
+    7  & 100           & 1000          & 4               & 40          & 0.04        & 0.04        & 10                      & 1048.40 \\
     \bottomrule
   \end{tabular}
-\end{table} \seb{put runtime here? Or somehow separate it, or do not put it at all?}
+\end{table}
 
 Fig.~\ref{fig:water_profiles} shows the free surface profiles of the \num{7} simulations at steady-state conditions along the channel axis.
 It can be noticed that for $Ny =$ \numlist{20;40;80} the water depth is visibly higher than for further refinements, and its shape quite varying.
 This means that the solution has not converged yet.
 Results for $Ny =$ \numlist{400;800;1000} are very close, since the lines are almost overlapping.
-$Ny =$ \num{200} shows a similar profile shape, but the height is still diverging quite a bit from the successive refinements.
+$Ny =$ \num{200} shows a similar profile shape, but the height is still diverging significantly from the successive refinements.
 To better observe the variations between the different refinements, the $h$ value convergence at the weir crest was studied.
 
-\seb{how to indicate units in graphs / diagrams? (unit)? [unit]? /unit?}
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/water_profiles.png}
-  \caption{Longitudinal free surface profiles at steady-state conditions for the \num{7} different grid resolutions.}
+  \caption{Longitudinal free surface profiles at steady-state conditions for the \num{7} different grid resolutions. Convergence of the solution for finer grids can be observed.}
   \label{fig:water_profiles}
 \end{figure}
 
@@ -171,7 +163,7 @@ In Fig.~\ref{fig:diff_center} the percent variation in the value of $h$ can be o
 Measured absolute $h$ values at the weir center can be observed in Fig.~\ref{fig:convergence_center} in the Appendix. 
 At the \nth{4} refinement the percent variation is smaller than \SI{0.01}{\percent}.
 This variation is small enough to assert that the solution has satisfactory converged.
-For the experiment it was therefore decided to use $(Nx, Ny) = (\num{40}, \num{400})$ corresponding to a grid resolution of \SI{0.10}{\m} in both x and y directions. The simulation runtime of $\approx \SI{1}{\hour} \SI{10}{\minute}$, required for this resolution is still quite acceptable.
+For the experiment it was therefore decided to use $(Nx, Ny) = (\num{40}, \num{400})$ corresponding to a grid resolution of \SI{0.10}{\m} in both x and y directions. The simulation runtime of $\approx \SI{1}{\hour} \SI{10}{\minute}$, required at this resolution is still quite acceptable.
 
 \begin{figure}[h]
   \centering
@@ -179,19 +171,19 @@ For the experiment it was therefore decided to use $(Nx, Ny) = (\num{40}, \num{4
   \caption{Percent variation of the measured $h$ at the weir midpoint between the given $dy$ and the previous one.}
   \label{fig:diff_center}
 \end{figure}
-\seb{Figure 3.3 moves to another section... is that ok??}
+
 
 %...............................................................................
 \subsubsection{Extracting the dataset}
 %...............................................................................
 The weir equation computes the discharge over the weir as a function of the water height $h_w$ under steady-state conditions.
 These are reached after $\approx \SI{50}{\s}$ of simulation.
-After this time, small oscillation of the water surface are still present.
-To get rid of these, a time averaged free surface from $t = \SI{100}{\s}$ to $t = \SI{200}{\s}$ was computed.
-Fig.~\ref{fig:free_surfaces} presents the free surface profiles of the \num{25} experiments at steady-state conditions obtained after this \emph{time smoothing out}.
+After this time, small oscillations of the water surface are still present.
+To remove these, a time averaged free surface from $t = \SI{100}{\s}$ to $t = \SI{200}{\s}$ was computed.
+Fig.~\ref{fig:free_surfaces} presents the free surface profiles of the \num{25} experiments at steady-state conditions.
 The three lowest profiles correspond to the simulation runs with the three lowest inflow discharges. 
-As initial condition the weir upstream side of the channel was filled with water to the weir's height.
-The fact that these three profiles are lower than the initial condition indicates that something went wrong with the simulation and water was lost from the top boundary.
+As initial condition the weir's upstream side of the channel was filled with water to the weir's height.
+The fact that these three profiles are lower than the initial condition indicates that a problem occurred with the simulation and water was lost from the top boundary.
 These simulations were discarded for the continuation of the experiment.
 The height value for the remaining simulations was extracted \SI{1.2}{\m} before the weir base, to avoid observations in the acceleration zone, happening in proximity of the weir crest.
 At this point a space average over the channel breadth was taken.
@@ -209,13 +201,13 @@ The procedure was repeated for all of the experiments.
 \subsubsection{Fitting the data}
 %...............................................................................
 The weir equation (Eq.~\ref{eq:weir_eq}) was fitted to the dataset previously extracted using linear regression.
-The original weir equation is non-linear with respect to the parameters, it was thus linearized by taking the logarithm:
+As the original weir equation is non-linear with respect to the parameters, it was thus linearized by taking the logarithm:
 
 \begin{equation}
   \log(Q) = \log(C) + \log(L) + a \cdot \log(h_w)
 \end{equation}
 
-\noindent and the values of the parameters $a$ and $C$ were determined.
+\noindent The values of the parameters $a$ and $C$ were determined from the linearized model.
 The performance of the fitted weir equation should be compared with that of a linear interpolation through the points and that of a cubic spline interpolation.
 Therefore, the points were interpolated with both methods.
 
@@ -224,7 +216,7 @@ Therefore, the points were interpolated with both methods.
 \subsubsection{Computing the error}\label{sec:compute_error}
 %...............................................................................
 To evaluate the performance of the three models, an increasing number of observations were removed, the models were trained on the remaining observations and it was tried to predict the ones removed.
-For an amount $k$ of points removed all possible combinations were tested. The number of model evaluations follows:
+For an amount $k$ of points removed, all possible combinations were tested. The number of model evaluations follows:
 
 \begin{equation}
   \binom{n}{k} = \frac{n!}{k!\left(n-k\right)!}
@@ -238,7 +230,7 @@ The root mean squared error (RMSE) of every combination was computed and the ave
 
 
 %-------------------------------------------------------------------------------
-\subsection{Results}
+\subsection{Results and Discussion}
 %-------------------------------------------------------------------------------
 % * importance of prior knowledge -> even if few points we can obtain good
 %   models. Not the case without (lin. interp, spline interp.)
@@ -258,11 +250,11 @@ These points represent the dataset which was used to fit the weir equation and t
 The fit of the different models to the dataset is displayed in Fig.~\ref{fig:fitting_results}.
 It can be observed that the linear interpolation fails to capture the initial trend shown by the weir equation and the cubic spline interpolation.
 This is due to two main reasons.
-The first one is that the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
+The first is that the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
 Moreover, in this region the weir equation presents its maximum curvature.
 This makes the linear interpolation diverge even faster.
 
-From the second to the last point all models seem to perform good: the three lines are almost perfectly overlaying, meaning that all give very similar results.
+From the second to the last point all models seem to perform well: the three lines are almost perfectly overlaying, meaning that all give very similar results.
 Some divergences can be observed in proximity of data points, especially between the weir equation and the other two models: this is due to the fact that the two interpolations \emph{interpolate} the points, whereas the curve obtained for the weir equation represents the best linear fit to the points (\mintinline{octave}{polyfit (x, y, 1)}).
 This minimizes the least-squares-error of the fit \autocite{eaton_gnu_2016}, which does not necessarily means interpolating through the points.
 
@@ -284,12 +276,12 @@ The difference in the $C$ coefficient observed here can be explained by this phe
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/fitting_errors.png}
-  \caption{Mean RMSE of the three different models as a function of the number of points used to train the models.}
+  \caption{Mean RMSE of the three different models as a function of the number of points used to train the models. It can be observed, that the RMSE of the cubic spline decreases exponentially by increasing the number of observations}
   \label{fig:fitting_errors}
 \end{figure}
 
-In Fig.~\ref{fig:fitting_errors} the RMSE obtained by cross-validation as explained in Sec.~\ref{sec:compute_error} are displayed.
-No matter how many points are used, the linear interpolation always performs at worst.
+Fig.~\ref{fig:fitting_errors} displays the RMSE obtained by cross-validation as explained in Sec.~\ref{sec:compute_error}.
+No matter how many points are used, the linear interpolation always performs worst.
 By increasing the number of points its performance improves quite rapidly, but not enough to reach that of the other two models.
 The process generating the points does not have a linear behavior.
 Despite the improvement of its performance, this model will never approximate the process generating the points as well as the others.
@@ -298,28 +290,24 @@ The results for the cubic spline interpolation confirm what was already observed
 This is a good model at mimicking the process originating the points.
 Its performance goes from slightly worse than that of the weir equation model up to almost \num{2} order of magnitude better.
 However, by reducing the number of points, the error of this model increases exponentially.
-Thanks to its flexibility, the cubic spline interpolation shows very small errors when fitted with many points.
+Due to its flexibility, the cubic spline interpolation shows very small errors when fitted with many points.
 This model, by definition, interpolates through all of the training points.
-If the training points are close to each other, the chance of interpolating an "unseen" point in the middle of two others, or at least to pass very close are very high.
+If the training points are close to each other, the chance of interpolating an "unseen" point in the middle of two others, or at least to pass very close, are very high.
 By increasing this distance these chances decrease quite fast, since the cubic spline interpolation is not a very suitable model to describe the behavior of the process between two points.
 For this reason the error increases exponentially.
 
 The weir equation model used minimizes the least-square-error of the fit, without necessarily interpolating through the points.
-It is a very inflexible model, only two parameters can be varied to improve the quality of fit, while many more observations are available.
-For this reason the interpolation through the points cannot be achieved, unless the observations were originated exactly by the model chosen.
-The results shown here are the best which can be achieved with it.
+It is a very inflexible model, as only two parameters can be varied to improve the quality of fit, while many more observations are available.
+For this reason, the interpolation through the points cannot be achieved, unless the observations were originated exactly by the model chosen.
 Because interpolation cannot be obtained, its error decreases very slowly with increasing number of points.
 The inflexibility of this model represents its weakness but at the same time its strength.
 This is in fact a very robust model, which still produces good results when few observations are available.
 It shows almost no decline in performance by reducing the number of points.
-
-Although its performance is outperformed by the cubic spline interpolation, when more than \num{4} observations are taken, use of this model can still be considered: the error, in spite of being higher than the one obtained with the cubic spline interpolation, is still very little compared with the values of $h$ measured.
-In a practical application in hydraulics the difference between the two models could be neglected and one could opt for the most stable one, to stay on the safe side when few points are available.
 Fig.~\ref{fig:boxplot_models} in the Appendix summarizes the performance of the three models when using $[\numrange{4}{13}]$ \# of points.
-Here it can be seen that the RMSE for the weir equation is higher on average respect to the cubic spline interpolation but still very low (in the order of $\approx \SI{1}{\centi\meter}$).
-Its variation is almost inexistent, the box plot is practially described by a line.\\
+Here it can be seen that the RMSE for the weir equation is higher on average respect to the cubic spline interpolation but still quite low (in the order of $\approx \SI{1}{\centi\meter}$).
+Its variation is almost inexistent; the box plot is practically described by a line.\\
 
-A closer comparison between the two best models (Fig.~\ref{fig:fitting_std}) shows new interesting features.
+A closer comparison between the two best models (see Fig.~\ref{fig:fitting_std}) shows new interesting features.
 The cubic spline interpolation is very sensitive to which points are removed when many are removed.
 The standard deviation on its RMSE by changing which observations are removed increases by a factor of \num{60} when \num{4} resp. \num{13} points are used.
 The opposite is observed for the weir equation model.
@@ -341,28 +329,19 @@ If a functional relationship $f:h_w \mapsto C$ had been established, then a weir
 
 
 From this example the importance of the trade-off \emph{prior knowledge} -- \emph{data availability} can be seen.
-Some "interpolation methods" \seb{is it correct "interpolation methods"? how could I call them otherwise?}, e.g. \emph{neural networks} in machine learning (ML), are very data-greedy.
+Some "interpolation methods", e.g. \emph{neural networks} in ML, are very data-greedy.
 These can perform very well when a big training dataset is available, but fail if not enough data is available.
-When obtaining new observations is computationally very costly, like it is the case with most simulations, "interpolation methods" allowing the encoding of prior knowledge can turn out to be very useful.
-Gaussian processes (GP) represent a good example.
-When the physical laws governing a process are known, i.e. its partial differential equations \seb{linear partial differential eq (to put them in the covariance function, there is a mapping)} the non-linear ones can be added in the mean function, it can be tried to encode them in the GP used.
-If the information embedded is correct, the result will be very similar to the one observed with the weir equation case study: it does not matter how many points are available to perform the fitting, the results will still be good.
+When obtaining new observations is computationally very costly, as is the case with most simulations, "interpolation methods" allowing the encoding of prior knowledge can prove to be very useful.
+Gaussian processes represent a good example.
+When the physical laws governing a process are known, i.e. its linear partial differential equations, they can be mapped into the covariance function of the GP.
+
+If the information encoded this way is correct, the result will be very similar to the one observed with the weir equation case study; it does not matter how many observations are available to perform the fitting, the results will still be good.
 If the right model for the process is found, no more observation are needed.
 These are simply given by the evaluation of the model itself.
 
-Moreover the technique just explained can give further insight and can help us learn new functional relationships about the process which is studied.
-If the GP chosen performs good, then the functional relationships encoded in it are somehow closely linked with the process itself.
+Moreover, the technique just explained can give further insight and can help us learn new functional relationships about the process which is studied.
+If the GP chosen performs well, then the functional relationships encoded in it are somehow closely linked with the process itself.
 New relationships and dependencies between predictors used and responses observed can be established and we can therefore shed new light on the mechanistic of the process.
-
-\seb{should I add a plot of the residues, to see if the weir equation is the "actual model" generating the points?}
-
-%-------------------------------------------------------------------------------
-\subsection{Discussion}
-%-------------------------------------------------------------------------------
-%* finish with take home message
-
-
-
 
 
 \newpage
@@ -370,6 +349,7 @@ New relationships and dependencies between predictors used and responses observe
 \noindent{\LARGE\textbf{Case study 2}}
 %===============================================================================
 \section{An hydrological emulator: estimating the \textit{time-to-threshold}}
+\label{sec:hydrological_emulator}
 %===============================================================================
 
 With this case study it was decided to address a complex hydrological problem by means of emulation.
