@@ -48,7 +48,7 @@ As the simulation runs, the inflow water flows down the channel, overflows the w
 After some time the simulation reaches the \emph{steady-state} conditions: inflow, discharge over the weir and outflow have the same magnitude and the water height above the weir has stabilized.
 At this point the value $h_w$ was extracted and was paired with the discharge value $Q$ generating it.
 \num{25} experiments were conducted with $Q$ linearly spaced in the range \SIrange{0.1}{10}{\cubic\meter\per\second}.
-All simulated pairs $(Q, h_w)$ constitute an observational \emph{predictor-response} set to which the weir equation was fitted.\\
+All simulated pairs $(Q, h_w)$ constitute an \emph{inputs-output} sets to which the weir equation was fitted.\\
 
 In order to ensure the convergence of the simulator solution, and therefore the quality of the experimental results, a \emph{grid convergence study} was performed prior to the experiment.
 For this, the simulation with the highest discharge was repeated with successive grid refinements.
@@ -83,7 +83,7 @@ The simulation was done with no rain and no infiltration.
 This way, water just enters the system through the top boundary and leaves it through the bottom one.
 For this a \emph{Neumann} boundary condition was chosen at the bottom, while an \emph{imposed discharge} boundary condition was set at the inflow boundary.
 This boundary condition needs two values to be specified: the magnitude of the inflow and an imposed water height, which is used under supercritical flow conditions.
-The \num{25} inflow discharges used were obtained with the following \citetalias{octave_community_gnu_2018} code.\\
+The \num{25} inflow discharges used were obtained with the following \citetalias{octave_community_gnu_2018} code:\\
 
 \inputminted[
   fontsize=\footnotesize,
@@ -96,7 +96,7 @@ The \num{25} inflow discharges used were obtained with the following \citetalias
   framesep=10mm
 ]{octave}{code.m}\\
 
-\noindent Where by definition within \citetalias{delestre_fullswof:_2017} the minus sign indicates that water steadily \emph{enters the domain}.
+\noindent where, by definition within \citetalias{delestre_fullswof:_2017}, the minus sign indicates that water steadily \emph{enters the domain}.
 The imposed height was set to \SI{3}{\m}, corresponding to the weir height.
 
 The channel topography presents no banks.
@@ -183,7 +183,7 @@ To remove these, a time averaged free surface from $t = \SI{100}{\s}$ to $t = \S
 Fig.~\ref{fig:free_surfaces} presents the free surface profiles of the \num{25} experiments at steady-state conditions.
 The three lowest profiles correspond to the simulation runs with the three lowest inflow discharges. 
 As initial condition the weir's upstream side of the channel was filled with water to the weir's height.
-The fact that these three profiles are lower than the initial condition indicates that a problem occurred with the simulation and water was lost from the top boundary.
+The fact that these three profiles are lower than the initial condition is due to a problem with \citetalias{delestre_fullswof:_2017} that lost water from the top boundary.
 These simulations were discarded for the continuation of the experiment.
 The height value for the remaining simulations was extracted \SI{1.2}{\m} before the weir base, to avoid observations in the acceleration zone, happening in proximity of the weir crest.
 At this point a space average over the channel breadth was taken.
@@ -208,14 +208,12 @@ As the original weir equation is non-linear with respect to the parameters, it w
 \end{equation}
 
 \noindent The values of the parameters $a$ and $C$ were determined from the linearized model.
-The performance of the fitted weir equation should be compared with that of a linear interpolation through the points and that of a cubic spline interpolation.
-Therefore, the points were interpolated with both methods.
-
+The performance of the fitted weir equation has been compared with the relationship obtained using linear and cubic spline interpolation.
 
 %...............................................................................
 \subsubsection{Computing the error}\label{sec:compute_error}
 %...............................................................................
-To evaluate the performance of the three models, an increasing number of observations were removed, the models were trained on the remaining observations and it was tried to predict the ones removed.
+To evaluate the performance of the three models, an increasing number of observations were progressively removed, the models trained on the remaining observations and evaluated on the leaved-out observations.
 For an amount $k$ of points removed, all possible combinations were tested. The number of model evaluations follows:
 
 \begin{equation}
@@ -224,10 +222,9 @@ For an amount $k$ of points removed, all possible combinations were tested. The 
 
 \noindent Since this number grows very fast a subset of the initial dataset was used.
 This can be found in Tab.~\ref{tab:dataset_error} in the Appendix.
-The first and last points of the dataset were kept during all the \emph{cross-validation} experiment in order to avoid wild extrapolation at the boundaries of the predictor space.
+The first and last points of the dataset were kept during all the \emph{cross-validation} experiment in order to avoid wild extrapolation at the boundaries of the inputs space.
 From the remaining \num{12} points all possible combinations of \num{1} to \num{10} points were removed.
-The root mean squared error (RMSE) of every combination was computed and the average RMSE for the removal of \num{1} up to \num{10} points was taken.
-
+The average root mean squared error (RMSE) observed for the removal of \num{1} up to \num{10} points is displayed in Fig.\ref{fig:fitting_errors}.
 
 %-------------------------------------------------------------------------------
 \subsection{Results and Discussion}
@@ -238,25 +235,23 @@ The root mean squared error (RMSE) of every combination was computed and the ave
 
 In Fig.~\ref{fig:simulations_results} the $(Q, h_w)$ pairs extracted from the simulations are plotted.
 The gap in the lower part of the plot is due to the data that had to be discarded.
-These points represent the dataset which was used to fit the weir equation and the other two models.
+The displayed points represent the input-output sets which was used to fit the weir equation and to apply the  linear and cubic spline interpolation.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/simulations_results.png}
-  \caption{Plot of the $(Q, h_w)$ pairs extracted from the simulations. Points corresponding to the unsuccessful simulations have already been discarded. This produces the gap visible in the left part of the plot.}
+  \caption{Plot of the $(Q, h_w)$ pairs extracted from the simulations. Points corresponding to unsuccessful simulations have been discarded, causing the gap visible in the bottom left part of the plot.}
   \label{fig:simulations_results}
 \end{figure}
 
-The fit of the different models to the dataset is displayed in Fig.~\ref{fig:fitting_results}.
-It can be observed that the linear interpolation fails to capture the initial trend shown by the weir equation and the cubic spline interpolation.
-This is due to two main reasons.
-The first is that the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
-Moreover, in this region the weir equation presents its maximum curvature.
-This makes the linear interpolation diverge even faster.
+The fit of the different models to the input-output sets is displayed in Fig.~\ref{fig:fitting_results}.
+It can be observed that the linear interpolation fails to model the initial curvature which is instead captured by the fitting of the weir equation and the cubic spline interpolation.
+This is due to two main reasons. 
+First, the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
+Secondly, this region of the input space presents a severe curvature, that makes the linear interpolation to diverge faster.
 
-From the second to the last point all models seem to perform well: the three lines are almost perfectly overlaying, meaning that all give very similar results.
-Some divergences can be observed in proximity of data points, especially between the weir equation and the other two models: this is due to the fact that the two interpolations \emph{interpolate} the points, whereas the curve obtained for the weir equation represents the best linear fit to the points (\mintinline{octave}{polyfit (x, y, 1)}).
-This minimizes the least-squares-error of the fit \autocite{eaton_gnu_2016}, which does not necessarily means interpolating through the points.
+With the remaining points, all models seem to perform well: the three lines are almost perfectly overlaying, meaning that all give very similar results.
+Nevertheless, slight divergences can be observed in proximity of the data points, especially between the weir equation and the two interpolation curves. This is due to the fact that the two interpolation models\emph{interpolate} exactly the points, whereas the curve obtained by fitting the weir equation (which represents the best linear fit to the points minimizing the least-squares-error ), does not necessarily pass exactly through the points.
 
 \begin{figure}[h]
   \centering
@@ -266,7 +261,7 @@ This minimizes the least-squares-error of the fit \autocite{eaton_gnu_2016}, whi
 \end{figure}
 
 For the fitting of the weir equation the values $C = 1.65$ and $a = 1.59$ were found.
-As mentioned in Sec.~\ref{sec:cs1_brief_description} for a weir of \SI{2}{\m} breadth and vertical walls $C$-values in the range $[\numrange{1.36}{1.53}]$ are expected, depending on the magnitude of $h_w$.
+As mentioned in Sec.~\ref{sec:cs1_brief_description}, for a weir of \SI{2}{\m} breadth and vertical walls, $C$-values in the range $[\numrange{1.36}{1.53}]$ are expected.
 The value obtained for $C$ assumes that $C$ does not vary with $h_w$.
 Moreover, the weir used for the experiment has a trapezoidal cross section instead of a rectangular one.
 \cite{tracy_discharge_1957} investigated how the coefficient $C$ varies with different weir shapes.
@@ -282,43 +277,31 @@ The difference in the $C$ coefficient observed here can be explained by this phe
 
 Fig.~\ref{fig:fitting_errors} displays the RMSE obtained by cross-validation as explained in Sec.~\ref{sec:compute_error}.
 No matter how many points are used, the linear interpolation always performs worst.
-By increasing the number of points its performance improves quite rapidly, but not enough to reach that of the other two models.
-The process generating the points does not have a linear behavior.
-Despite the improvement of its performance, this model will never approximate the process generating the points as well as the others.
+By increasing the number of points its performance improves quite rapidly, but not enough to reach that of the other two models, because the process generating the points does not have a linear behavior.
+ 
+The results for the cubic splines interpolation confirm what was already observed in Fig.\ref{fig:fitting_results}:  cubic splines interpolation seems to mimicks in an accurate manner the process originating the points.  This is explainable by the high flexibility of cubic splines interpolation method, which typically shows very small errors when fitted with many points. However, by reducing the number of points available for interpolation, the error of this model increases exponentially. Despite this, on average if more than 5 observations are available, cubic splines interpolation outperforms the other methods.
 
-The results for the cubic spline interpolation confirm what was already observed in the previous plot.
-This is a good model at mimicking the process originating the points.
-Its performance goes from slightly worse than that of the weir equation model up to almost \num{2} order of magnitude better.
-However, by reducing the number of points, the error of this model increases exponentially.
-Due to its flexibility, the cubic spline interpolation shows very small errors when fitted with many points.
-This model, by definition, interpolates through all of the training points.
-If the training points are close to each other, the chance of interpolating an "unseen" point in the middle of two others, or at least to pass very close, are very high.
-By increasing this distance these chances decrease quite fast, since the cubic spline interpolation is not a very suitable model to describe the behavior of the process between two points.
-For this reason the error increases exponentially.
+On the other hand, the regression line obtained using the weir equation model shows only a slight decrease in accuracy when progressively removing observations for fitting. This high stability (insensitivity to the number of available observations for fitting) is due to the fact that in this case only two regression coefficients must be determined. Nevertheless, the low flexibility of linear regression models tends to prevent the interpolation of the data points and causes the linear regression model to not outperform cubic spline interpolation when many observations are available and the functional relationship is non-linear (or not optimally parametrized by an ad-hoc equation).  
 
-The weir equation model used minimizes the least-square-error of the fit, without necessarily interpolating through the points.
-It is a very inflexible model, as only two parameters can be varied to improve the quality of fit, while many more observations are available.
-For this reason, the interpolation through the points cannot be achieved, unless the observations were originated exactly by the model chosen.
-Because interpolation cannot be obtained, its error decreases very slowly with increasing number of points.
-The inflexibility of this model represents its weakness but at the same time its strength.
-This is in fact a very robust model, which still produces good results when few observations are available.
-It shows almost no decline in performance by reducing the number of points.
+%The weir equation model used minimizes the least-square-error of the fit, without necessarily interpolating through the points.
+%It is a very inflexible model, as only two parameters can be varied to improve the quality of fit, while many more observations are available.
+%For this reason, the interpolation through the points cannot be achieved, unless the observations were originated exactly by the model chosen.
+%Because interpolation cannot be obtained, its error decreases very slowly with increasing number of points.
+%The inflexibility of this model represents its weakness but at the same time its strength.
+%This is in fact a very robust model, which still produces good results when few observations are available.
+%It shows almost no decline in performance by reducing the number of points.
+
 Fig.~\ref{fig:boxplot_models} in the Appendix summarizes the performance of the three models when using $[\numrange{4}{13}]$ \# of points.
 Here it can be seen that the RMSE for the weir equation is higher on average respect to the cubic spline interpolation but still quite low (in the order of $\approx \SI{1}{\centi\meter}$).
 Its variation is almost inexistent; the box plot is practically described by a line.\\
 
-A closer comparison between the two best models (see Fig.~\ref{fig:fitting_std}) shows new interesting features.
-The cubic spline interpolation is very sensitive to which points are removed when many are removed.
-The standard deviation on its RMSE by changing which observations are removed increases by a factor of \num{60} when \num{4} resp. \num{13} points are used.
-The opposite is observed for the weir equation model.
-This is more sensitive to which observation is removed when only few of them are removed and becomes less sensitive as fewer observations are used to fit the model.
-However, the variation here when \num{4} resp. \num{13} points are used is only $\approx \num{6} \times$.
+An in-depth comparison between the two best models (see Fig.~\ref{fig:fitting_std}) shows new interesting features.
+The cubic spline interpolation is very sensitive to which points are removed when few observations are available for interpolation. The standard deviation on its RMSE by changing which observations are removed increases by a factor of \num{60} when \num{4} resp. \num{13} points are used.
+Oppositely, the regression line based on the weir equation model is more sensitive to which observation is removed when only few of them are removed; while it becomes less sensitive as fewer observations are used to fit the model. However, the variation in RMSE variability  when \num{4} resp. \num{13} points are used, change only by a factor of $\approx \num{6}$.
 
-When considering this, the weir equation can still do better when up to \num{6} points are used, and not just by \num{4} as it was indicated by Fig.~\ref{fig:fitting_errors}.
-In the weir equation model proposed by \cite{brown_urban_2009}, the coefficient $C$ varies as a function of $h_w$.
-The shorter the weir width, the wider becomes the range of values for the $C$ coefficient.
-If a functional relationship $f:h_w \mapsto C$ had been established, then a weir equation model better fitting the data would have been obtained.
+When considering this, the regression line based on the weir equation can still have the potential to perform better than the cubic spline interpolation when only up to \num{6} observations are available (and not just by \num{4} as it was indicated by Fig.~\ref{fig:fitting_errors})
 
+In the weir equation model proposed by \cite{brown_urban_2009}, the coefficient $C$ has been allowed to varies as a function of $h_w$:  the shorter the weir width, the wider becomes the range of values for the $C$ coefficient. If the regression line would have been fitted on this model, then a better fit to the observations would have been obtained.
 
 \begin{figure}[h]
   \centering
@@ -328,21 +311,14 @@ If a functional relationship $f:h_w \mapsto C$ had been established, then a weir
 \end{figure}
 
 
-From this example the importance of the trade-off \emph{prior knowledge} -- \emph{data availability} can be seen.
-Some "interpolation methods", e.g. \emph{neural networks} in ML, are very data-greedy.
-These can perform very well when a big training dataset is available, but fail if not enough data is available.
-When obtaining new observations is computationally very costly, as is the case with most simulations, "interpolation methods" allowing the encoding of prior knowledge can prove to be very useful.
-Gaussian processes represent a good example.
-When the physical laws governing a process are known, i.e. its linear partial differential equations, they can be mapped into the covariance function of the GP.
+This first case studies highlighted the importance of the trade-off between \emph{prior knowledge} and \emph{data availability}.
 
-If the information encoded this way is correct, the result will be very similar to the one observed with the weir equation case study; it does not matter how many observations are available to perform the fitting, the results will still be good.
-If the right model for the process is found, no more observation are needed.
-These are simply given by the evaluation of the model itself.
+Machine learning (ML) regression algorithms such as \emph{RandomForest} (Breiman et al.), \emph{Gradient Boosting Machines}(CITT) and \emph{Feedforward Neural Networks}(CITTT) are known to be very powerful on establishing non-linear functional relationship hidden in the data, but they also are particularly data-greedy. They have the potential to perform very well when a big training dataset is available, but fail if not enough data are available. Using numerical simulators, the generation of these large training datasets can be computationally very costly, thus partially hampering the use of these algorithms.
 
-Moreover, the technique just explained can give further insight and can help us learn new functional relationships about the process which is studied.
-If the GP chosen performs well, then the functional relationships encoded in it are somehow closely linked with the process itself.
-New relationships and dependencies between predictors used and responses observed can be established and we can therefore shed new light on the mechanistic of the process.
+In this case study, we showed that simpler interpolation methods can still allow to obtain good performance when  moderate simulated input-output sets are available. 
+Moreover, the encoding of prior knowledge was proved to be useful when less data are available: the \emph{weir equation} model, unlike the others, could still perform well when fitted to few observations.
 
+Taking into consideration the previous findings, GPs could be the ideal tool for emulation of physical processes due to their ability to model highly non-linear relationships, to interpolate the data points as well as encoding prior knowledge of the process \autocite{rasmussen_gaussian_2010}. Recent studies showed the possibility to direct map partial differential equations (PDEs) into covariance functions \autocite{lindgren_an_explicit_2011}. This allows to include the mechanistic of the process in the interpolation problem. On the other side, identification of accurate GP models can shed new light on the mechanistic of the process.
 
 \newpage
 
@@ -358,19 +334,21 @@ New relationships and dependencies between predictors used and responses observe
 
 %This is also very instructive for the reader.
 
-With this semi-virtual case study we decided to address a complex hydrological problem by means of emulation.
-The problem we want to solve is estimating the time needed for a channel conveying water from a catchment to reach a certain threshold discharge ($Q_{thold}$) at a specific point along the channel when subject to different rains and when different initial moisture content conditions of the soil reign.
-With the term "rain event" we are going to consider both the actual rain and the initial conditions of the soil.
-Two events characterized by the same rain but different initial conditions of the soil represent two different rain events. The variables chosen to characterize a rain event are \emph{rain intensity} and \emph{initial soil saturation}.
+As already stated in the introduction, our society and its infrastractures are exposed to the risk of flooding.
+In this case study, we illustrate a methodology which can be used to develop an emulation-based early flood warning system.
+For a channel conveying water from a catchment, we want to estimate, at a specific location along the channel, the time needed to reach an ad-hoc specified \emph{threshold discharge} ($Q_!$). 
+The time needed to exceed $Q_!$ will be referred hereinafter as \emph{time-to-threshold}($t_!$). 
 
-The threshold discharge could never be reached.
-Our emulator has therefore a hierarchical structure: it is composed of a classifier (determining whether the threshold is exceeded or not) and of the emulator, estimating the time-to-threshold.
+This time-to-threshold will depend on the rainfall distribution in the catchment and the initial soil moisture content.
 
-For the experiment a synthetic catchment topography was used, which can make the case study look very abstract.
-The methodology used is exploiting the catchment's specific behaviour; this information is therefore intrinsically embedded in the emulator built.
-This high level of abstraction and generalization allows theoretically for an easy application of the method to whatever case study.
-A concrete application of the emulator developed here would be as an \emph{early flood warning system}.
+With the term "event", hereinafter, we are going to consider a combination of the \emph{rain intensity} and the \emph{initial soil saturation} conditions over the catchment. 
+For some events, namely very low precipitation and low initial soil saturation conditions, the threshold discharge at the specific location may never be reached.
 
+For this reason, the developed warning system has a hierarchical structure: it is composed of a classifier determining whether the threshold discharge ($Q_!$) can be exceeded (or not) and of an emulator which estimate the time-to-threshold $t_!$.
+
+To develop the methodology, a synthetic catchment topography was generated. Due to the generalization and abstraction of the proposed work-flow however, the methodology can be easily applied to real-situations. 
+ 
+% The methodology used is exploiting the catchment's specific behaviour; this information is therefore intrinsically embedded in the emulator built.
 
 %-------------------------------------------------------------------------------
 \subsection{Material and methods}
@@ -379,20 +357,20 @@ A concrete application of the emulator developed here would be as an \emph{early
 \subsubsection{Generating the topography}
 %...............................................................................
 
-The topography used is visible in Fig.~\ref{fig:topography} and represents a catchment of size $\SI{2}{\kilo\meter} \times \SI{2}{\kilo\meter}$.
-It is made by the superposition of a sloping plane with three Gaussian bumps.
+The synthetic topography used is displayed in Fig.~\ref{fig:topography} and covers a catchment of size $\SI{2}{\kilo\meter} \times \SI{2}{\kilo\meter}$. 
+The simulation grid is composed of $\num{100} \times \num{100}$ cells, which results in a cell resolution of $\SI{20}{\meter} \times \SI{20}{\meter}.$
+
+The topography is generated by the superposition of a sloping plane with three Gaussian bumps.
 The Gaussian bumps have different heights and widths and generate a \emph{Y-shaped channel} which extends from the upper and left boundary down to the lower boundary.
 This has a single outlet located close to the center of the domain's bottom boundary.
 
-The synthetic topography produced, in contrast to a real one, has the advantage of having a much smoother surface, which allows using a coarser grid resolution without losing topographical features.
-The coarser the grid the fewer the nodes where the finite volume (FV) equations have to be solved, which reduces the simulation runtime.
-Another advantage of having a smooth topography, not presenting discontinuities, is that the solutions converge easily, and no grid refinement is necessary.
-The grid used is composed of $\num{100} \times \num{100}$ cells, giving a resolution of $\SI{20}{\meter} \times \SI{20}{\meter}.$
+In contrast to real topography, the synthetic topography has a much smoother surface. This allows the use of a coarse grid resolution without losing the topographical features and the reduction of the simulation runtime. 
+In a real situation, a wigglier topography might introduce additional non-linearities in the runoff-generation process, which would require an higher resolution of the simulation grid and thus longer computing time.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/topography.png}
-  \caption{Synthetic topography composed of three Gaussian bumps on a sloping plane. The runoff from this domain, due to the high variability of its slope, is given by the superpositions of several waves. For the time-to-threshold flood-warning problem, this generates non-monotonous functions (see Fig.~\ref{fig:hydrograph}) which make emulation challenging.}
+  \caption{Synthetic topography composed of three Gaussian bumps on a sloping plane. The runoff from this domain, due to the high variability of its slope, is given by the superpositions of several waves. For the time-to-threshold flood-warning problem, this generates non-monotonous functions which make emulation challenging (see Fig.~\ref{fig:hydrograph}).}
   \label{fig:topography}
 \end{figure}
 
@@ -401,8 +379,8 @@ The grid used is composed of $\num{100} \times \num{100}$ cells, giving a resolu
 %...............................................................................
 The dataset required for building the emulator was generated by running \num{50} simulations with different combinations of the variables \emph{rain intensity} ($I$) and \emph{initial soil saturation} ($\theta_i$).
 The duration of every simulation was $\approx \SI{30}{\minute}$, for a simulated time of \SI{9}{\hour}, giving a ratio real-time/simulation-time of \SI{3.3}{\minute\per\hour} simulated.
-The initial soil saturation, being a spatially distributed variable, was kept uniform over the whole domain.
-The rain intensity was kept constant and was uniformly applied over the domain, also since \citetalias{delestre_fullswof:_2017}, at this stage of development, only allows for uniformly distributed rain \autocite{laguerre_documentation_2016}.
+The initial soil saturation, despite being a spatially distributed variable, was kept uniform over the whole domain.
+The rain intensity was kept constant and was uniformly applied over the domain, also because \citetalias{delestre_fullswof:_2017}, at this stage of development, only allows for uniformly distributed rain \autocite{laguerre_documentation_2016}.
 
 \num{5} different initial saturations in the $[\numrange{0}{1}]$ interval and \num{10} rain intensities in the \SIrange{10}{35}{\milli\metre\per\hour} interval were taken and all their possible combinations were used as inputs for the simulations.
 The rain duration was set to \SI{6}{\hour}, while a simulation duration of \SI{9}{\hour} was chosen in order to be able to observe the hydrograph recession. A time resolution of \SI{60}{\second} was used.
@@ -442,16 +420,17 @@ Three \textit{wall boundary conditions} were set for the remaining boundaries, m
 \subsubsection{Extracting the datasets}
 %...............................................................................
 The datasets used to build the emulator was extracted from the simulation outputs in two steps.
-In a first step the outflow hydrographs were extracted from the simulation results. From these, the time-to-threshold was successively extracted.
-The outflow hydrographs were obtained by summing up the cell discharge along the whole domain bottom boundary at every time-step saved.
-The result of this operation is a discharge time series (vector) with \num{540} values, one every simulated minute.
-The same procedure was repeated with every experiment, giving \num{50} different hydrographs (see Fig.~\ref{fig:hydrographs3d}).\\
+First, the outflow hydrographs were extracted from the simulation output files, by summing up, at every time-step saved, the cell discharge along the whole domain bottom boundary. The result of this operation is a river flow time series with \num{540} observations, with a temporal resolution of 1 minute.
+The same procedure was repeated for each of the 50 events, producing \num{50} different hydrographs (see Fig.~\ref{fig:hydrographs3d}).\\
 
-To build the \emph{time-to-threshold emulator}, the emulator giving the lapse of time $t_!$ passed from the beginning of the rain event to the exceeding of the threshold discharge $Q_!$, a threshold discharge has to be established.
-For a real case study a characteristic discharge value would be set.
-This could be the discharge at which a bridge or the embankments located on the channel are overflown.
-Here this value can be chosen with greater freedom, and the effects of choosing different values can be studied.
+Successively, the time-to-threshold $t_!$ has been computed based on the specified threshold discharge $Q_!$. 
+The time-to-threshold $t_!$ paired with the corresponding rainfaill intensity and the initial soil saturation conditions formed the output-inputs sets used to construct the emulator. 
 
+In a real situations, the threshold discharge $Q_!}$ could be the discharge at which a bridge or the embankments located on the channel are overflown. 
+In order to develop the methodology, $Q_!$ was set to \SI{10}{\percent} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
+
+The time at which this value is exceeded for the first time was extracted from every hydrograph and forms the dataset for the emulator.
+ 
 By looking at one of the hydrographs extracted (Fig.~\ref{fig:hydrograph}) it can be observed that $t_!$ is a difficult quantity to predict.
 In fact, depending on the $Q_!$ set, the time-to-threshold can be reached very quickly, can show a long time-lag, or not be reached at all.
 Within the region defined by the $Q_!$ and the $Q'_!$ lines the hydrograph presents a plateau.
@@ -465,8 +444,7 @@ The studied quantity $t_!$ is therefore said to be \emph{discontinuous}.
   \label{fig:hydrograph}
 \end{figure}
 
-$Q_!$ was set to \SI{10}{\percent} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
-The time at which this value is exceeded for the first time was extracted from every hydrograph and forms the dataset for the emulator.
+
 From the same hydrographs the dataset for the classifier was also produced.
 This was created by assigning the value \num{-1} to rain events not reaching the threshold and \num{1} the others.
 
