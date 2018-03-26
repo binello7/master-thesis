@@ -80,21 +80,21 @@ ss_val = soil_saturations_val;
 #-------------------------------------------------------------------------------
 #meanfunc = {@meanConst};
 #mn = 0;
-meanfunc = [];
-mn = [];
-#meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanPoly,2}}};
-#mn = rand (7,1);
+#meanfunc = [];
+#mn = [];
+meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanPoly,2}}};
+mn = rand (7,1);
 
 
 # covariacne function
-#covfunc = {@covPoly,'iso',3};
-#cv = rand (3,1);
+covfunc = {@covPoly,'iso',3};
+cv = rand (3,1);
 #covfunc = @covNoise;
-#cv = 1;
+##cv = 1;
 #covfunc = {@covPPard,3};
 #cv = [4 2.6 8];
-covfunc = {@covMaternard,1};
-cv = [1;1;1];
+#covfunc = {@covMaternard,1};
+#cv = [1;1;1];
 #covfunc = @covSEard;
 #cv = [1;1;1;];
 
@@ -125,8 +125,8 @@ tf = t_Qtrain < 420;
 tftst = t_Qtest < 420;
 
 
-xtrn = [ri_train(tf) ss_train(tf);ri_test(tftst)(:) ss_test(tftst)(:)];
-ytrn = [t_Qtrain(tf);t_Qtest(tftst)];
+xtrn = [ri_train(tf) ss_train(tf)];#ri_test(tftst)(:) ss_test(tftst)(:)];
+ytrn = [t_Qtrain(tf)];#t_Qtest(tftst)];
 xemu = [ri_emu(:) ss_emu(:)];
 
 args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
@@ -142,7 +142,7 @@ tic
 t_Qemu = gp (hyp, args{:}, xemu);
 toc
 
-save ('hyp_reg.dat', 'hyp');
+#save ('hyp_reg.dat', 'hyp');
 
 t_Qemu = reshape (t_Qemu, size (ri_emu));
 
