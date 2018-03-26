@@ -17,6 +17,7 @@
 * Separate results and discussion in CS1
 * check "bla bla license"
 * check missing references!!
+* Q_!, Q_thresh, Q_thold?? which one??
 
 # Less important
 * review first sentence of paragraphs to highlight the whole paragraph
