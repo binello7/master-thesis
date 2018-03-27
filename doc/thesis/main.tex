@@ -103,6 +103,12 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{hyperref}
 
+\usepackage[
+    type={CC},
+    modifier={by-sa},
+    version={4.0},
+]{doclicense}
+
 %-------------------------------------------------------------------------------
 %  NEW COMMANDS AND DEFINITIONS
 %-------------------------------------------------------------------------------
@@ -238,6 +244,9 @@ headsepline, % Uncomment to get a line under the header
 \end{titlepage}
 \newpage\null\thispagestyle{empty}\newpage
 
+
+\doclicenseThis
+
 %-------------------------------------------------------------------------------
 %  DECLARATION PAGE
 %-------------------------------------------------------------------------------
@@ -249,18 +258,14 @@ headsepline, % Uncomment to get a line under the header
 %-------------------------------------------------------------------------------
 
 \begin{abstract}
-\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-With intensification of land use, more people living in endangered zones and climatic changes the importance of correctly predicting flooding has gained significance.
-Development of new numerical models and continuously improving computer performance offer reliable tools to tackle the problem.
-However, their very high computational demand hinders their application to near real time applications like \emph{early flood warning}.
-Emulation, the approximation of detailed simulators with simplified, \emph{ad-hoc} models, comes forward as one of the possible solutions to the problem.
-After going through the basics of emulation we propose an application of it to flood prediction: the development of an emulation-based early flood warning system.
-The methodology used to build it is explained with a special focus on Gaussian Processes; the method used for its construction.
+\addchaptertocentry{\abstractname}  
 
-
-
-% * flood prediction
-
+In recent decades, with the growth of computational power and the development of sophisticated and accurate hydrodynamical numerical models, simulations have become a powerful tool to make hydrological predictions.
+Emulation, the approximation of detailed numerical simulators with simplified \emph{ad-hoc} models, reduces the excessive computational burden of the numerical simulators,thus allowing the development of near-real time applications. 
+After an introduction to the basic principles of emulation, this thesis proposes an innovative early flood warning system.
+This alert system is constructed by emulating a numerical simulator solving the Shallow Water Equation for overland flow.
+Application of the illustrated methodology to real-world situations will permit to emanate timely alert for the implementation of measures targeted at reducing the damages caused by floods. 
+ 
 \end{abstract}
 
 %-------------------------------------------------------------------------------
@@ -269,23 +274,59 @@ The methodology used to build it is explained with a special focus on Gaussian P
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-\begin{itemize}
-\itemsep0em
-  \item Supervisors
-  \item Professor
-  \item Vasilis
-  \item Joao
-  \item family
-  \item wg
-  \item gionata
-  \item Octave
-  \item FullSWOF\_2D
-  \item Inkscape
-\end{itemize}
+
+I first of all would like to thank my two supervisors, Dr. Juan Pablo Carbajal and Dr. Jörg Rieckermann, and the examiner of my thesis Prof. Dr. Peter Molnar.
+Their support was fundamental during the course of my whole master thesis.
+In particular, I want to thank Juan Pablo for all the time spent with me, staying at the eawag until late at night just a couple of days before Christmas, in order to completely debug the package fswof2d. Or again, spending hours at the telephone with me to discuss last details of the emulator a couple of days before my intermediate presentation.
+It was just great to pursue my thesis under your supervision; for this just THANK YOU.
+Thank you too Jörg Rieckermann, your punctual comments to my draft allowed me to find the guideline I couldn't find so far.
+The help of Vasilis at the very beginning of my thesis, when still struggling to understand the functioning of my simulator was very encouraging; I am grateful for this.
+I also would like to thank Joao, providing me the topography for the simulation that we sadly could not run because of lack of time, and with it many useful suggestions.
+Eawag is a great place, because it is full of great people. I am very glad that I had the opportunity of spending my thesis period there. Thank you to my office mates, to the running group, and to all of the people who made eawag such a special place.\\
+
+This thesis was also possible thanks to all of the support I received from the outside.
+I want to thank my parents for always being present when I needed.
+And my sister and her farm, for offering me the right diversion when I wanted to knock off.
+I am particularly grateful to my good friend Gionata, offering me the moral and technical support I needed when feeling lost and confused.\\
+
+Last but not least, a special thanks goes to my "WG". Donato and Gloria; Gloria and Donato, who accompanied from near all of my thesis, with its ups and downs; and were always there to make me laugh when I needed.\\
+
+Finally, a special thought goes to the developers of all of the open softwares that allowed the realization of my thesis. You are doing great! A huge thanks \citetalias{octave_community_gnu_2018}, \citetalias{delestre_fullswof:_2017} and \citetalias{inkscape_community_inkscape_2018}.
+
 \end{acknowledgements}
 
 
-%-------------------------------------------------------------------------------ABBREVIATIONS
+
+%-------------------------------------------------------------------------------
+%  TABLE OF CONTENTS
+%-------------------------------------------------------------------------------
+
+\tableofcontents
+
+
+%-------------------------------------------------------------------------------
+%  THESIS BODY
+%-------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{thesis} % Return the page headers back to the "thesis" style
+
+% Include the chapters of the thesis as separate files from the Chapters folder
+% Uncomment the lines as you write the chapters
+
+\include{Chapters/1Introduction}
+\include{Chapters/2Methods}
+\include{Chapters/3CaseStudies}
+\include{Chapters/5Conclusions}
+
+%-------------------------------------------------------------------------------
+%  BIBLIOGRAPHY
+%-------------------------------------------------------------------------------
+
+\printbibliography[heading=bibintoc]
+
+%-------------------------------------------------------------------------------
 %-------------------------------------------------------------------------------
 
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
@@ -331,36 +372,6 @@ $t_{max}$    & Simulation duration            & \si{\s} \\
 
 \end{symbols}
 
-
-%-------------------------------------------------------------------------------
-%  TABLE OF CONTENTS
-%-------------------------------------------------------------------------------
-
-\tableofcontents
-\seb{is that ok index up to third level? or better just second? should third level be numbered and indented as well?}
-
-
-%-------------------------------------------------------------------------------
-%  THESIS BODY
-%-------------------------------------------------------------------------------
-
-\mainmatter % Begin numeric (1,2,3...) page numbering
-
-\pagestyle{thesis} % Return the page headers back to the "thesis" style
-
-% Include the chapters of the thesis as separate files from the Chapters folder
-% Uncomment the lines as you write the chapters
-
-\include{Chapters/1Introduction}
-\include{Chapters/2Methods}
-\include{Chapters/3CaseStudies}
-\include{Chapters/5Conclusions}
-
-%-------------------------------------------------------------------------------
-%  BIBLIOGRAPHY
-%-------------------------------------------------------------------------------
-
-\printbibliography[heading=bibintoc] \seb{any rule for the bibliography? print ISBN? print url where document is available (if pdf)?}
 
 %-------------------------------------------------------------------------------
 %  APPENDIX
