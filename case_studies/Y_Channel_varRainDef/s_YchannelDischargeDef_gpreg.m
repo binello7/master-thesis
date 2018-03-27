@@ -80,21 +80,21 @@ ss_val = soil_saturations_val;
 #-------------------------------------------------------------------------------
 #meanfunc = {@meanConst};
 #mn = 0;
-#meanfunc = [];
-#mn = [];
-meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanPoly,2}}};
-mn = rand (7,1);
+meanfunc = [];
+mn = [];
+#meanfunc = {@meanSum,{@meanConst,@meanLinear,{@meanPoly,2}}};
+#mn = rand (7,1);
 
 
 # covariacne function
-covfunc = {@covPoly,'iso',3};
-cv = rand (3,1);
+#covfunc = {@covPoly,'iso',3};
+#cv = rand (3,1);
 #covfunc = @covNoise;
 ##cv = 1;
 #covfunc = {@covPPard,3};
 #cv = [4 2.6 8];
-#covfunc = {@covMaternard,1};
-#cv = [1;1;1];
+covfunc = {@covMaternard,1};
+cv = [1;1;1];
 #covfunc = @covSEard;
 #cv = [1;1;1;];
 
@@ -160,7 +160,7 @@ hte = plot3 (ri_test(tftst), ss_test(tftst), t_Qtest(tftst), 'bo', 'markerfaceco
 hva = plot3 (rain_intensities_val, soil_saturations_val, t_Qval, 'go', 'markerfacecolor', 'g');
 he = mesh (ri_emu, ss_emu, t_Qemu, 'edgecolor', 'k', 'facecolor', 'none');
 hold off
-legend ([he, htr(1), hte(1), hva(1)], 'emulator', 'training', 'test', 'validation')
+legend ([he, htr(1), hte(1), hva(1)], 'emulator', 'training', 'validation', 'test')
 xlabel ('I [mm/h]')
 ylabel ('\theta_i [-]')
 zlabel ('t_! [min]')
