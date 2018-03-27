@@ -116,9 +116,9 @@ likfunc = @likLogistic;
 lk = [];
 
 
-#hyp.mean = mn;
-#hyp.cov  = cv;
-#hyp.lik  = lk;
+hyp.mean = mn;
+hyp.cov  = cv;
+hyp.lik  = lk;
 #load ('hyp_class.dat');
 
 ## Prior
