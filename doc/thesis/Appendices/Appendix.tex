@@ -2,7 +2,6 @@
 \chapter{Appendix}
 
 
-\seb{change appendix name or way it is displayed. I want to have just 1 appendix}
 %===============================================================================
 \section{Additional material}\label{sec:additional_material}
 %===============================================================================
@@ -30,8 +29,7 @@
   \caption{Channel topography and free surface of the water computed with \citetalias{delestre_fullswof:_2017} at $t = \SI{16}{\s}$. The simulation at this point has not reached the steady-state conditions yet. This is visible from the waves on the water surface downstream of the weir, indicating that the hydraulic jump has not stabilized yet.}
   \label{fig:channel}
 \end{figure}
-\seb{does it make sense to put this figure?}
-\seb{change the caption of the figure!}
+
 
 
 \begin{figure}[H]
@@ -68,7 +66,7 @@
 \section{Case study 2}
 %===============================================================================
 %-------------------------------------------------------------------------------
-\subsection{Test dataset}\label{sec:test_dataset}
+\subsection{Validation dataset}\label{sec:test_dataset}
 %-------------------------------------------------------------------------------
 \inputminted[
   fontsize=\footnotesize,
@@ -82,11 +80,11 @@
 ]{octave}{code.m}
 
 %-------------------------------------------------------------------------------
-\subsection{Validation dataset}
+\subsection{Test dataset}
 %-------------------------------------------------------------------------------
 \begin{table}[H]
   \centering
-  \caption{Dataset used for the validation of the emulator.}
+  \caption{Input parameters of the test set}
   \label{tab:validation_dataset}
   \begin{tabular}{ccccccc}
     \toprule
@@ -99,14 +97,16 @@
 \end{table}
 
 %-------------------------------------------------------------------------------
-\subsection{Classification additional dataset}
+\subsection{Additional dataset for classification}
 %-------------------------------------------------------------------------------
 \begin{table}[H]
   \centering
-  \caption{Dataset used for the second, more accurate classification.}
+  \caption{Dataset used to refine the classification boundary.}
   \label{tab:classification_dataset}
   \begin{tabular}{ccccccccc}
     \toprule
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} \\
+    \midrule
     $\bm{I}$ {\scriptsize[\si{\milli\meter\per\hour}]} & 11.2  & 12.0  & 13.5  & 14.7  & 15.4  & 15.8 & 16.3 & 17.0\\
     $\bm{\theta_i}$                                    & 0.95  & 0.80  & 0.60  & 0.45  & 0.35  & 0.3  & 0.20 & 0.05\\
     \bottomrule
@@ -115,43 +115,14 @@
 
 
 %-------------------------------------------------------------------------------
-\subsection{"Rough" classifier}
+\subsection{Linear GP classifier}
 %-------------------------------------------------------------------------------
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/classifier_trn.png}
-  \caption{Linear separation of the training dataset with use of the "meanLinear" and "covConst" functions of the \citetalias{rasmussen_gaussian_2010} package. The linear classification works well on this dataset, but the shape of the boundary could be very different if more observations were present. An additional dataset with observations close to this boundary was created in order to refine the shape of the boundary.}
+  \caption{Linear separation of the training dataset using GP with "meanLinear" and "covConst" functions.}
   \label{fig:classifier_rough}
 \end{figure}
-
-%-------------------------------------------------------------------------------
-\subsection{Values of classifier's hyperparameters}\label{sec:classifier_hyperparameters}
-%-------------------------------------------------------------------------------
-\inputminted[
-  fontsize=\footnotesize,
-  firstline=115,
-  lastline=132,
-  numbersep=2pt,
-  gobble=0,
-  frame=none,
-  bgcolor=light-gray,
-  framesep=10mm
-]{octave}{code.m}
-
-
-%-------------------------------------------------------------------------------
-\subsection{Values of emulator's hyperparameters}\label{sec:emulator_hyperparameters}
-%-------------------------------------------------------------------------------
-\inputminted[
-  fontsize=\footnotesize,
-  firstline=91,
-  lastline=108,
-  numbersep=2pt,
-  gobble=0,
-  frame=none,
-  bgcolor=light-gray,
-  framesep=10mm
-]{octave}{code.m}
 
 
 %-------------------------------------------------------------------------------
