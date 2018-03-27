@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pdflatex -shell-escape main.tex
+pdflatex -shell-escape SR_MThesis_Emulation.tex
 biber main
-pdflatex -shell-escape main.tex
-pdflatex -shell-escape main.tex
+pdflatex -shell-escape SR_MThesis_Emulation.tex
+pdflatex -shell-escape SR_MThesis_Emulation.tex
