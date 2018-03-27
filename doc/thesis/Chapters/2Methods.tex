@@ -18,7 +18,7 @@
 
 %After Emulation description: 
 
-%In the following, I will first describe introduce mechanistic emulators/compare the concept of mechanistic /phenomenological emulators with a didactical case study. Second, use emulators in a practically relevant task: time-to-threshold, i.e. time until sounding flood alarm. 
+%In the following, I will first describe introduce mechanistic emulators/compare the concept of mechanistic /phenomenological emulators with a didactically case study. Second, use emulators in a practically relevant task: time-to-threshold, i.e. time until sounding flood alarm. 
 
 %The first example is continuous => straightforward. the second is more complex => classification of input/output space. => hierarchical emulator?
 %-------------------------------------------------------------------------------
@@ -42,10 +42,11 @@
 
 %Unlike high performance computing (HPC), emulation is one way of reducing computational time with no big investments.
 
-In the recent decades, the increasing computational capabilities of computer processors has enlarged the applications of numerical simulators and opened the possibility to an increase of the simulation resolution and accuracy. In many engineering fields, the level of detail of these simulators has grown to the point of substituting the realization/execution of physical experiments. 
-Despite the numerous advantages provided by these numerical simulators, the elevated computing time of the simulations remains a major drawback, especially for development of real-time applications or testing/optimization of different simulation conditions/designs.  
+In the recent decades, the increasing computational capabilities of computer processors has enlarged the applications of numerical simulators and opened the possibility to an increase of the simulation resolution and accuracy.
+In many engineering fields, the level of detail of these simulators has grown to the point of substituting the realization of laboratory experiments. 
+Despite the numerous advantages provided by these numerical simulators, the elevated computing time of the simulations remains a major drawback, especially for development of real-time applications or testing/optimization of different simulation conditions/designs.
  
-A possible solution to this problem is provided by emulators; approximation models which try to reproduce the behaviour of the detailed simulator but with minor computational costs. Construction of appropriate emulators allows huge speedups at the expense of unnecessary simulation informations and accuracy\autocite{carbajal_appraisal_2016}.
+A possible solution to this problem is provided by emulators; approximation models which try to reproduce the behaviour of the detailed simulator but with minor computational costs. Construction of appropriate emulators allows huge speedups at the expense of unnecessary simulation informations and accuracy \autocite{carbajal_appraisal_2016}.\\
 
 Emulators are task-specific, built to answer a specific question.
 If the research question changes, a new, ad-hoc emulator must be built.
@@ -56,7 +57,7 @@ hydrograph to be obtained without running a new simulation.
 If a new task would request the prediction of the flow velocity time-series at the same location, the previously constructed emulator would not be able to provide an answer, because trained only with the pair water depth-input hydrograph. If this new task has to be accomplished many times, it could make sense to build a new emulator in order to reduce the overall computational time.
 The above example shows that emulators can be space-specific (e.g. water depth time-series at a specific point) or time specific (e.g. water depth profile along a channel at specific instant).\\
 
-When running hydrodynamical simulation, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in". \autocite{carbajal_emumore_2017}. Fig.~\ref{fig:simulation} schematizes this peculiarity: in hydrodynamics SWE must be solved over the whole simulation grid, although the output of interest might just be the water depth simulated at a chosen grid cell.
+When running hydrodynamical simulations, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in". \autocite{carbajal_emumore_2017}. Fig.~\ref{fig:simulation} schematizes this peculiarity: in hydrodynamics SWE must be solved over the whole simulation grid, although the output of interest might just be the water depth simulated at a chosen grid cell.
 
 \begin{figure}[h]
   \centering
@@ -65,7 +66,7 @@ When running hydrodynamical simulation, the simulator goes through a series of \
   \label{fig:simulation}
 \end{figure}
 
-In contrast to the numerical simulator, an emulator bridges the internal states: it goes from the inputs to desired output, without going through all of the internal states.  Fig.~\ref{fig:emulation} depicts this relationship bridging the internal states.
+In contrast to the numerical simulator, an emulator bridges the internal states: it goes from the inputs to the desired output, without going through all of the internal states.  Fig.~\ref{fig:emulation} depicts this relationship bridging the internal states.
 
 \begin{figure}[h]
   \centering
@@ -92,7 +93,7 @@ On the other hand, data-driven emulators try to uncover the relationships within
 A key step when building an emulator is establishing the functional relationship between the simulated inputs-output sets. This statistical exercise correspond to solve an interpolation or regression problem.
 If the simulated inputs-output sets are considered exact, an interpolation is preferred: this means that the functional relationship must pass through all data points. In this thesis, simulations performed within case studies 1 and 2 are considered exacts: every simulation run with the same inputs produces the same output.
 As a consequence, the emulators presented in case studies 1 and 2 aim at interpolating the simulated inputs-output sets.
-In case studies 1, this could not be done with the \textit{weir equation}, given the inflexibility of this model.\\
+In case study 1, this could not be done with the \textit{weir equation}, given the inflexibility of this model.\\
 
 A large variety of methods exist to solve interpolation or regression problems. The choice may depend on the number of inputs (dimensions of the inputs space), on the amount of observations available to establish the relationship or on previous knowledge about the considered system.
 Within this thesis three different types of interpolation techniques, implemented within \citetalias{octave_community_gnu_2018}, were used.
@@ -117,7 +118,7 @@ By choosing specific mean and covariance functions, or setting constraints on th
 This way the number of observations needed for an accurate intrapolation (predicted behaviour between two interpolated observations) can be reduced.
 Extrapolation, namely predicting the behaviour of the process beyond the available observations, should also be more accurate when prior knowledge is embedded.
 
-The package \citetalias{rasmussen_gaussian_2010} offers a set of mean, covariance and likelihood functions as well as various prior distribution and inference methods readily available for to the user.
+The package \citetalias{rasmussen_gaussian_2010} offers a set of mean, covariance and likelihood functions as well as various prior distributions and inference methods readily available to the user.
 Ad-hoc mean and covariance functions can be generated by the user as composition of provided base functions (e.g. sum, product or power of functions).
 
 Tuning of mean and covariance functions' hyperparameters to obtain the best fit can be done using the function \emph{minimize}. This minimizes the negative logarithm of the \emph{marginal likelihood} $p(\bm{y}\vert \bm{X})$ (the probability of observing the output $\bm{y}$ given the inputs $\bm{X}$).
@@ -136,7 +137,7 @@ The outflow of water occurs through the boundaries by setting a \emph{Neumann} b
 Infiltration is implemented by means of a modified version of the Green-Ampt equation, correcting for values of the infiltration capacity tending to infinite.
 The infiltrated amount of water is stored in the soil and does not leave the computational domain.\\
 
-\noindent In order to run simulations, FullSWOF needs at least the following inputs:
+\noindent In order to run simulations, \citetalias{delestre_fullswof:_2017} needs at least the following inputs:
 
 \begin{enumerate}
 \itemsep0em
@@ -153,7 +154,7 @@ The infiltrated amount of water is stored in the soil and does not leave the com
     \item Various settings for the numerical schemes
     \item Different physical parameters (friction coefficient, initial soil saturation, soil thickness, soil hydraulic conductivity, maximal infiltration)
 \end{itemize}
-  \item \textbf{Initial conditions}: text file defining the initial conditions of the simulation. It specifies the \emph{water depth} and \emph{flow velocity}for every cell of the domain.
+  \item \textbf{Initial conditions}: text file defining the initial conditions of the simulation. It specifies the \emph{water depth} and \emph{flow velocity} for every cell of the domain.
 \end{enumerate}
 
 \noindent Every simulation produces the following outputs:
@@ -168,7 +169,7 @@ The infiltrated amount of water is stored in the soil and does not leave the com
 \end{enumerate}
 
 
-\noindent In order to generate the required input files, interaction functions were developed for \citetalias{octave_community_gnu_2018}. These were grouped into a package which is distributed\footnote{The \emph{fswof2d} package can be downloaded at: \url{https://bitbucket.org/binello7/fswof2d/}} under the GPLv3+ license.
+\noindent In order to generate the required input files, interaction functions were developed for \citetalias{octave_community_gnu_2018}. These were grouped into a package which is distributed\footnote{The \emph{fswof2d} package can be downloaded at: \url{https://bitbucket.org/binello7/fswof2d/}} under the \href{https://www.gnu.org/licenses/quick-guide-gplv3.en.html}{GPLv3+} license.
 
 
 
