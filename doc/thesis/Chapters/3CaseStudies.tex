@@ -21,7 +21,7 @@
 As a first case study to apply the acquired knowledge, it was decided to build an utterly mechanistic emulator.
 The main goal of this case study is to try to fit the \emph{weir equation} to simulated data instead of to experimental data.
 Here we essentially rediscover the way science has always been done: by observing, measuring and trying to discover mathematical relationships.
-The most significant difference is the fact that the experimental set-up is completely computer built.\\
+The most significant difference is the fact that the experimental set-up is completely computer-built.\\
 
 The \emph{weir equation} is a partially theoretical equation that provides an estimate of the discharge $Q$ over a weir as a function of the water depth above the weir itself ($h_w$).
 The equation can be derived from the Bernoulli equation under certain assumptions \autocite{bos_discharge_1989} and can be found in many different forms.
@@ -33,7 +33,7 @@ The form used here is the one proposed by \emph{Francis} \autocite{walcott_weir_
 
 \noindent Where the empirical coefficient $C$ corrects for the assumption of absence of viscous effects and uniform velocity distribution, $L$ is the length of the weir (perpendicular to the channel) and $h_w$ is the water height above the weir.
 
-In addition to the parametric model (\textit{weir equation}) two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the simulated data points.\\
+In addition to the parametric model (\textit{weir equation}), two non-parametric local techniques, namely \emph{linear interpolation} and \emph{cubic spline interpolation}, were used to intrapolate between the simulated data points.\\
 
 
 %-------------------------------------------------------------------------------
@@ -75,9 +75,9 @@ We therefore expect a value close to this for our experiment.
 \end{figure}
 
 %...............................................................................
-\subsubsection{Setting-up the simulations}
+\subsubsection{Setting up the simulations}
 %...............................................................................
-After generating the topography to be used for the experiment the simulation parameters were defined.
+After generating the topography to be used for the experiment, the simulation parameters were defined.
 
 The simulation was done with no rain and no infiltration.
 This way, water just enters the system through the top boundary and leaves it through the bottom one.
@@ -247,11 +247,11 @@ The displayed points represent the input-output sets which was used to fit the w
 The fit of the different models to the input-output sets is displayed in Fig.~\ref{fig:fitting_results}.
 It can be observed that the linear interpolation fails to model the initial curvature which is instead captured by the fitting of the weir equation and the cubic spline interpolation.
 This is due to two main reasons. 
-First, the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge quite a lot from non-linear models.
-Secondly, this region of the input space presents a severe curvature, that makes the linear interpolation to diverge faster.
+First, the density of data points in this region is low---the linear interpolation simply joins the two nearest points with a segment---and on such a long distance it can diverge considerably from non-linear models.
+Secondly, this region of the input space presents a severe curvature, that makes the linear interpolation diverge faster.
 
 With the remaining points, all models seem to perform well: the three lines are almost perfectly overlaying, meaning that all give very similar results.
-Nevertheless, slight divergences can be observed in proximity of the data points, especially between the weir equation and the two interpolation curves. This is due to the fact that the two interpolation models\emph{interpolate} exactly the points, whereas the curve obtained by fitting the weir equation (which represents the best linear fit to the points minimizing the least-squares-error ), does not necessarily pass exactly through the points.
+Nevertheless, slight divergences can be observed in proximity of the data points, especially between the weir equation and the two interpolation curves. This is due to the fact that the two interpolation models\emph{interpolate} exactly the points, whereas the curve obtained by fitting the weir equation (which represents the best linear fit to the points minimizing the least-squares-error), does not necessarily pass exactly through the points.
 
 \begin{figure}[h]
   \centering
@@ -265,7 +265,7 @@ As mentioned in Sec.~\ref{sec:cs1_brief_description}, for a weir of \SI{2}{\m} b
 The value obtained for $C$ assumes that $C$ does not vary with $h_w$.
 Moreover, the weir used for the experiment has a trapezoidal cross section instead of a rectangular one.
 \cite{tracy_discharge_1957} investigated how the coefficient $C$ varies with different weir shapes.
-For a weir with sloping walls the $C$ coefficient increases, because the head losses in comparison to one with vertical walls are lower.
+For a weir with sloping walls the $C$ coefficient increases, because the head losses are lower in comparison to one with vertical walls.
 The difference in the $C$ coefficient observed here can be explained by this phenomenon.\\
 
 \begin{figure}[h]
@@ -277,9 +277,9 @@ The difference in the $C$ coefficient observed here can be explained by this phe
 
 Fig.~\ref{fig:fitting_errors} displays the RMSE obtained by cross-validation as explained in Sec.~\ref{sec:compute_error}.
 No matter how many points are used, the linear interpolation always performs worst.
-By increasing the number of points its performance improves quite rapidly, but not enough to reach that of the other two models, because the process generating the points does not have a linear behavior.
+By increasing the number of points its performance improves quite rapidly, but not enough to reach that of the other two models, because the process generating the points does not have a linear behaviour.
  
-The results for the cubic splines interpolation confirm what was already observed in Fig.\ref{fig:fitting_results}:  cubic splines interpolation seems to mimicks in an accurate manner the process originating the points.  This is explainable by the high flexibility of cubic splines interpolation method, which typically shows very small errors when fitted with many points. However, by reducing the number of points available for interpolation, the error of this model increases exponentially. Despite this, on average if more than 5 observations are available, cubic splines interpolation outperforms the other methods.
+The results for the cubic splines interpolation confirm what was already observed in Fig.\ref{fig:fitting_results}:  cubic splines interpolation seems to mimick in an accurate manner the process originating the points.  This is explainable by the high flexibility of cubic splines interpolation method, which typically shows very small errors when fitted with many points. However, by reducing the number of points available for interpolation, the error of this model increases exponentially. Despite this, on average if more than 5 observations are available, cubic splines interpolation outperforms the other methods.
 
 On the other hand, the regression line obtained using the weir equation model shows only a slight decrease in accuracy when progressively removing observations for fitting. This high stability (insensitivity to the number of available observations for fitting) is due to the fact that in this case only two regression coefficients must be determined. Nevertheless, the low flexibility of linear regression models tends to prevent the interpolation of the data points and causes the linear regression model to not outperform cubic spline interpolation when many observations are available and the functional relationship is non-linear (or not optimally parametrized by an ad-hoc equation).  
 
@@ -313,9 +313,9 @@ In the weir equation model proposed by \cite{brown_urban_2009}, the coefficient 
 
 This first case studies highlighted the importance of the trade-off between \emph{prior knowledge} and \emph{data availability}.
 
-Machine learning (ML) regression algorithms such as \emph{RandomForest} (Breiman et al.), \emph{Gradient Boosting Machines}(CITT) and \emph{Feedforward Neural Networks}(CITTT) are known to be very powerful on establishing non-linear functional relationship hidden in the data, but they also are particularly data-greedy. They have the potential to perform very well when a big training dataset is available, but fail if not enough data are available. Using numerical simulators, the generation of these large training datasets can be computationally very costly, thus partially hampering the use of these algorithms.
+Machine learning (ML) regression algorithms such as \emph{RandomForest} (Breiman et al.), \emph{Gradient Boosting Machines}(CITT) and \emph{Feedforward Neural Networks}(CITTT) are known to be very powerful at establishing non-linear functional relationship hidden in the data, but they also are particularly data-greedy. They have the potential to perform very well when a big training dataset is available, but fail if not enough data are available. Using numerical simulators, the generation of these large training datasets can be computationally very costly, thus partially hampering the use of these algorithms.
 
-In this case study, we showed that simpler interpolation methods can still allow to obtain good performance when  moderate simulated input-output sets are available. 
+In this case study, it was shown that simpler interpolation methods can still allow to obtain good performance when  moderate simulated input-output sets are available. 
 Moreover, the encoding of prior knowledge was proved to be useful when less data are available: the \emph{weir equation} model, unlike the others, could still perform well when fitted to few observations.
 
 Taking into consideration the previous findings, GPs could be the ideal tool for emulation of physical processes due to their ability to model highly non-linear relationships, to interpolate the data points as well as encoding prior knowledge of the process \autocite{rasmussen_gaussian_2010}. Recent studies showed the possibility to direct map partial differential equations (PDEs) into covariance functions \autocite{lindgren_an_explicit_2011}. This allows to include the mechanistic of the process in the interpolation problem. On the other side, identification of accurate GP models can shed new light on the mechanistic of the process.
@@ -341,8 +341,8 @@ The time needed to exceed $Q_!$ will be referred hereinafter as \emph{time-to-th
 
 This time-to-threshold will depend on the rainfall distribution in the catchment and the initial soil moisture content.
 
-With the term "event", hereinafter, we are going to consider a combination of the \emph{rain intensity} and the \emph{initial soil saturation} conditions over the catchment. 
-For some events, namely very low precipitation and low initial soil saturation conditions, the threshold discharge at the specific location may never be reached.
+With the term "rain event", hereinafter, we are going to consider a combination of the \emph{rain intensity} and the \emph{initial soil saturation} conditions over the catchment. 
+For some rain events, namely very low precipitation and low initial soil saturation conditions, the threshold discharge at the specific location may never be reached.
 
 For this reason, the developed warning system has a hierarchical structure: it is composed of a classifier determining whether the threshold discharge ($Q_!$) can be exceeded (or not) and of an emulator which estimate the time-to-threshold $t_!$.
 
@@ -424,90 +424,61 @@ First, the outflow hydrographs were extracted from the simulation output files, 
 The same procedure was repeated for each of the 50 events, producing \num{50} different hydrographs (see Fig.~\ref{fig:hydrographs3d}).\\
 
 Successively, the time-to-threshold $t_!$ has been computed based on the specified threshold discharge $Q_!$. 
-The time-to-threshold $t_!$ paired with the corresponding rainfaill intensity and the initial soil saturation conditions formed the output-inputs sets used to construct the emulator. 
+Simulated $t_!$, paired with the corresponding rain intensity and the initial soil saturation condition, formed the output-inputs set of observations generating the \emph{training dataset} used to construct the emulator. 
 
-In a real situations, the threshold discharge $Q_!$ could be the discharge at which a bridge or the embankments located on the channel are overflown. 
-In order to develop the methodology, $Q_!$ was set to \SI{10}{\percent} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
-
-The time at which this value is exceeded for the first time was extracted from every hydrograph and forms the dataset for the emulator.
+In a real situations, $Q_!}$ could be the discharge at which a bridge or the embankments located on the channel are overflown. In order to develop the methodology, $Q_!$ was set to \SI{10}{\percent} of the $Q_{max}$ value recorded, corresponding to \SI{0.17}{\cubic\meter\per\second}.
  
-By looking at one of the hydrographs extracted (Fig.~\ref{fig:hydrograph}) it can be observed that $t_!$ is a difficult quantity to predict.
-In fact, depending on the $Q_!$ set, the time-to-threshold can be reached very quickly, can show a long time-lag, or not be reached at all.
-Within the region defined by the $Q_!$ and the $Q'_!$ lines the hydrograph presents a plateau.
-Here, a minimal variation of the threshold set can make the time-to-threshold fall towards $t_!$ or $t'_!$, hence causing a big jump in the value.
-The studied quantity $t_!$ is therefore said to be \emph{discontinuous}.
+By looking at one of the hydrographs extracted (Fig.~\ref{fig:hydrograph}) it can be observed that $t_!$ is a difficult quantity to predict. In fact, depending on the $Q_!$ set, the $t_!$ can be reached very quickly, can show a long time-lag, or not be reached at all. 
+As illustratory example, in Fig.~\ref{fig:hydrograph}, the hydrograph between $Q_!$ and the $Q'_!$ presents a plateau. Thus, a minimal variation of the threshold discharge specification can lead to sudden large jump of the time-to-threshold. For this reason, the studied quantity $t_!$ is said to be \emph{discontinuous}.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Figures/hydrograph.png}
-  \caption{Response hydrograph for $\theta_i = \num{0.5}$ and $I = \SI{32.2}{\milli\meter\per\hour}$. By looking at the plateau located between the $Q_!$ and $Q'_!$ lines, the discontinuity in $t_!$ can be observed. A minimal change in the threshold causes a jump in the time-to-threshold of almost an hour. This feature makes the emulation task very challenging.}
+  \caption{Response hydrograph for $\theta_i = \num{0.5}$ and $I = \SI{32.2}{\milli\meter\per\hour}$. By looking at the plateau located between the $Q_!$ and $Q'_!$ lines, the discontinuity in $t_!$ can be observed. A minimal change in the threshold discharge causes a jump of the time-to-threshold of almost an hour. This feature makes the emulation task very challenging.}
   \label{fig:hydrograph}
 \end{figure}
-
-
-From the same hydrographs the dataset for the classifier was also produced.
-This was created by assigning the value \num{-1} to rain events not reaching the threshold and \num{1} the others.
 
 %...............................................................................
 \subsubsection{Building-up the classifier}
 %...............................................................................
+
 The classifier was built in order to ease the task of computing the time-to-threshold.
 The classifier should distinguish whether a rain event is going to reach the threshold discharge or not.
-Only the events classified as "reaching the threshold" are given to the emulator to compute \emph{when} this will happen.
-To train the classifier we used the $\num{-1}/\num{1}$ dataset previously created.
-We tested different classifier before finding a satisfying one.
-To visually inspect the performance of each different classifier, we plotted the dataset in an initial soil saturation vs. rain intensity plot (Fig.~\ref{fig:classifier_rough}).
-Rain events reaching the threshold are marked with red circles, while rain events not reaching it with green ones.
-We built the classifier using GP---this with the help of the package \citetalias{rasmussen_gaussian_2010} for \citetalias{octave_community_gnu_2018}.
-The data seemed to be linearly separable, therefore we used the "meanLinear" mean function.
-We combined this with different covariance functions and trained the models with the "minimize" function, by using a "likLogistic" likelihood function and the Expectation Propagation (EP) as inference method.
-The use of the "meanLinear" mean function with a "covConst" covariance functions produced good results: the dataset could be linearly separated (see Fig~\ref{fig:classifier_rough} in the Appendix).
-However, infinite different curves could define the frontier between events reaching and not reaching the threshold.
-After we obtained this first border we added new data points in its proximity by running new simulations.
-With these we followed the exact same procedure explained above.
-We added these new observations to the classifier's training dataset and plotted them as triangles, in order to distinguish them from the previous ones.
-The new data points suggested that the boundary is actually not linear; it has a curvy shape instead.
-We therefore chose a curvy mean function and combined it with various covariance functions.
-After training many models an optimal set of mean, covariance and likelihood functions combined with the use of EP inference method could be found. These results can be found under Sec.~\ref{sec:classifier}.
-One point could not be separated with any set of functions tried.
+Only the rain events classified as "reaching the discharge threshold" are given to the emulator to compute \emph{when} this will happen.
+
+To train the classifier we assigned the value \num{-1} to rain events not reaching the discharge threshold and \num{1} the others.  
+We tested different GP classifier before finding a satisfying one.
+Since the data points seemed to be linearly separable, we decided to use the "meanLinear" mean function and vary
+the covariance functions.
+To visually inspect the performance of each these different classifiers, we drew the classifier boundaries over the input space formed by the rain intensities and the initial soil saturation conditions. Fig.~\ref{fig:classifier_rough} shows the classifier boundary obtained by using a "covConst" covariance function.
+Still, 
+% and trained the models with the "minimize" function, by using a "likLogistic" likelihood function and the Expectation Propagation (EP) as inference method.
+ 
+However, an infinite number of curves could define the frontier between rain events exceeding and not the threshold discharge. Thus we decided to perform new simulations using combinations of rainfall intensity and initial soil saturation condition located in proximity of the classifier boundary. 
+
+The data points obtained by these new simulations (marked as triangle in \ref{fig:classifier}) suggested that the boundary was actually not linear but curvy. 
+We therefore trained various GP classifiers by testing various curvy mean function and a set of covariance functions. An appropriate set of mean, covariance and likelihood function is reported  Sec.~\ref{sec:classifier}.
+% although is not able to separate correctly a data point.  
+%%% CONTROLLARE QUA SE METTERE L'ULTIMA FRASE 
+ 
 
 %...............................................................................
 \subsubsection{Building-up the emulator}
 %...............................................................................
-The procedure we used to build the time-to-threshold emulator is very similar to the one used for the classifier.
-We plotted the \num{50}-points dataset as red dots in a 3D graph, where the x and y axis are given by the rain intensity $I$ and the initial soil saturation $\theta_i$ respectively.
-The z-axis shows the response of every rain event, namely the time-to-threshold, which we previously extracted.
-We created a $(I, \theta_i)$ grid where to evaluate the emulator:\\
+The procedure we used to build the time-to-threshold emulator is similar to the one used to build up the classifier.
+To select an accurate GP model and evaluate its performance, we performed other simulations with FullSWOF to also create a : 
 
-\inputminted[
-  fontsize=\footnotesize,
-  firstline=30,
-  lastline=42,
-  numbersep=2pt,
-  gobble=0,
-  frame=none,
-  bgcolor=light-gray,
-  framesep=10mm
-]{octave}{code.m}\\
+\begin{enumerate}
+   \item \emph{validation dataset} : composed of \num{36} different $(I, \theta_i)$ combinations covering  regularly the input space's regions not covered by the training data. These data points are displayed in blue in Fig. \ref{fig:emulator} , while the code found to generate this validation observations is provided in Sec.~\ref{sec:test_dataset} of the Appendix.
+   \item \emph{test dataset} : composed of \num{6} $(I, \theta_i)$ points located sparsely in the inputs space. These observations are displayed in green in Fig. \ref{fig:emulator}, and the $(I,    \theta_i)$ pairs values  are reported in Tab.~\ref{tab:validation_dataset} of the Appendix.
+\end{enumerate}
 
-\noindent Then we performed a GP regression on the training dataset using the \citetalias{rasmussen_gaussian_2010} package.
-As for the classifier, we tested different combinations of mean, covariance and likelihood functions with arbitrary initial hyperparameters values.
-As an inference method we used the "infExact" one.
-We minimized the negative log marginal likelihood with the "minimize" function and with this we obtained the optimized values for the hyperparameters.
-We then evaluated the obtained model on the $(I, \theta_i)$ evaluation grid which we previously created.
-Since it was sometimes difficult to establish which GP was performing better we produced a new dataset, the \emph{test dataset}.
-We created the test dataset the same way we generated the training one, but using different $(I, \theta_i)$ values.
-The values of $I$ and $\theta_i$ used can be produced with the code found in Sec.~\ref{sec:test_dataset} of the Appendix.
-The test dataset has \num{36} points given by all possible combinations of these values.
-We then added the test dataset to the plot and used it to evaluate the performance of the models far from the observations used for the training.
-With these points guiding us we found the model producing the best results.
-The \emph{test dataset} was then included in the dataset used for training, in order to further improve the emulator's performance.
-Finally, we originated a \nth{3} dataset, the \emph{validation dataset}.
-This is constituted by \num{6} points sparse in the inputs space.
-The values of the $(I, \theta_i)$ pairs composing this dataset can be found in Tab.~\ref{tab:validation_dataset} of the Appendix.
-These observations constitute an unbiased dataset, since it was never shown to the model.
-We evaluated the performance of our model on both test and validation dataset by computing the MAE and the RMSE.
+To define an accurate GP model, we tested various combinations of mean and covariance functions. 
+The GP models trained on the training dataset (composed of 50 observations) were evaluated on the validation dataset. The mean and covariance functions of the GP model showing the lowest RMSE (computed on the validation set) was selected to build the final emulator. 
 
+In order to increase the details captured by the final emulator, the training and validation datasets were combined together, and the resulting set of observations used to train the final GP model. 
+ 
+The performance of the final emulator was assessed on the test dataset, by computing the RMSE and the maximum absolute error (MAE).
 
 %-------------------------------------------------------------------------------
 \subsection{Results}
@@ -519,20 +490,19 @@ We evaluated the performance of our model on both test and validation dataset by
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{Figures/hydrographs3d.png}
-  \caption{Response hydrographs for the \num{50} simulations at the catchment outlet. The red frame shows the end of the rain event. Depth-dimension shows the \emph{rain intensity} variable, while the \emph{initial saturation} variable is rendered by the colormap. It can be observed, that shape and magnitude of the response vary considerably from one simulation to the other.}
+  \caption{Response hydrographs for the \num{50} simulations at the catchment outlet which compose the training dataset. The red frame shows the end of the rain event. Depth-dimension shows the \emph{rain intensity} variable, while the \emph{initial saturation} variable is rendered by the colormap. It can be observed, that shape and magnitude of the response vary considerably from one simulation to the other.}
   \label{fig:hydrographs3d}
 \end{figure}
 
 
-Fig.~\ref{fig:hydrographs3d} shows the \num{50} obtained hydrographs.
-Here many interesting features can be observed.
-It can be seen that experiments run with the two lowest rain intensities and low initial soil saturation generated no discharge.
+Fig.~\ref{fig:hydrographs3d} shows the \num{50} simulated hydrographs which compose the training dataset.
+Many interesting features can be observed.
+First of all, it can be seen that experiments run with the two lowest rain intensities and low initial soil saturation generated no discharge.
 In the second place, simulations run with $\theta_i = \num{1}$ always reached their peak discharge, and this happened quite quickly.
 Some of these show a second smaller increase after the first quick rising limb.
 This is even more accentuated in the simulations were the soil was initially not saturated.
 We can explain this effect as the mapping of the topography configuration to the response hydrographs.
 The topography used presents zones with very steep slopes and others with very flat ones, causing different flow velocities.
-This results in water at the same distance from the outlet arriving with different travel times.
 When the water from the inclines has reached the outlet, that coming from flat areas is still traveling downstream.
 After a given lapse of time this water reaches the outlet as well, giving rise to the bumps visible in the hydrographs.\\
 
@@ -543,11 +513,9 @@ After a given lapse of time this water reaches the outlet as well, giving rise t
 %   * show final values of hyperparameters
 
 Fig.~\ref{fig:classifier} displays the results of the classification task.
-Green data points correspond to rain events which did not exceed the threshold, while the red ones to those which did.
-Circles show the initial dataset (training dataset), whereas triangles indicate the dataset which was added in a second time.
-According to the classifier every $(I, \theta_i)$ pair chosen in the yellow region will cause the exceeding of $Q_!$.
-The classifier could correctly classify all but one points given.
-The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yellow region although its color is green.
+Rain events reaching the discharge threshold are marked with red circles, while rain events not reaching it with green ones. Circles represent training dataset observations, whereas triangles indicate the dataset which was added in a second time to test the linearity of the boundary find using only the training dataset.
+According to the classifier, every $(I, \theta_i)$ pair chosen in the yellow region will cause the exceeding of $Q_!$. The classifier could correctly classify all but one points given.
+%The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yellow region although its color is green.
 
 \begin{figure}[h]
   \centering
@@ -558,7 +526,7 @@ The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yello
 
 The portion of code here below shows the mean, covariance and likelihood functions set which produced the best results.
 The arbitrary hyperparameters values set here were then optimized with the "minimize" function.
-The final values can be found under Sec.~\ref{sec:classifier_hyperparameters} of the Appendix.\\
+The final values can be found in Sec.~\ref{sec:classifier_hyperparameters} of the Appendix.\\
 
 \inputminted[
   fontsize=\footnotesize,
@@ -571,22 +539,21 @@ The final values can be found under Sec.~\ref{sec:classifier_hyperparameters} of
   framesep=10mm
 ]{octave}{code.m}
 
-
 %...............................................................................
 \subsubsection{The emulator}
 %...............................................................................
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\textwidth]{Figures/emulator.png}
-  \caption{Time-to-threshold emulator: training (red), test (blue) and validation (green) datasets and the emulator (mesh) predicting the time-to-threshold ($t_!$) in regions where there are no observations. The emulator interpolates all of the training points (red and blue ones). The extrapolation far outside the observations boundaries are meaningless. These are already discarded by the classifier.}
+  \caption{Time-to-threshold emulator: training (red), validation (blue) and test (green) datasets and the emulator (mesh) predicting the time-to-threshold ($t_!$) in regions where there are no observations. The emulator interpolates all of the training points (red and blue ones). The extrapolation far outside the observations boundaries are meaningless. These are already discarded by the classifier.}
   \label{fig:emulator}
 \end{figure}
 
 The time-to-threshold emulator is shown in Fig.~\ref{fig:emulator}.
-The x and y axis indicate the value of the inputs---rain intensity and soil saturations---while the corresponding response is given on the z-axis.
-The circles represent the datasets used for training (red), testing (blue) and validating (green).
-The emulator is given by the black mesh and is the result of the evaluation of the optimized GP at the \num{6400} evaluation points.
-The set of mean, covariance and likelihood functions with which the emulator was obtained were:\\
+The x and y axis indicate the value of the inputs (rain intensity and soil saturations) while the corresponding time-to-threshold is given on the z-axis.
+The circles represent the datasets used for training (red), validation (blue) and testing (green).
+The interpolation surface of the final emulator is given by the black mesh and is the result of the evaluation of the final GP model at \num{6400} mesh points.
+The set of mean, covariance and likelihood functions with which the emulator was obtained is:\\
 
 \inputminted[
   fontsize=\footnotesize,
@@ -601,22 +568,17 @@ The set of mean, covariance and likelihood functions with which the emulator was
 
 \noindent The optimized values of the GP hyperparameters can be found under Sec.~\ref{sec:emulator_hyperparameters} in the Appendix.\\
 
-The performance of the emulator was assessed by computing MAE and RMSE of the validation and test datasets. These provides an estimation of the out-of-sample error.
-These results are summarized in Tab.~\ref{tab:emulator_performance}.
-
-
-
+The performance of the emulator was assessed by computing MAE and RMSE on the test dataset.  These provides an estimation of the out-of-sample error, and is reported in Tab.~\ref{tab:emulator_performance}.
 
 \begin{table}[h]
   \centering
-  \caption{Emulator performance on \emph{test} and \emph{validation} datasets. The test dataset was also used for model interpolation, for this reason it shows "no error".}
+  \caption{Emulator performance on the \emph{test}datasets. 
   \label{tab:emulator_performance}
   \begin{tabular}{lcc}
     \toprule
      & \textbf{MAE [\si{\minute}, \si{\percent}]} & \textbf{RMSE [\si{\minute}]} \\
     \midrule
-    \textbf{test}       & $8.0\cdot 10^{-5},\,5.2\cdot 10^{-5}$ & $2.3\cdot 10^{-5}$\\
-    \textbf{validation} & $6.0,\,5.9$ & $4.0$\\
+    \textbf{test} & $6.0,\,5.9$ & $4.0$\\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -635,60 +597,41 @@ This represents a \emph{speedup} of \textbf{\num{150000}} $\bm{\times}$.
 % * discuss emulator's speedup
 % * if a real system is built -> UQ very important!!
 
+In early flood warning system, a crucial point is to not underestimate the danger of floods.
+In the case a flood alert is issued but no flood occur, minor economic loss could be related to deployment of temporary flood control measures or the cost of population evacuations, but nobody would be armed. 
+In the opposite scenario, when no alert is issued but a flood occurs, the risk of elevated economic losses and  fatalities occurrence is high. 
+ 
+Our emulation-based early flood warning system is composed by a \emph{classifier} which says if an alert should be emitted, and by an \emph{emulator} which estimates the time period before a specific discharge is exceeded in case an alert is emitted by the classifier.
 
-Crucial for an early flood warning system, is to avoid underestimating the danger.
-This means, the time to thresholds predicted by our emulator are allowed to be shorter than the real ones, but not longer.
-Our emulation-based early flood warning system is the sum of the \emph{classifier} and the \emph{emulator}.
-Information about the rain event are passed to the classifier (forecasted rain intensity and estimated soil saturation of the catchment).
-The classifier accomplishes the first task: assessing if the rain event will reach the given threshold or not.
-Under Sec.~\ref{sec:classifier} we saw that the classifier proposed for this catchment and the chosen $Q_!$ fails to classify one point.
-In this case the classifiers assigns "reaching threshold" to a point which is actually not reaching it.
-In such a scenario, as the one imagined, this error would be quite serious but not dangerous: temporary flood control measures would be prepared, the population would be warned but at the end no flooding would occur.
-This would cost money but nobody would be armed.
-The misclassified point is a training point.
-This means that a better classifier should be found, by further varying the GP used for the classification.
-Once a classifier correctly separating all training points is found, its performance should be evaluated.
-For this a new dataset, with points close to the newly determined frontier should be created.
-The classifier should then be tested with this dataset.
-Its performance is given by the ratio "correctly classified" over "total data points".
-If this outcome was satisfactory, then we could keep the classifier obtained.
-If not we would add the new dataset to the training dataset, retrain the classifier and retest it on a further dataset that has to be produced.
-This procedure should be repeated until satisfactory results are reached.
-Unfortunately, this could not be done to a further extent due to lack of time.
-For application to a real case it would be crucial to train a very good classifier.
-From this depends if the authorities in charge would take actions or if nothing at all is done in case of a potential flooding.
-Dramatical consequences could happen, if based on the classifier no action is taken but the threshold is reached.\\
+Dramatical consequences could thus happen if the classifier would not emit an alert, but the specified discharge is exceeded..\\
 
-The emulator, representing the second step of the early flood warning system, even if to a minor extent, should also never underestimate the risk.
-The danger linked with underestimating how fast $Q_!$ is reached is somehow a bit smaller: measures are being taken when unexpectedly the flood arrives---but still to consider.
-The MAE obtained on the validation datasets is \SI{6.0}{\minute}, \SI{5.9}{\percent} respectively.
-In this case, it was predicted that an event reaching the threshold after \SI{101.5}{\minute} would have reached it after \SI{95.5}{\minute} and that another one reaching it after \SI{192.5}{\minute} would have reached it after \SI{198.0}{\minute} (cf. Tab.~\ref{tab:validation_performance} in the Appendix).
-Those are the validation data points where the error was maximum.
-In the second case we are underestimating the error, but this by a fairly small amount of time.
-The absolute RMSE, \SI{4.0}{\minute} is quite close to the MAE, the MAE being just \SI{2}{\minute} higher than the RMSE.
-This seem to indicate that the distribution of the error is quite narrow and that the model typically produces prediction errors of about $\approx \SI{5}{\minute}$.
+In Sec.~\ref{sec:classifier} we saw that the proposed classifier failed to classify one observation.
+In that case, the classifier predicted that the discharge threshold would have been exceeded when actually was not. However the misclassified point is a training point, which means that the established classifier is not so accurate and a better one should be identified. 
+To do this, new simulations near the actual classifier boundary should be performed , new GP models tested and evaluated. This iterative procedure has not be done due to lack of time, but should be conducted if such type of emulator would be applied in a real situation.  
 
-The time resolution used for the simulation was \SI{1}{\minute}.
-For this reason, validation errors which magnitude is smaller than this value cannot be considered as such, since at the simulation level the time-to-threshold uncertainty is already of the order of \SI{1}{\minute}.
-The time resolution can have also played a role in the shape of the emulator's surface.
-The mesh shows regions where the surface is less smooth, in particular in proximity of some test data points, where small peaks can be observed.
-These are due to the interpolation done by the GP.
-In order to interpolate the points the surface grows more than what could seem "natural".
-We need to remember that the location of these points on the $t_!$ has an uncertainty of \SI{1}{\minute}, due to the resolution chosen.
-This means that each point could actually be shifted up or down by \SI{1}{\minute}, which could produce these "unnatural" peaks observed.\\
+As far as the estimation of time-to-threshold is concerned, underestimation of the period of time before the threshold discharge is reached has less consequences than an overestimation of it. This because the measures to reduced the impact of the flood (that is expected to occur) would be already put in place. 
+Tab.~\ref{tab:validation_performance} in the Appendix reports the errors in time-to-threshold for each observation of the test set.
 
-Although the global performance seems to be good, particular attention have to be paid.
-These prediction errors are found when no uncertainty on the parameters is considered.
-When using this flood warning system in a real case the parameters values passed to the emulator, forecasted rain intensity and initial soil saturation in particular, can be very uncertain.
-For this an uncertainty quantification should be carried out, in order to know which influence would have the estimated input uncertainty on the output.
-The same has to be done when using a detailed simulator.
-The emulator here proves to be very useful, since uncertainty quantification requires several model runs.
-With the speedup obtained with our emulator, this task is \textbf{\num{150000}} more efficient.
+Regarding underestimation of $t_!$, the worst error in term of magnitude on the test set is when estimating the flood to occur after \SI{198.0}{\minute} when actually occurring \SI{5.5}{\minute} before, based on the numerical simulations of test observation 2.
+This means a relative time-to-threshold error of about 3 \% to the simulated time-to-threshold. 
 
-This same speedup also offers the possibility of adapting our predictions in near-real time.
-Outputs from our emulator can be reevaluated during the happening of the rain event if changing conditions are detected.
-In particular, uncertainty on the rain intensity decreases for short term forecasting, making prediction of our emulator more certain the nearer in time we are to the occurrence of the rain event.
+However, when having to put in place some measures to reduce the flood damage, high accuracy in determining the time-to-threshold is required when the time period is short. In the case of the test observations 4 and 5, the relative time-to-threshold error is of about 4.5 \%. 
 
+Despite, having obtained a time-to-threshold error of \SI{30}{\s}  when $t_!$ is in the order of \SI{10}{\minute} is an excellent results, more test observations should be simulated to obtain a reliable emulator performance assessment.
+ 
+As a final remark regarding the emulator performance, it should keep in mind that the time resolution of the numerical simulation was \SI{1}{\minute}. Thus, the test time-to-threshold error with magnitude smaller than 1 should not be considered de facto as errors. This is the case for test observations 4 and 6. 
+
+In light of real-world applications, the results obtained with our emulator are over-optimistic.
+The actual emulator performance does not account for the uncertainty in the inputs parameters. 
+In real situations, rain intensity and initial soil saturation must be estimated or are known only to a given degree of accuracy. 
+Therefore, propagation of inputs uncertainty to emulator outputs should be accounted when assessing the performance of an operational emulators.
+
+Still, the advantage in using emulators is that uncertainty quantification can be performed much faster than using numerical simulators: the speed up obtained with our emulator has been shown to be \num{150000} $\times$. 
+
+In conclusion, the shorter computing time required by the emulator would also allow to adapt the predictions in near-real time: the emulator could be re-evaluated during the duration of the rain event if more accurate inputs conditions are available or integrating for example in the workflow a kalman filtering data assimilation scheme. 
+ 
+ 
+ 
 
 
 
