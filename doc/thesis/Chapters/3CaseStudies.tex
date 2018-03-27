@@ -8,16 +8,6 @@
 \label{sec:mechanistic_emulator}
 %===============================================================================
 
-%:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-%  * present it as a didactic example
-%  * use it to compare GP (prior knowledge) with e.g. deep neural networks: how many points can we have?
-%  * mention grid convergence study (results go in the Appendix)
-%  * mention problem with FullSWOF boundary conditions
-%  * define well results and methodology
-%  * such an emulator can be improved -> modified to compute slope in order to have a given mu value
-%  * state all of the goals of the CS: learn weir eq. from simulation, apply curve fitting, get a feeling for simulation accuracy
-%:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 As a first case study to apply the acquired knowledge, it was decided to build an utterly mechanistic emulator.
 The main goal of this case study is to try to fit the \emph{weir equation} to simulated data instead of to experimental data.
 Here we essentially rediscover the way science has always been done: by observing, measuring and trying to discover mathematical relationships.
@@ -228,9 +218,6 @@ The average root mean squared error (RMSE) observed for the removal of \num{1} u
 %-------------------------------------------------------------------------------
 \subsection{Results and Discussion}
 %-------------------------------------------------------------------------------
-% * importance of prior knowledge -> even if few points we can obtain good
-%   models. Not the case without (lin. interp, spline interp.)
-
 
 In Fig.~\ref{fig:simulations_results} the $(Q, h_w)$ pairs extracted from the simulations are plotted.
 The gap in the lower part of the plot is due to the data that had to be discarded.
@@ -282,14 +269,6 @@ The results for the cubic splines interpolation confirm what was already observe
 
 On the other hand, the regression line obtained using the weir equation model shows only a slight decrease in accuracy when progressively removing observations for fitting. This high stability (insensitivity to the number of available observations for fitting) is due to the fact that in this case only two regression coefficients must be determined. Nevertheless, the low flexibility of linear regression models tends to prevent the interpolation of the data points and causes the linear regression model not to outperform cubic spline interpolation when many observations are available.
 
-%The weir equation model used minimizes the least-square-error of the fit, without necessarily interpolating through the points.
-%It is a very inflexible model, as only two parameters can be varied to improve the quality of fit, while many more observations are available.
-%For this reason, the interpolation through the points cannot be achieved, unless the observations were originated exactly by the model chosen.
-%Because interpolation cannot be obtained, its error decreases very slowly with increasing number of points.
-%The inflexibility of this model represents its weakness but at the same time its strength.
-%This is in fact a very robust model, which still produces good results when few observations are available.
-%It shows almost no decline in performance by reducing the number of points.
-
 Fig.~\ref{fig:boxplot_models} in the Appendix summarizes the performance of the three models when using $[\numrange{4}{13}]$ number of observations.
 Here it can be seen that the RMSE for the weir equation is higher on average respect to the cubic spline interpolation but still quite low (in the order of $\approx \SI{1}{\centi\meter}$).
 Its variation is almost inexistent; the box plot is practically described by a line.\\
@@ -326,12 +305,6 @@ Taking into consideration the previous findings, GPs could be the ideal tool for
 \label{sec:hydrological_emulator}
 %===============================================================================
 
-%I would write "semi-virtual" or inspired by a true case.
-
-%Then, you could present the real-world case of the bridge as motivation. And write a bit in detail, why it was not possible in your thesis to investigate the REAL system, but you had to compromise.
-
-%This is also very instructive for the reader.
-
 As already stated in the introduction, our society and its infrastructures are exposed to the risk of flooding.
 In this case study, we illustrate a methodology which can be used to develop an emulation-based early flood warning system.
 For a channel conveying water from a catchment, we want to estimate, at a specific location along the channel, the time needed to reach a specific \emph{threshold discharge} ($Q_!$). 
@@ -343,8 +316,6 @@ For some rain events, namely very low precipitation and low initial soil saturat
 For this reason, the developed warning system has a hierarchical structure: it is composed of a classifier determining whether the threshold discharge ($Q_!$) will be exceeded and of an emulator which estimates the time-to-threshold $t_!$.
 
 To develop the methodology, a synthetic catchment topography was generated. Due to the generalization and abstraction of the proposed work-flow however, the methodology can be easily applied to real-situations. 
- 
-% The methodology used is exploiting the catchment's specific behaviour; this information is therefore intrinsically embedded in the emulator built.
 
 %-------------------------------------------------------------------------------
 \subsection{Material and methods}
@@ -446,13 +417,12 @@ We tested different GP classifier before finding a satisfying one.
 Since the data points seemed to be linearly separable, we decided to use the "meanLinear" mean function and vary
 the covariance functions.
 To visually inspect the performance of each of these different classifiers, we drew the classifier boundaries over the input space formed by the rain intensities and the initial soil saturation conditions. Fig.~\ref{fig:classifier_rough} shows the classifier boundary obtained by using a "covConst" covariance function.
-% and trained the models with the "minimize" function, by using a "likLogistic" likelihood function and the Expectation Propagation (EP) as inference method.
- 
+
 However, an infinite number of curves could define the frontier between rain events exceeding and not the threshold discharge. Thus we decided to perform new simulations using combinations of rainfall intensity and initial soil saturation condition located in proximity of the classifier boundary. 
 
 The data points obtained by these new simulations (marked as triangle in \ref{fig:classifier}) suggested that the boundary was actually not linear but curvy. 
 We therefore trained various GP classifiers by testing various curvy mean function and a set of covariance functions.
- 
+
 
 %...............................................................................
 \subsubsection{Building-up the emulator}
@@ -501,13 +471,10 @@ After a given lapse of time this water reaches the outlet as well, giving rise t
 %...............................................................................
 \subsubsection{The classifier}\label{sec:classifier}
 %...............................................................................
-% * Classifier:
-%   * show final values of hyperparameters
 
 Fig.~\ref{fig:classifier} displays the results of the classification task.
 Rain events reaching the discharge threshold are marked with red circles, while rain events not reaching it with green ones. Circles represent training dataset observations, whereas triangles indicate the dataset which was added in a second time to test the linearity of the boundary.
 According to the classifier, every $(I, \theta_i)$ pair chosen in the yellow region will cause the exceeding of $Q_!$. The classifier could correctly classify all but one data points given.
-%The triangle located at $(I, \theta_i) = (14.7, 0.45)$ is found within the yellow region although its color is green.
 
 \begin{figure}[h]
   \centering
@@ -555,12 +522,6 @@ This represents a \emph{speedup} of \textbf{\num{150000}} $\bm{\times}$.
 %-------------------------------------------------------------------------------
 \subsection{Discussion}
 %-------------------------------------------------------------------------------
-% * emulator should never underestimate danger -> we want to avoid it
-%   absolutely)
-% * discuss point misclassified
-% * discuss influence of time resolution
-% * discuss emulator's speedup
-% * if a real system is built -> UQ very important!!
 
 In early flood warning system, a crucial point is not to underestimate the danger of floods.
 In case a flood alert is issued but no flood occurs, minor economic loss could be related to deployment of temporary flood control measures or the cost of population evacuations, but nobody would be armed. 
@@ -594,9 +555,4 @@ Therefore, propagation of inputs uncertainty to emulator outputs should be accou
 Still, the advantage in using emulators is that uncertainty quantification can be performed much faster than using numerical simulators: the speed up obtained with our emulator was shown to be \num{150000} $\times$. 
 
 In conclusion, the shorter computing time required by the emulator would also allow to adapt the predictions in near-real time: the emulator could be re-evaluated during the duration of the rain event if more accurate inputs conditions are available or integrating for example in the workflow a Kalman filtering data assimilation scheme. 
- 
- 
- 
-
-
 
