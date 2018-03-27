@@ -43,18 +43,20 @@
 %Unlike high performance computing (HPC), emulation is one way of reducing computational time with no big investments.
 
 In the recent decades, the increasing computational capabilities of computer processors has enlarged the applications of numerical simulators and opened the possibility to an increase of the simulation resolution and accuracy. In many engineering fields, the level of detail of these simulators has grown to the point of substituting the realization/execution of physical experiments. 
-Despite the numerous advantages provided by these numerical simulators, the elevated computing time of the simulations remains an important drawback, especially for development of real-time applications or testing/optimization of different simulation conditions/designs.  
+Despite the numerous advantages provided by these numerical simulators, the elevated computing time of the simulations remains a major drawback, especially for development of real-time applications or testing/optimization of different simulation conditions/designs.  
  
-A possible solution to this problem is provided by emulators, approximation models which try to reproduce the behaviour of the detailed simulator but with minor computational costs. Construction of appropriate emulators allow to achieve huge speedups at the expenses of unneeded simulation details and accuracy \autocite{carbajal_appraisal_2016}.
+A possible solution to this problem is provided by emulators; approximation models which try to reproduce the behaviour of the detailed simulator but with minor computational costs. Construction of appropriate emulators allows huge speedups at the expense of unnecessary simulation informations and accuracy\autocite{carbajal_appraisal_2016}.
 
 Emulators are task-specific, built to answer a specific question.
 If the research question changes, a new, ad-hoc emulator must be built.
 Let us make an example from the hydrodynamics field, where the research target is to know the water depth time-series at a specific point in a river channel knowing the (input) hydrograph at the inlet of the channel. 
-Several numerical simulations could be performed based on different input hydrographs, saving the respective simulated water depth time series at the location of interest. Then, an emulator could be built to learn the relationship between the hydrograph and the observed water-depth time series. This would allow to obtain an estimate of the water depth time-series from a specific input hydrograph without running a new simulation. 
+Several numerical simulations could be performed based on different input hydrographs, saving the respective simulated water depth time series at the location of interest. Then, an emulator could be built to learn the relationship between the hydrograph and the observed water-depth time series. 
+This would allow an estimate of the water depth time-series from a specific input
+hydrograph to be obtained without running a new simulation.
 If a new task would request the prediction of the flow velocity time-series at the same location, the previously constructed emulator would not be able to provide an answer, because trained only with the pair water depth-input hydrograph. If this new task has to be accomplished many times, it could make sense to build a new emulator in order to reduce the overall computational time.
 The above example shows that emulators can be space-specific (e.g. water depth time-series at a specific point) or time specific (e.g. water depth profile along a channel at specific instant).\\
 
-When running hydrodynamical simulation, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in". \autocite{carbajal_emumore_2017}. Fig.~\ref{fig:simulation} schematizes this peculiarity: in hydrodynamics SWE must be solved over the whole simulation grid, although the output we are interested in might be just the water depth simulated at a chosen grid cell.
+When running hydrodynamical simulation, the simulator goes through a series of \emph{internal states} that are often not needed for a specific application. The structure of such simulators is said "fan-out/fan-in". \autocite{carbajal_emumore_2017}. Fig.~\ref{fig:simulation} schematizes this peculiarity: in hydrodynamics SWE must be solved over the whole simulation grid, although the output of interest might just be the water depth simulated at a chosen grid cell.
 
 \begin{figure}[h]
   \centering
