@@ -1,0 +1,27 @@
+% Collection of useful mathematical symbols and commands
+% Calculus
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\pder}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpder}[2]{\frac{\partial^2{#1}}{\partial{#2^2}}}
+\newcommand{\sderp}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
+\newcommand{\tder}[2]{\frac{\ud{#1}}{\ud{#2}}}
+\newcommand{\rot}[1]{\nabla \times {#1}}
+\newcommand{\diver}[1]{\nabla \cdot {#1}}
+\newcommand{\definter}[4]{\int_{#1}^{#2} {#3}\ud {#4}}
+\newcommand{\inter}[2]{\int {#1}\ud {#2}}
+\newcommand{\braket}[2]{\langle {#1} , {#2} \rangle}
+% Misc
+\newcommand{\eval}[1]{\Big |_{#1}}
+\newcommand{\bset}[1]{\big\lbrace {#1} \big\rbrace}
+\newcommand{\stimes}[2]{{#1}\!\times\!{#2}}
+\newcommand{\trp}{\top}
+\newcommand{\preup}[2]{{}^{#2}\!{#1}}
+
+% Operators
+\DeclareMathOperator*{\armin}{arg\,min}
+\DeclareMathOperator*{\armax}{arg\,max}
+\DeclareMathOperator*{\rank}{rank}
+\DeclareMathOperator*{\cov}{cov}
+\DeclareMathOperator*{\nullsp}{null}
+% Logicals
+\newcommand{\suchthat}{\big \backslash \;}

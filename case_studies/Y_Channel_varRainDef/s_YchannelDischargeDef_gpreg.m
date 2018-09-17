@@ -125,8 +125,8 @@ tf = t_Qtrain < 420;
 tftst = t_Qtest < 420;
 
 
-xtrn = [ri_train(tf) ss_train(tf)];#ri_test(tftst)(:) ss_test(tftst)(:)];
-ytrn = [t_Qtrain(tf)];#t_Qtest(tftst)];
+xtrn = [ri_train(tf) ss_train(tf); ri_test(tftst)(:) ss_test(tftst)(:)];
+ytrn = [t_Qtrain(tf); t_Qtest(tftst)];
 xemu = [ri_emu(:) ss_emu(:)];
 
 args ={infe, meanfunc, covfunc, likfunc, xtrn, ytrn};
@@ -138,9 +138,9 @@ toc
 
 
 #load ('hyp_reg.dat');
-tic
+
 t_Qemu = gp (hyp, args{:}, xemu);
-toc
+
 
 #save ('hyp_reg.dat', 'hyp');
 
@@ -168,19 +168,11 @@ grid off;
 view (124, 32)
 print ('emulator.png', '-r300');
 
-## Performing test and validation
-# test
-tic
-t_Qemu_test = gp (hyp, args{:}, [ri_test(tftst) ss_test(tftst)]);
-toc
-mae_test      = MaxAE (t_Qemu_test, t_Qtest(tftst))
-mae_test_perc = MaxAPE (t_Qemu_test, t_Qtest(tftst))
-rmse_test = rmse (t_Qemu_test, t_Qtest(tftst))
 
-# validation
-tic
+# Performing validation
+
 t_Qemu_val = gp (hyp, args{:}, [ri_val ss_val]);
-toc
+
 mae_val      = MaxAE (t_Qemu_val, t_Qval)
 mae_val_perc = MaxAPE (t_Qemu_val, t_Qval)
 rmse_val     = rmse (t_Qemu_val, t_Qval)
