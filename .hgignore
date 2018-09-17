@@ -2,9 +2,12 @@ syntax: glob
 
 
 doc/pres/pres01/img
+doc/pres/*/*.pdf
+doc/pres/*/*/*.pdf
 doc/pres/pres_mseminar/MSem_Presentation.bib
 doc/regression_exercises/mfiles/*.eps
 doc/regression_exercises/mfiles/*.png
+doc/regression_exercises/*.pdf
 case_studies/*/*.png
 case_studies/*/*.eps
 case_studies/*/*.sh
@@ -12,9 +15,14 @@ case_studies/*/*/*.txt
 case_studies/*/gist_earth.m
 doc/IAHR/IAHR_Template
 doc/IAHR/auslagen_de_filled.doc
+doc/IAHR/*.pdf
+doc/IAHR/*/*.pdf
 doc/thesis/main-blx.bib
+doc/thesis/Drafts
 doc/pres/pres03/_minted-*
 doc/thesis/_minted-*
+doc/thesis/*.pdf
+
 *.vrb
 *.docx
 *.bbl
@@ -30,4 +38,3 @@ doc/thesis/_minted-*
 *.snm
 *.toc
 *.dat
-*.pdf
