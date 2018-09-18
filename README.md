@@ -9,9 +9,8 @@ Do not hesitate to conctact the people involved if you have feedback.
 * Extend weir equation experiment: emulator giving weir slope / weir length for a desired \mu coefficient and compare it with [this paper](https://pubs.usgs.gov/circ/1957/0397/report.pdf)
 
 ### Reminders
-[comment]: <> (:white_large_square: symbol for an empty check mark)
-:white_check_square: by 16/02/2018: prepare master thesis outline
-:white_check_mark: by 15/02/2018: prepare abstract for IAHR congress
+:white_check_square: by 16/02/2018: prepare master thesis outline\
+:white_check_mark: by 15/02/2018: prepare abstract for IAHR congress\
 ----
 
 ### To discuss
