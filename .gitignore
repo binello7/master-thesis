@@ -1,3 +1,7 @@
 wiki/
 *.pdf
 mfiles/scripts/**/*.png
+case_studies/**/data
+case_studies/**/img
+case_studies/**/run.sh
+case_studies/**/*.dat
