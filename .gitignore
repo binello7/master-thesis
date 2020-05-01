@@ -1,5 +1,5 @@
 wiki/
-*.pdf
+**/*eps-converted-to.pdf
 mfiles/scripts/**/*.png
 case_studies/**/data
 case_studies/**/img
