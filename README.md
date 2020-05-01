@@ -10,7 +10,7 @@ Do not hesitate to conctact the people involved if you have feedback.
 * mythesis
 
 ## Presentations
-* [Presentation eawag] ('Montag Seminar')
+* [Presentation eawag](doc/pres/pres_mseminar/Msem_Presentation.pdf) ('Montag Seminar')
 * [Presentation 1](doc/pres/pres01/01_Presentation.pdf)
 * [Presentation 2]
 * [Final Presentation]
