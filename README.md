@@ -6,5 +6,15 @@ Do not hesitate to conctact the people involved if you have feedback.
 ---
 
 # Downloads
+## Thesis
+* mythesis
+
 ## Presentations
-* [Presentation_01](doc/pres/pres01/01_Presentation.pdf)
+* [Presentation eawag] ('Montag Seminar')
+* [Presentation 1](doc/pres/pres01/01_Presentation.pdf)
+* [Presentation 2]
+* [Final Presentation]
+
+## IAHR 2018 (Trento)
+* [Abstract]
+* [Presentation]
