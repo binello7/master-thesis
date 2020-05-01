@@ -7,4 +7,4 @@ Do not hesitate to conctact the people involved if you have feedback.
 
 # Downloads
 ## Presentations
-* [presentation_01](doc/pres/pres01/01_Presentation.pdf)
+* [Presentation_01](doc/pres/pres01/01_Presentation.pdf)
