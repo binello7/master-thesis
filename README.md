@@ -6,6 +6,7 @@ This repository contains all of the material relevant for my Master Thesis (Nove
 
 Flooding and inundation have dramatically increased in the last years due to climate change. To
 limit the risks and damage novel control, mitigation, and warning measures are needed.
+
 However, before major infrastructure investments are in place, the real effectiveness of these
 measures has to be evaluated and a very powerful tool to do it is numerical simulation. Simulation,
 despite is low cost and feasibility, also presents some drawbacks and difficulties: due to the
@@ -15,6 +16,7 @@ The same problem affects the design and analysis of control or mitigation measur
 measures hundred of thousands of simulations have to be run to calibrate model parameters or to
 study and compare different scenarios. For example, model calibration using current numerical
 models based on shallow water equations can last up to several weeks.
+
 There are four approaches to deal with this problem: i) discard systems analysis and intelligent
 control strategies, ii) work only with utterly simplified models, iii) use high-performance computing
 (HPC), and iv) construct fast surrogate models. The first two are inefficient and the third, using
@@ -27,6 +29,7 @@ constructed models which mimic the behavior of the simulation models as closely 
 being computationally cheaper to evaluate<sup>1</sup>”. A limited number of simulations at intelligently
 chosen points has to be run with the original simulator, from these the emulator can learn the
 behavior of the system and generate approximations of the relevant observables.
+
 The objective of this Master thesis is to develop emulators for the widely accepted overland flow
 model base on the 2D shallow water equations (Saint-Venant), and applied to a specific case study.
 This model is implemented in several open source simulators, such as FullSWOF, FLOW-R2D, and
