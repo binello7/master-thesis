@@ -42,6 +42,7 @@ which a dataset is already available 2 .
 Build an emulator for these scenarios. The scenario will cover: i) optimization of flood
 protection measures, ii) water level uncertainty quantification, iii) early flood warning
 systems.
+
 Two intermediate meetings will be scheduled during the 18 weeks master thesis period. The first
 one will be held during the 6 th week of the master thesis period and the second one during the 12 th .
 The exact dates will be fixed later. Aim of these meetings is to take stock of the situation, possibly
