@@ -20,14 +20,20 @@ pkg load fswof2d
 pkg load linear-algebra
 
 %% Generate needed folders for FullSWOF_2D
-inputsFolder  = 'Inputs';
-outputsFolder = 'Outputs';
+dataFolder    = 'data';
+imagesFolder  = 'img';
+inputsFolder  = fullfile (dataFolder, 'Inputs');
+outputsFolder = fullfile (dataFolder, 'Outputs');
 fname         = @(s) fullfile (inputsFolder, s);
 suffname      = @(s,d) sprintf ('%s_%02d.dat', s, d);
+
 if !exist (inputsFolder, 'dir')
   mkdir (inputsFolder);
 endif
 
+if !exist (imagesFolder, 'dir')
+  mkdir (imagesFolder);
+endif
 
 %% Parameters that don't change in the loop
 B = 4;
@@ -38,7 +44,6 @@ dy = Ly ./ Ny;
 nExp = length (Nx);     % how many experiments we run
 
 %% Define the longitudinal profile of the weir and that of the free surface
-%
 weir_height = 3;
 
 wBot_r(1) = 17;
@@ -83,7 +88,7 @@ for i = 1:nExp
   UU = zeros (Ny(i), Nx(i));
   VV = zeros (Ny(i), Nx(i));
 
-
+  figure ('visible', 'off')
   surf (XX, YY, ZZ);
   hold on
   mesh (XX, YY, HZ, 'facecolor', 'none', 'edgecolor', 'b');
@@ -91,17 +96,18 @@ for i = 1:nExp
   axis ([0 B 0 Ly 0 weir_height]);
   text (3.5, 5, 4.3, sprintf ('Nx = %d', Nx(i)))
   text (3.5, 5, 4, sprintf ('Ny = %d', Ny(i)))
-  print (gcf, sprintf ('experiment%02d_set-up.png', i), '-r300');
+  print (gcf, fullfile (imagesFolder, ...
+    sprintf ('experiment%02d_set-up.png', i)), '-r300');
+  close all
 
-
-  %  Convert the data to the FullSWOF_2D format
+  % Convert the data to the FullSWOF_2D format
   [X Y Z H U V] = dataconvert ('fswof2d', XX, YY, ZZ, HH, UU, VV);
 
-  %  Write the topography to the file
+  % Write the topography to the file
   topofile = suffname ("topography", i);
   topo2file (X, Y, Z, fname (topofile));
 
-  %  Write the initial conditions to the file
+  % Write the initial conditions to the file
   huvfile = suffname ("huv_init", i);
   huv2file (X, Y, H, U, V, fname (huvfile));
 
@@ -127,23 +133,23 @@ for i = 1:nExp
   suffoutputsFolder = strcat (outputsFolder, out_suff);
   if !exist (suffoutputsFolder, 'dir')
     mkdir (suffoutputsFolder);
-  endif
+  end%if
 
-endfor
+end%for
 
-close all
 
 %% Write bash script to run study
 bfile = "run.sh";
 printf ("Writing Bash script to file %s\n", bfile); fflush (stdout);
 timetxt = strftime ("%Y-%m-%d %H:%M:%S", localtime (time ()));
 bsh = {
-'%!/bin/bash', ...
-sprintf("%% Automatically generated on %s\n", timetxt), ...
+'#!/bin/bash', ...
+sprintf("## Automatically generated on %s\n", timetxt), ...
 'echo Started on $(date)', ...
+'cd data', ...
 sprintf("for i in {1..%d}; do", nExp), ...
 sprintf("  id=`printf %%02d $i`"), ...
-'  nohup time fswof2d -f parameters_$id.dat &', ...
+'  nohup time fswof2d-1.07 -f parameters_$id.dat &', ...
 '  if(( ($i % $(nproc)) == 0)); then wait; fi', ...
 'done', ...
 'echo Finished on $(date)'
@@ -153,6 +159,8 @@ fid = fopen (bfile, "wt");
 fputs (fid, bsh);
 fclose (fid);
 
+% make file executable
+system ('chmod +x run.sh');
+
 % save global variables
 save('input_variables.dat', 'weir_height', 'wTop_l', 'wTop_r', 'pweir');
-clear all
