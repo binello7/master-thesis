@@ -1,5 +1,6 @@
 # Master thesis
-This repository contains all of the material relevant for my Master Thesis (November 2017 - March 2018)
+This repository contains all of the material relevant for my Master Thesis (November 2017 - March 2018).  
+To download the final report, slides used for the presentations, etc. go down to [Download](#Download)
 
 ## Description
 **Development of an Overland Flow Model Emulator**
