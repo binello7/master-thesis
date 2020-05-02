@@ -24,7 +24,7 @@ and problems. Therefore, constructing fast surrogate models, so-called emulators
 simulators is very attractive. It does not require a huge investment in new hardware and software,
 and the same tool can be used to solve very different problems. Emulators are “data-driven
 constructed models which mimic the behavior of the simulation models as closely as possible while
-being computationally cheaper to evaluate<sup>1<\sup>”. A limited number of simulations at intelligently
+being computationally cheaper to evaluate<sup>1</sup>”. A limited number of simulations at intelligently
 chosen points has to be run with the original simulator, from these the emulator can learn the
 behavior of the system and generate approximations of the relevant observables.
 The objective of this Master thesis is to develop emulators for the widely accepted overland flow
