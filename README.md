@@ -5,7 +5,7 @@ This repository contains all of the material relevant for my Master Thesis (Nove
 
 # Downloads
 ## Thesis
-* mythesis
+* [Master Thesis](doc/thesis/SR_MThesis_Emulation.pdf)
 
 ## Presentations
 * [Presentation eawag](doc/pres/pres_mseminar/Msem_Presentation.pdf) ('Montag Seminar')
