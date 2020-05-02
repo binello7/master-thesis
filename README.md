@@ -1,5 +1,5 @@
 ## Master thesis
-This repository contains all of the material relevant for my Master Thesis (
+This repository contains all of the material relevant for my Master Thesis (November 2017 - March 2018)
 
 ---
 
