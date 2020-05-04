@@ -1,4 +1,7 @@
 #!/bin/bash
 
-octave s_ChannelMiddleWeir_meshstudy_input.m
+octave s_ChannelMiddleWeir_meshstudy_genInputs.m
 ./run.sh
+
+octave s_meshstudy_extractOutputs.m
+octave s_meshstudy_plotResults.m
