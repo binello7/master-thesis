@@ -41,18 +41,18 @@ for i = 1:nExp
   data_init     = loadfile ('huz_initial.dat');
   data_evl      = loadfile ('huz_evolution.dat');
   paramsfile    = fullfile (inputsFolder, sprintf ('parameters_%02d.dat', i));
-  params{i}     = read_params (paramsfile);
-  Nx(i) = params{i}.Nxcell;
-  Ny(i) = params{i}.Nycell;
-  B     = params{1}.L;
-  Ly    = params{1}.l;
+  params     = read_params (paramsfile);
+  Nx(i) = params.Nxcell
+  Ny(i) = params.Nycell
+  B     = params.L;
+  Ly    = params.l;
   Y{i}  = data_init(1:Ny(i),2);
   Z{i}  = data_init(1:Ny(i),7);
   clear data_init;
   h{i}  = data_evl(:,3);
   clear data_evl;
 
-  nstates = params{i}.nbtimes;
+  nstates = params.nbtimes;
 
   for t = 1:nstates
     idx_1 = 1 + (t - 1) * Nx(i) * Ny(i);
