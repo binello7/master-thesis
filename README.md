@@ -12,7 +12,7 @@ limit the risks and damage, novel control, mitigation, and warning measures are 
 
 However, before major infrastructure investments are in place, the real effectiveness of these
 measures has to be evaluated. A very powerful tool to do it is numerical simulation. Simulation,
-despite is low cost and feasibility, also presents some drawbacks and difficulties: due to the
+despite his low cost and feasibility, also presents some drawbacks and difficulties. Due to the
 complexity of flood wave propagation in urban environments and floodplains, computations can
 take very long. This renders impractical the use of warning systems based on numerical simulation.
 The same problem affects the design and analysis of control or mitigation measures. For these
