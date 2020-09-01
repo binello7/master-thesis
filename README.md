@@ -64,7 +64,7 @@ state of progress.
 * [Master Thesis](doc/thesis/SR_MThesis_Emulation.pdf)
 
 ### Presentations
-* [Presentation eawag](doc/pres/pres_mseminar/Msem_Presentation.pdf) ('Montag Seminar')
+* [Presentation eawag](doc/pres/pres_mseminar/Msem_Presentation.pdf) ("Montag Seminar")
 * [Presentation 1](doc/pres/pres01/01_Presentation.pdf)
 * [Presentation 2](doc/pres/pres02/02_Presentation.pdf)
 * [Final Presentation](doc/pres/pres03/03_Presentation.pdf)
