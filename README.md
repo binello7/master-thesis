@@ -8,7 +8,7 @@ Code in this repository makes use of tools from the [fswof2d](https://github.com
 **Development of an Overland Flow Model Emulator**
 
 Flooding and inundation have dramatically increased in the last years due to climate change. To
-limit the risks and damage novel control, mitigation, and warning measures are needed.
+limit the risks and damage, novel control, mitigation, and warning measures are needed.
 
 However, before major infrastructure investments are in place, the real effectiveness of these
 measures has to be evaluated and a very powerful tool to do it is numerical simulation. Simulation,
