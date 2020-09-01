@@ -14,7 +14,7 @@ However, before major infrastructure investments are in place, the real effectiv
 measures has to be evaluated. A very powerful tool to do it is numerical simulation. Simulation,
 despite his low cost and feasibility, also presents some drawbacks and difficulties. Due to the
 complexity of flood wave propagation in urban environments and floodplains, computations can
-take very long. This renders impractical the use of warning systems based on numerical simulation.
+be very time-consuming. This renders impractical the use of warning systems based on numerical simulation.
 The same problem affects the design and analysis of control or mitigation measures. For these
 measures hundred of thousands of simulations have to be run to calibrate model parameters or to
 study and compare different scenarios. For example, model calibration using current numerical
