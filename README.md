@@ -1,6 +1,6 @@
 # Master thesis
 This repository contains all of the material relevant for my Master Thesis (November 2017 - March 2018).  
-To download the final report, slides used for the presentations, etc. go down to [Downloads](#Downloads)
+To download the final report, slides used for the presentations, etc. go down to [Downloads](#Downloads).
 
 Code in this repository makes use of tools from the [fswof2d](https://github.com/binello7/fswof2d) repository, which contains an Octave package easing the interaction with the simulator used ([FullSWOF_2D](https://sourcesup.renater.fr/projects/fullswof-2d/)).
 
